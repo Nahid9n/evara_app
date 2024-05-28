@@ -1,6 +1,3 @@
-
-
-
 @extends('website.master')
 @section('title', 'Product Detail Page')
 
@@ -28,34 +25,30 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-
-
                         <div class="product-detail accordion-detail">
                             <div class="row mb-50">
                                 <div class="col-md-6 col-sm-12 col-xs-12">
-                                    <div class="detail-gallery">
+                                    <div class="detail-gallery"  style="height: 500px">
                                         <span class="zoom-icon"><i class="fi-rs-search"></i></span>
                                         <!-- MAIN SLIDES -->
                                         <div class="product-image-slider">
                                             @foreach($product->productImages as $productImage)
                                                 <figure class="border-radius-10">
                                                     <img src="{{asset($productImage->image)}}"
-                                                         alt="product image" height="300"/>
+                                                         alt="product image" class="img-fluid" style="width:100%; height:550px;"/>
                                                 </figure>
                                             @endforeach
                                         </div>
                                         <!-- THUMBNAILS -->
                                         <div class="slider-nav-thumbnails pl-15 pr-15">
                                             @foreach($product->productImages as $productImage)
-                                                <div><img src="{{asset($productImage->image)}}"
-                                                          alt="product image" height="300"/></div>
+                                                <div><img src="{{asset($productImage->image)}}" alt="product image" width="100" height="100"/></div>
                                             @endforeach
                                         </div>
                                     </div>
                                     <!-- End Gallery -->
                                 </div>
 {{-- =========  form ========================  =========================================== --}}
-
                                 <div class="col-md-6 col-sm-12 col-xs-12">
                                     <form action="{{ route('cart.store') }}" method="post">
                                         @csrf
@@ -125,8 +118,8 @@
                                                 <div class="mt-2">
                                                     @foreach($product->colors as $key => $color)
                                                         <label  for="">
-                                                            <input type="radio" name="color" {{ $key == 0 ? 'checked' : '' }} style="width: 20px; height: 20px" value="{{ $color->color->name }}"/>
-                                                            {{ $color->color->name }}
+                                                            <input type="radio" name="color" {{ $key == 0 ? 'checked' : '' }} style="width: 20px; height: 20px" value="{{ $color->color->name ?? '' }}"/>
+                                                            {{ $color->color->name ?? '' }}
                                                         </label>
                                                     @endforeach
                                                 </div>
@@ -138,8 +131,8 @@
                                                 <div class="mt-2">
                                                     @foreach($product->sizes as $key1 => $size)
                                                         <label for="">
-                                                            <input type="radio" name="size" {{ $key1 == 0 ? 'checked' : '' }} style="width: 20px; height: 20px" value="{{ $size->size->code }}">
-                                                            {{ $size->size->name }}
+                                                            <input type="radio" name="size" {{ $key1 == 0 ? 'checked' : '' }} style="width: 20px; height: 20px" value="{{ $size->size->code ?? '' }}">
+                                                            {{ $size->size->name ?? ''}}
                                                         </label>
                                                     @endforeach
                                                 </div>
@@ -179,14 +172,12 @@
                                     </form>
                                     <!-- Detail Info -->
                                 </div>
-
-
                             </div>
                             <div class="row">
                                 <div class="col-lg-12 m-auto entry-main-content">
                                     <h2 class="section-title style-1 mb-30">Description</h2>
                                     <div class="description mb-50">
-                                        {!!  $product->long_description !!}
+                                        {!! $product->long_description !!}
                                     </div>
                                 </div>
                                 <div class="col-12">

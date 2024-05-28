@@ -350,6 +350,9 @@
                                     <a class="active" href="{{route('home')}}">Home</a>
                                 </li>
                                 <li>
+                                    <a class="active" href="{{route('product-all')}}">Products</a>
+                                </li>
+                                <li>
                                     <a href="{{route('purchase-guide')}}">Purchase Guide</a>
                                 </li>
                                 <li>

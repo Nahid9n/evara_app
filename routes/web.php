@@ -51,7 +51,7 @@ Route::get('/', [EvaraController::class,'index'])->name('home');
 //Route::get('/product-category', [EvaraController::class,'category'])->name('product-category');
 Route::get('/product-category/{id}', [EvaraController::class,'category'])->name('product-category');
 Route::get('/product-sub-category/{id}', [EvaraController::class,'subCategory'])->name('product-sub-category');
-//Route::get('/product-detail', [EvaraController::class,'product'])->name('product-detail');
+Route::get('/product-all', [EvaraController::class,'allProduct'])->name('product-all');
 Route::get('/product-detail/{id}', [EvaraController::class,'product'])->name('product-detail');
 
 Route::get('/about-us', [PagesController::class,'about'])->name('about');

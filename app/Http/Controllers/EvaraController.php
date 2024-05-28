@@ -62,6 +62,12 @@ class EvaraController extends Controller
         ]);
     }
 
+    public function allProduct()
+    {
+        return view('website.product.allproduct', [
+            'products' => Product::where('status',1)->latest()->paginate(12),
+        ]);
+    }
     public function product($id)
     {
         $this->product = Product::find($id);
@@ -85,4 +91,5 @@ class EvaraController extends Controller
             'discount'  => $this->discount,
         ]);
     }
+
 }
