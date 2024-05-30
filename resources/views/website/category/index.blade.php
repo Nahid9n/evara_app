@@ -21,9 +21,9 @@
                 <div class="col-lg-9">
                     <div class="shop-product-fillter">
                         <div class="totall-product">
-                            <p> We found <strong class="text-brand">688</strong> items for you!</p>
+                            <p> We found <strong class="text-brand">{{count($products)}}</strong> items for you!</p>
                         </div>
-                        <div class="sort-by-product-area">
+                        {{--<div class="sort-by-product-area">
                             <div class="sort-by-cover mr-10">
                                 <div class="sort-by-product-wrap">
                                     <div class="sort-by">
@@ -62,7 +62,7 @@
                                     </ul>
                                 </div>
                             </div>
-                        </div>
+                        </div>--}}
                     </div>
                     <div class="row product-grid-3">
 

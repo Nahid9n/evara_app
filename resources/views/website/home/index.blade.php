@@ -47,26 +47,201 @@
             </div>
         </div>
     </section>
+    <section class="popular-categories section-padding mt-15 mb-25">
+        <div class="container wow fadeIn animated">
+            <h3 class="section-title mb-20"><span>Popular</span> Categories</h3>
+            <div class="carausel-6-columns-cover position-relative">
+                <div class="slider-arrow slider-arrow-2 carausel-6-columns-arrow" id="carausel-6-columns-arrows"></div>
+                <div class="carausel-6-columns" id="carausel-6-columns">
+                    @foreach($categories as $category)
+                        <div class="card-1 text-center" style="height: 200px">
+                            <figure class="img-hover-scale overflow-hidden justify-content-center">
+                                <a href="#"><img src="{{ asset($category->image)}}" width="100" height="100" alt=""></a>
+                            </figure>
+                            <h5><a href="{{route('product-category',['id' => $category->id])}}">{{($category->name)}}</a></h5>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </section>
     <section class="product-tabs section-padding position-relative wow fadeIn animated">
         <div class="bg-square"></div>
         <div class="container">
             <div class="tab-header">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="nav-tab-one" data-bs-toggle="tab" data-bs-target="#tab-one" type="button" role="tab" aria-controls="tab-one" aria-selected="true">Featured</button>
+                        <button class="nav-link active" id="nav-tab-three" data-bs-toggle="tab" data-bs-target="#tab-three" type="button" role="tab" aria-controls="tab-three" aria-selected="false">Latest</button>
                     </li>
                     <li class="nav-item" role="presentation">
+                        <button class="nav-link " id="nav-tab-one" data-bs-toggle="tab" data-bs-target="#tab-one" type="button" role="tab" aria-controls="tab-one" aria-selected="true">Featured</button>
+                    </li>
+                    {{--<li class="nav-item" role="presentation">
                         <button class="nav-link" id="nav-tab-two" data-bs-toggle="tab" data-bs-target="#tab-two" type="button" role="tab" aria-controls="tab-two" aria-selected="false">Popular</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="nav-tab-three" data-bs-toggle="tab" data-bs-target="#tab-three" type="button" role="tab" aria-controls="tab-three" aria-selected="false">New added</button>
-                    </li>
+                    </li>--}}
                 </ul>
                 <a href="#" class="view-more d-none d-md-flex">View More<i class="fi-rs-angle-double-small-right"></i></a>
             </div>
             <!--End nav-tabs-->
             <div class="tab-content wow fadeIn animated" id="myTabContent">
-                <div class="tab-pane fade show active" id="tab-one" role="tabpanel" aria-labelledby="tab-one">
+                <div class="tab-pane fade show active" id="tab-three" role="tabpanel" aria-labelledby="tab-three">
+                    <div class="row product-grid-4">
+                        @foreach($latestProducts as $key=>$product)
+                            <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+                                <div class="product-cart-wrap mb-30">
+                                    <div class="product-img-action-wrap">
+                                        <div class="product-img product-img-zoom">
+                                            <a href="{{ route('product-detail',$product->id) }}">
+                                                <img class="default-img" src="{{asset($product->image)}}" height="300" alt="">
+                                                <img class="hover-img" src="{{asset($product->image)}}" alt="">
+                                            </a>
+                                        </div>
+                                        <div class="product-action-1">
+                                            <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#latestViewModal{{$key}}"><i class="fi-rs-eye"></i></a>
+                                            <a aria-label="Add To Wishlist" class="action-btn hover-up" href="{{ route('wishlist.ad',$product->id) }}"><i class="fi-rs-heart"></i></a>
+                                            <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+                                        </div>
+                                        <div class="product-badges product-badges-position product-badges-mrg">
+                                            <span class="hot">Hot</span>
+                                        </div>
+                                    </div>
+                                    <div class="product-content-wrap">
+                                        <div class="product-category">
+                                            <a href="shop-grid-right.html">{{$product->category->name}}</a>
+                                        </div>
+                                        <h2><a href="{{ route('product-detail',$product->id) }}">{{$product->name}}</a></h2>
+                                        <div class="rating-result" title="90%">
+                                            <span>
+                                                <span>90%</span>
+                                            </span>
+                                        </div>
+                                        <div class="product-price">
+                                            <span>{{$product->selling_price}}</span>
+                                            <span class="old-price">{{$product->regular_price}}</span>
+                                        </div>
+                                        <div class="product-action-1 show">
+                                            <a aria-label="Add To Cart" class="action-btn hover-up" href="{{ route('product-detail',$product->id) }}"><i class="fi-rs-shopping-bag-add"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- Quick view -->
+                            <div class="modal fade custom-modal" id="latestViewModal{{$key}}" tabindex="-1" aria-labelledby="latestViewModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-12 col-xs-12">
+                                                    <div class="detail-gallery">
+                                                        <span class="zoom-icon"><i class="fi-rs-search"></i></span>
+                                                        <!-- MAIN SLIDES -->
+                                                        <div class="product-image-slider">
+                                                            @foreach($product->productImages as $productImage)
+                                                                <figure class="border-radius-10">
+                                                                    <img src="{{asset($productImage->image)}}"
+                                                                         alt="product image" class="img-fluid" style="width:100%; height:550px;"/>
+                                                                </figure>
+                                                            @endforeach
+                                                        </div>
+                                                        <!-- THUMBNAILS -->
+                                                        <div class="slider-nav-thumbnails pl-15 pr-15">
+                                                            @foreach($product->productImages as $productImage)
+                                                                <div><img src="{{asset($productImage->image)}}" alt="product image" width="100" height="80"/></div>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Gallery -->
+                                                    <div class="social-icons single-share">
+                                                        <ul class="text-grey-5 d-inline-block">
+                                                            <li><strong class="mr-10">Share this:</strong></li>
+                                                            <li class="social-facebook"><a href="#"><img src="{{asset('/')}}website/assets/imgs/theme/icons/icon-facebook.svg" alt=""></a></li>
+                                                            <li class="social-twitter"> <a href="#"><img src="{{asset('/')}}website/assets/imgs/theme/icons/icon-twitter.svg" alt=""></a></li>
+                                                            <li class="social-instagram"><a href="#"><img src="{{asset('/')}}website/assets/imgs/theme/icons/icon-instagram.svg" alt=""></a></li>
+                                                            <li class="social-linkedin"><a href="#"><img src="{{asset('/')}}website/assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12 col-xs-12">
+                                                    <div class="detail-info">
+                                                        <h3 class="title-detail mt-30">{{$product->name}}</h3>
+                                                        <div class="product-detail-rating">
+                                                            <div class="pro-details-brand">
+                                                                <span> Brands: <a href="shop-grid-right.html">{{ $product->brand->name }}</a></span>
+                                                            </div>
+                                                            <div class="product-rate-cover text-end">
+                                                                <div class="product-rate d-inline-block">
+                                                                    <div class="product-rating" style="width:90%">
+                                                                    </div>
+                                                                </div>
+                                                                <span class="font-small ml-5 text-muted"> (25 reviews)</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="clearfix product-price-cover">
+                                                            <div class="product-price primary-color float-left">
+                                                                <ins><span class="text-brand">{{$product->selling_price}}</span></ins>
+                                                                <ins><span class="old-price font-md ml-15">{{$product->regular_price}}</span></ins>
+                                                                <span class="save-price  font-md color3 ml-15">25% Off</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="bt-1 border-color-1 mt-15 mb-15"></div>
+                                                        <div class="short-desc mb-30">
+                                                            <p class="font-sm">{{ $product->short_description }}</p>
+                                                        </div>
+
+                                                        <div class="attr-detail attr-color mb-15">
+                                                            <strong class="mr-10">Color</strong>
+                                                            <ul class="list-filter color-filter">
+                                                                <li>
+                                                                    <select class="form-control" name="color" id="">
+                                                                        <option label="" >select color</option>
+                                                                        @foreach($product->colors as $key => $color)
+                                                                        <option value="" style="background-color: {{ $color->color->code }}">{{ $color->color->name ?? '' }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="attr-detail attr-size">
+                                                            <strong class="mr-10">Size</strong>
+                                                            <ul class="list-filter size-filter font-small">
+                                                                <li>
+                                                                    <select class="form-control" name="color" id="">
+                                                                        <option label="" >select size</option>
+                                                                        @foreach($product->sizes as $key1 => $size)
+                                                                            <option value="" >{{ $size->size->name ?? '' }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+                                                        <div class="detail-extralink">
+                                                            <div class="row">
+                                                                <input type="number" name="qty" class="form-control w-100" value="1" min="1"  max="{{ $product->stock_amount }}"/>
+                                                            </div>
+                                                            <div class="product-extra-link2">
+                                                                <button type="submit" class="button button-add-to-cart btn-sm mx-2">Add to cart</button>
+                                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
+                                                                <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+                                                            </div>
+                                                        </div>
+                                                        <ul class="product-meta font-xs color-grey mt-50">
+                                                            <li class="mb-5">SKU: <a href="#">{{$product->code}}</a></li>
+                                                            <li class="mb-5">Tags: <a href="#" rel="tag">Cloth</a>, <a href="#" rel="tag">Women</a>, <a href="#" rel="tag">Dress</a> </li>
+                                                            <li>Availability:<span class="in-stock text-success ml-5">{{$product->stock_amount}} Items In Stock</span></li>
+                                                        </ul>
+                                                    </div>
+                                                    <!-- Detail Info -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="tab-pane fade  " id="tab-one" role="tabpanel" aria-labelledby="tab-one">
                     <div class="row product-grid-4">
 
                         @foreach($products as $product)
@@ -107,15 +282,148 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Quick view -->
+                            <div class="modal fade custom-modal" id="quickViewModal" tabindex="-1" aria-labelledby="quickViewModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-12 col-xs-12">
+                                                    <div class="detail-gallery">
+                                                        <span class="zoom-icon"><i class="fi-rs-search"></i></span>
+                                                        <!-- MAIN SLIDES -->
+                                                        <div class="product-image-slider">
+                                                            <figure class="border-radius-10">
+                                                                <img src="{{asset('/')}}website/assets/imgs/shop/product-16-2.jpg" alt="product image">
+                                                            </figure>
+                                                            <figure class="border-radius-10">
+                                                                <img src="{{asset('/')}}website/assets/imgs/shop/product-16-1.jpg" alt="product image">
+                                                            </figure>
+                                                            <figure class="border-radius-10">
+                                                                <img src="{{asset('/')}}website/assets/imgs/shop/product-16-3.jpg" alt="product image">
+                                                            </figure>
+                                                            <figure class="border-radius-10">
+                                                                <img src="{{asset('/')}}website/assets/imgs/shop/product-16-4.jpg" alt="product image">
+                                                            </figure>
+                                                            <figure class="border-radius-10">
+                                                                <img src="{{asset('/')}}website/assets/imgs/shop/product-16-5.jpg" alt="product image">
+                                                            </figure>
+                                                            <figure class="border-radius-10">
+                                                                <img src="{{asset('/')}}website/assets/imgs/shop/product-16-6.jpg" alt="product image">
+                                                            </figure>
+                                                            <figure class="border-radius-10">
+                                                                <img src="{{asset('/')}}website/assets/imgs/shop/product-16-7.jpg" alt="product image">
+                                                            </figure>
+                                                        </div>
+                                                        <!-- THUMBNAILS -->
+                                                        <div class="slider-nav-thumbnails pl-15 pr-15">
+                                                            <div><img src="{{asset('/')}}website/assets/imgs/shop/thumbnail-3.jpg" alt="product image"></div>
+                                                            <div><img src="{{asset('/')}}website/assets/imgs/shop/thumbnail-4.jpg" alt="product image"></div>
+                                                            <div><img src="{{asset('/')}}website/assets/imgs/shop/thumbnail-5.jpg" alt="product image"></div>
+                                                            <div><img src="{{asset('/')}}website/assets/imgs/shop/thumbnail-6.jpg" alt="product image"></div>
+                                                            <div><img src="{{asset('/')}}website/assets/imgs/shop/thumbnail-7.jpg" alt="product image"></div>
+                                                            <div><img src="{{asset('/')}}website/assets/imgs/shop/thumbnail-8.jpg" alt="product image"></div>
+                                                            <div><img src="{{asset('/')}}website/assets/imgs/shop/thumbnail-9.jpg" alt="product image"></div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Gallery -->
+                                                    <div class="social-icons single-share">
+                                                        <ul class="text-grey-5 d-inline-block">
+                                                            <li><strong class="mr-10">Share this:</strong></li>
+                                                            <li class="social-facebook"><a href="#"><img src="{{asset('/')}}website/assets/imgs/theme/icons/icon-facebook.svg" alt=""></a></li>
+                                                            <li class="social-twitter"> <a href="#"><img src="{{asset('/')}}website/assets/imgs/theme/icons/icon-twitter.svg" alt=""></a></li>
+                                                            <li class="social-instagram"><a href="#"><img src="{{asset('/')}}website/assets/imgs/theme/icons/icon-instagram.svg" alt=""></a></li>
+                                                            <li class="social-linkedin"><a href="#"><img src="{{asset('/')}}website/assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12 col-xs-12">
+                                                    <div class="detail-info">
+                                                        <h3 class="title-detail mt-30">Colorful Pattern Shirts HD450</h3>
+                                                        <div class="product-detail-rating">
+                                                            <div class="pro-details-brand">
+                                                                <span> Brands: <a href="shop-grid-right.html">Bootstrap</a></span>
+                                                            </div>
+                                                            <div class="product-rate-cover text-end">
+                                                                <div class="product-rate d-inline-block">
+                                                                    <div class="product-rating" style="width:90%">
+                                                                    </div>
+                                                                </div>
+                                                                <span class="font-small ml-5 text-muted"> (25 reviews)</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="clearfix product-price-cover">
+                                                            <div class="product-price primary-color float-left">
+                                                                <ins><span class="text-brand">$120.00</span></ins>
+                                                                <ins><span class="old-price font-md ml-15">$200.00</span></ins>
+                                                                <span class="save-price  font-md color3 ml-15">25% Off</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="bt-1 border-color-1 mt-15 mb-15"></div>
+                                                        <div class="short-desc mb-30">
+                                                            <p class="font-sm">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquam rem officia, corrupti reiciendis minima nisi modi,!</p>
+                                                        </div>
+
+                                                        <div class="attr-detail attr-color mb-15">
+                                                            <strong class="mr-10">Color</strong>
+                                                            <ul class="list-filter color-filter">
+                                                                <li><a href="#" data-color="Red"><span class="product-color-red"></span></a></li>
+                                                                <li><a href="#" data-color="Yellow"><span class="product-color-yellow"></span></a></li>
+                                                                <li class="active"><a href="#" data-color="White"><span class="product-color-white"></span></a></li>
+                                                                <li><a href="#" data-color="Orange"><span class="product-color-orange"></span></a></li>
+                                                                <li><a href="#" data-color="Cyan"><span class="product-color-cyan"></span></a></li>
+                                                                <li><a href="#" data-color="Green"><span class="product-color-green"></span></a></li>
+                                                                <li><a href="#" data-color="Purple"><span class="product-color-purple"></span></a></li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="attr-detail attr-size">
+                                                            <strong class="mr-10">Size</strong>
+                                                            <ul class="list-filter size-filter font-small">
+                                                                <li><a href="#">S</a></li>
+                                                                <li class="active"><a href="#">M</a></li>
+                                                                <li><a href="#">L</a></li>
+                                                                <li><a href="#">XL</a></li>
+                                                                <li><a href="#">XXL</a></li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+                                                        <div class="detail-extralink">
+                                                            <div class="detail-qty border radius">
+                                                                <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
+                                                                <span class="qty-val">1</span>
+                                                                <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
+                                                            </div>
+                                                            <div class="product-extra-link2">
+                                                                <button type="submit" class="button button-add-to-cart">Add to cart</button>
+                                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
+                                                                <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+                                                            </div>
+                                                        </div>
+                                                        <ul class="product-meta font-xs color-grey mt-50">
+                                                            <li class="mb-5">SKU: <a href="#">FWM15VKT</a></li>
+                                                            <li class="mb-5">Tags: <a href="#" rel="tag">Cloth</a>, <a href="#" rel="tag">Women</a>, <a href="#" rel="tag">Dress</a> </li>
+                                                            <li>Availability:<span class="in-stock text-success ml-5">8 Items In Stock</span></li>
+                                                        </ul>
+                                                    </div>
+                                                    <!-- Detail Info -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         @endforeach
 
                     </div>
                     <!--End product-grid-4-->
                 </div>
                 <!--En tab one (Featured)-->
-                <div class="tab-pane fade" id="tab-two" role="tabpanel" aria-labelledby="tab-two">
+                {{--<div class="tab-pane fade" id="tab-two" role="tabpanel" aria-labelledby="tab-two">
                     <div class="row product-grid-4">
-                        <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+                        @foreach($latestProducts as $product)
+                            <div class="col-lg-3 col-md-4 col-12 col-sm-6">
                             <div class="product-cart-wrap mb-30">
                                 <div class="product-img-action-wrap">
                                     <div class="product-img product-img-zoom">
@@ -153,55 +461,12 @@
                                 </div>
                             </div>
                         </div>
-
+                        @endforeach
                     </div>
                     <!--End product-grid-4-->
-                </div>
+                </div>--}}
                 <!--En tab two (Popular)-->
-                <div class="tab-pane fade" id="tab-three" role="tabpanel" aria-labelledby="tab-three">
-                    <div class="row product-grid-4">
-                        <div class="col-lg-3 col-md-4 col-12 col-sm-6">
-                            <div class="product-cart-wrap mb-30">
-                                <div class="product-img-action-wrap">
-                                    <div class="product-img product-img-zoom">
-                                        <a href="shop-product-right.html">
-                                            <img class="default-img" src="{{asset('/')}}website/assets//imgs/shop/product-2-1.jpg" alt="">
-                                            <img class="hover-img" src="{{asset('/')}}website/assets//imgs/shop/product-2-2.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="product-action-1">
-                                        <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
-                                        <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                                        <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
-                                    </div>
-                                    <div class="product-badges product-badges-position product-badges-mrg">
-                                        <span class="hot">Hot</span>
-                                    </div>
-                                </div>
-                                <div class="product-content-wrap">
-                                    <div class="product-category">
-                                        <a href="shop-grid-right.html">Music</a>
-                                    </div>
-                                    <h2><a href="shop-product-right.html">Donec ut nisl rutrum</a></h2>
-                                    <div class="rating-result" title="90%">
-                                            <span>
-                                                <span>90%</span>
-                                            </span>
-                                    </div>
-                                    <div class="product-price">
-                                        <span>$238.85 </span>
-                                        <span class="old-price">$245.8</span>
-                                    </div>
-                                    <div class="product-action-1 show">
-                                        <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.html"><i class="fi-rs-shopping-bag-add"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                    </div>
-                    <!--End product-grid-4-->
-                </div>
                 <!--En tab three (New added)-->
             </div>
             <!--End tab-content-->
@@ -222,27 +487,6 @@
             @endforeach
         </div>
     </section>
-
-    <section class="popular-categories section-padding mt-15 mb-25">
-        <div class="container wow fadeIn animated">
-            <h3 class="section-title mb-20"><span>Popular</span> Categories</h3>
-            <div class="carausel-6-columns-cover position-relative">
-                <div class="slider-arrow slider-arrow-2 carausel-6-columns-arrow" id="carausel-6-columns-arrows"></div>
-                <div class="carausel-6-columns" id="carausel-6-columns">
-                    @foreach($categories as $category)
-                        <div class="card-1">
-                            <figure class="img-hover-scale overflow-hidden">
-                                <a href="#"><img src="{{ asset($category->image)}}" height="200" alt=""></a>
-                            </figure>
-                            <h5><a href="{{route('product-category',['id' => $category->id])}}">{{($category->name)}}</a></h5>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </section>
-
-
     <section class="banners mb-15">
         <div class="container">
             <div class="row">
@@ -261,7 +505,6 @@
             </div>
         </div>
     </section>
-
     <section class="section-padding">
         <div class="container wow fadeIn animated">
             <h3 class="section-title mb-20"><span>New</span> Arrivals</h3>
@@ -303,8 +546,7 @@
             </div>
         </div>
     </section>
-
-    <section class="deals section-padding">
+    {{--<section class="deals section-padding">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 deal-co">
@@ -343,7 +585,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section>--}}
     <section class="section-padding">
         <div class="container">
             <h3 class="section-title mb-20 wow fadeIn animated"><span>Featured</span> Brands</h3>
@@ -359,7 +601,7 @@
             </div>
         </div>
     </section>
-    <section class="bg-grey-9 section-padding">
+    {{--<section class="bg-grey-9 section-padding">
         <div class="container pt-25 pb-25">
             <div class="heading-tab d-flex">
                 <div class="heading-tab-left wow fadeIn animated">
@@ -625,7 +867,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section>--}}
     <section class="mb-50">
         <div class="container">
             <div class="row">
@@ -642,7 +884,7 @@
             </div>
         </div>
     </section>
-    <section class="mb-45">
+    {{--<section class="mb-45">
         <div class="container">
             <div class="row">
                 <div class="col-lg-3 col-md-6 mb-sm-5 mb-md-0">
@@ -798,6 +1040,8 @@
                 </div>
             </div>
         </div>
-    </section>
-
+    </section>--}}
 @endsection
+@push('js')
+
+@endpush

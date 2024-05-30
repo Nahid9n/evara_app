@@ -22,7 +22,7 @@
 
                 <div class="card mt-5">
                     <div class="card-body">
-                        <p class="text-muted">{{session('message')}}</p>
+
                         <div class="border p-3 rounded">
                             <h6 class="mb-0 text-uppercase">Category Create Form</h6>
                             <hr/>
@@ -92,7 +92,7 @@
                     <h3 class="card-title">Edit Sub Category Form</h3>
                 </div>
                 <div class="card-body">
-                    <p class="text-muted">{{session('message')}}</p>
+
                     <form class="form-horizontal" action="{{ route('sub-category.update',$sub_category->id) }}" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
@@ -136,8 +136,10 @@
                         <div class="row mb-4">
                             <label class="col-md-3 form-label">Publication Status</label>
                             <div class="col-md-9 pt-3">
-                                <label> <input type="radio" value="1" {{$sub_category->status == 1 ? 'checked' : ''}} name="status"><span> Published</span> </label>
-                                <label> <input type="radio" value="0" {{$sub_category->status == 0 ? 'checked' : ''}} name="status"><span> Unpublished</span> </label>
+                                <select class="form-control" name="status" id="">
+                                    <option value="1" {{$sub_category->status == 1 ? 'selected' : ''}} >Published</option>
+                                    <option value="0" {{$sub_category->status == 0 ? 'selected' : ''}}>Unpublished</option>
+                                </select>
                             </div>
                         </div>
 

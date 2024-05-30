@@ -1,17 +1,16 @@
 @extends('admin.master')
 @section('title','Manage Category Page')
 @section('body')
-
     <div class="row">
-        <div class="col-xl-12 mx-auto">
-
+        <div class="col">
             <div class="card">
+                <div class="card-header border-bottom">
+                    <h3 class="card-title">All Category Info</h3>
+                </div>
                 <div class="card-body">
-                    <div class="border p-3 rounded">
-                        <h6 class="mb-0 text-uppercase">Category Show  Table</h6>
-                        <hr/>
-                        <p class="text-muted">{{session('message')}}</p>
-                        <table id="example" class="table table-hover table-striped table-bordered">
+
+                    <div class="table-responsive">
+                        <table id="example" class="table table-hover table-bordered">
                             <thead>
                             <th>sl</th>
                             <th>Category Name</th>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Exception;
+use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
@@ -19,7 +21,7 @@ class CategoryController extends Controller
     public function index()
     {
         return view('admin.category.index', [
-            'categories' => Category::all()
+            'categories' => Category::latest()->get(),
         ]);
     }
     /**
@@ -41,17 +43,22 @@ class CategoryController extends Controller
     //====================================
     public function store(Request $request)
     {
+        try {
+            $this->validate($request,[
+                'name' => 'required|unique:categories,name'
+            ],[
+                'name.required'         => 'Category name field is required',
+                'name.unique' => 'This Name is Already Have'
+            ]);
+            Category::newCategory($request);
 
+            return back()->with('message', 'Category info create successfully.');
+        }
+        catch (Exception $e){
+            return back()->with('error', $e->getMessage());
+        }
 //        return $request;
-        $this->validate($request,[
-            'name' => 'required|unique:categories,name'
-        ],[
-            'name.required'         => 'Category name field is required',
-            'name.unique' => 'Vai , ei nam ta already ase, r diyen na'
-        ]);
-        Category::newCategory($request);
 
-        return back()->with('message', 'Category info create successfully.');
     }
     /**
      * Display the specified resource.
@@ -98,18 +105,25 @@ class CategoryController extends Controller
 
     public function update(Request $request, Category $category)
     {
-        if($category->name != $request->name)
-        {
-            $this->validate($request,[
-                'name' => 'required|unique:categories,name'
-            ],[
-                'name.required'         => 'Category name field is required',
-                'name.unique' => 'Vai , ei nam ta already ase, r diyen na'
-            ]);
+        try {
+            if($category->name != $request->name)
+            {
+                $this->validate($request,[
+                    'name' => [
+                        'required',
+                        Rule::unique('categories')->ignore($category->id),
+                    ]
+                ]);
+            }
+
+            Category::updateCategory($request, $category);
+            return redirect('/category')->with('message', 'category info update successfully.');
+        }
+        catch (Exception $e){
+           return back()->with('error', $e->getMessage());
         }
 
-        Category::updateCategory($request, $category);
-        return redirect('/category')->with('message', 'category info update successfully.');
+
     }
 
     /**

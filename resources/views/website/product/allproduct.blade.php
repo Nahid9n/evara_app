@@ -62,6 +62,7 @@
                             </div>
                         </div>
                         <div class="row product-grid-3">
+
                             @forelse($products as $product)
                             <div class="col-lg-4 col-md-4 col-12 col-sm-6 border border-1 shadow">
                                 <div class="product-cart-wrap mb-30" style="height: 450px">

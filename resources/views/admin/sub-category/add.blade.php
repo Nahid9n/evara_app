@@ -23,7 +23,7 @@
 
             <div class="card mt-5">
                 <div class="card-body">
-                    <p class="text-muted">{{session('message')}}</p>
+
                     <div class="border p-3 rounded">
                         <h6 class="mb-0 text-uppercase">Category Create Form</h6>
                         <hr/>
@@ -93,11 +93,11 @@
                     <h3 class="card-title">Add Sub Category Form</h3>
                 </div>
                 <div class="card-body">
-                    <p class="text-muted">{{session('message')}}</p>
+
                     <form class="form-horizontal" action="{{ route('sub-category.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row mb-4">
-                            <label for="" class="col md-3 form-label">Category Name</label>
+                            <label for="" class="col md-3 form-label">Category Name <span class="text-danger">*</span></label>
                             <div class="col-md-9">
                                 <select name="category_id" id="" class="form-control" required>
                                     <option value="" disabled selected> -- Select Category --</option>
@@ -110,9 +110,9 @@
                             </div>
                         </div>
                         <div class="row mb-4">
-                            <label for="name"  class="col-md-3 form-label">Sub Category Name</label>
+                            <label for="name"  class="col-md-3 form-label">Sub Category Name <span class="text-danger">*</span></label>
                             <div class="col-md-9">
-                                <input class="form-control" value="{{ old('name') }}" name="name" id="name" placeholder="Sub Category Name" type="text"/>
+                                <input class="form-control" value="{{ old('name') }}" name="name" id="name" placeholder="Sub Category Name" type="text" required/>
                                 <span class="text-danger">{{$errors->has('name') ? $errors->first('name') : ''}}</span>
                             </div>
                         </div>
@@ -136,8 +136,10 @@
                         <div class="row mb-4">
                             <label class="col-md-3 form-label">Publication Status</label>
                             <div class="col-md-9 pt-3">
-                                <label for=""><input type="radio" value="1" checked name="status"><span> Published </span></label>
-                                <label for=""><input type="radio" value="0" checked name="status"><span> Unpublished </span></label>
+                                <select class="form-control" name="status" id="">
+                                    <option value="1" selected>Published</option>
+                                    <option value="0">Unpublished</option>
+                                </select>
                             </div>
                         </div>
 

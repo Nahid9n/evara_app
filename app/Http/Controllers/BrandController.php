@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use Illuminate\Http\Request;
+use Exception;
 
 class BrandController extends Controller
 {
@@ -12,9 +13,15 @@ class BrandController extends Controller
      */
     public function index()
     {
-        return view('admin.brand.index',[
-            'brands' => Brand::all()
-        ]);
+        try {
+            return view('admin.brand.index',[
+                'brands' => Brand::latest()->get(),
+            ]);
+        }
+        catch (Exception $e){
+            return back()->with('error', $e->getMessage());
+        }
+
     }
 
     /**
@@ -22,7 +29,13 @@ class BrandController extends Controller
      */
     public function create()
     {
-        return view('admin.brand.add');
+        try {
+            return view('admin.brand.add');
+        }
+        catch (Exception $e){
+            return back()->with('error', $e->getMessage());
+        }
+
     }
 
     /**
@@ -30,14 +43,18 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-//        return $request;
-        $this->validate($request,[
-            'name' => 'required'
-        ],[
-            'name.required'         => 'Brand name field is required',
-        ]);
-        Brand::newBrand($request);
-        return back()->with('message', 'Brand info is created successfully.');
+        try {
+            $this->validate($request,[
+                'name' => 'required'
+            ],[
+                'name.required'         => 'Brand name field is required',
+            ]);
+            Brand::newBrand($request);
+            return back()->with('message', 'Brand info is created successfully.');
+        }
+        catch (Exception $e){
+            return back()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -45,8 +62,14 @@ class BrandController extends Controller
      */
     public function show(Brand $brand)
     {
-        Brand::checkStatus($brand);
-        return back()->with('message','Status is updated');
+        try {
+            Brand::checkStatus($brand);
+            return back()->with('message','Status is updated');
+        }
+        catch (Exception $e){
+            return back()->with('error', $e->getMessage());
+        }
+
 
     }
 
@@ -56,9 +79,15 @@ class BrandController extends Controller
 
     public function edit(Brand $brand)
     {
-        return view('admin.brand.edit', [
-            'brand' => $brand
-        ]);
+        try {
+            return view('admin.brand.edit', [
+                'brand' => $brand
+            ]);
+        }
+        catch (Exception $e){
+            return back()->with('error', $e->getMessage());
+        }
+
     }
 
     /**
@@ -66,8 +95,19 @@ class BrandController extends Controller
      */
     public function update(Request $request, Brand $brand)
     {
-        Brand::updateBrand($request, $brand);
-        return redirect('/brand')->with('message','brand info update successfully.');
+        try {
+            $this->validate($request,[
+                'name' => 'required'
+            ],[
+                'name.required'         => 'Brand name field is required',
+            ]);
+            Brand::updateBrand($request, $brand);
+            return redirect('/brand')->with('message','brand info update successfully.');
+        }
+        catch (Exception $e){
+            return back()->with('error', $e->getMessage());
+        }
+
     }
     /**
      * Remove the specified resource from storage.
@@ -75,14 +115,20 @@ class BrandController extends Controller
     private static $brand;
     public function destroy(Brand $brand)
     {
-        self::$brand = Brand::find($brand->id);
-        if (self::$brand->image) {
-            if (file_exists(self::$brand->image)) {
-                unlink(self::$brand->image);
+        try {
+            self::$brand = Brand::find($brand->id);
+            if (self::$brand->image) {
+                if (file_exists(self::$brand->image)) {
+                    unlink(self::$brand->image);
+                }
             }
+            self::$brand->delete();
+            return back()->with('message','delete brand Successfully');
         }
-        self::$brand->delete();
-        return back()->with('message','delete brand Successfully');
+        catch (Exception $e){
+            return back()->with('error',$e->getMessage());
+        }
+
     }
 
 

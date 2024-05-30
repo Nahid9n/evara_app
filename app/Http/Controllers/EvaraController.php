@@ -21,8 +21,9 @@ class EvaraController extends Controller
           'products' => Product::where('featured_status',1)
          // 'products' => Product::where('status',1)
               ->orderBy('id','desc')
-              ->take(8)
+              ->take(12)
               ->get(['id','name','image','category_id','regular_price','selling_price']),
+            'latestProducts' => Product::where('status',1)->take(12)->latest()->get(),
 //          'product_offers' => ProductOffer::all(),
           'product_offers'  => ProductOffer::where('status',1)->orderBy('id','desc')->take(4)->get(),
           'vendor_products' => Product::whereNot('vendor_id', 0)->where('status', 1)->orderBy('id','desc')->take(16)->get(),

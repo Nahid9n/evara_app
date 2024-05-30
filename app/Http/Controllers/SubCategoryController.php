@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
+use Exception;
 
 class SubCategoryController extends Controller
 {
@@ -14,7 +15,7 @@ class SubCategoryController extends Controller
     public function index()
     {
         return view('admin.sub-category.index', [
-            'sub_categories' => SubCategory::all()
+            'sub_categories' => SubCategory::latest()->get(),
         ]);
     }
     /**
@@ -50,17 +51,22 @@ class SubCategoryController extends Controller
 // 2nd =========================================
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'category_id' => 'required',
-            'name' => 'required',
-        ],[
-            'category_id.required' => 'Category Name field is required',
-            'name.required' => 'Sub Category Name field is required',
-//            'name.unique' => 'Vai , ei nam ta already ase, r diyen na',
-        ]);
-//        return $request;
-        SubCategory::newSubCategory($request);
-        return back()->with('message','Sub Category info create successfully.');
+        try {
+            $this->validate($request,[
+                'category_id' => 'required',
+                'name' => 'required',
+            ],[
+                'category_id.required' => 'Category Name field is required',
+                'name.required' => 'Sub Category Name field is required',
+            ]);
+            SubCategory::newSubCategory($request);
+            return back()->with('message','Sub Category info create successfully.');
+        }
+        catch (Exception $e){
+            return back()->with('error',$e->getMessage());
+        }
+
+
     }
     /**
      * Display the specified resource.
@@ -85,8 +91,21 @@ class SubCategoryController extends Controller
      */
     public function update(Request $request, SubCategory $subCategory)
     {
-        SubCategory::updateSubCategory($request, $subCategory);
-        return redirect('/sub-category')->with('message', 'Sub category info update successfully.');
+        try {
+            $this->validate($request,[
+                'category_id' => 'required',
+                'name' => 'required',
+            ],[
+                'category_id.required' => 'Category Name field is required',
+                'name.required' => 'Sub Category Name field is required',
+            ]);
+            SubCategory::updateSubCategory($request, $subCategory);
+            return redirect('/sub-category')->with('message', 'Sub category info update successfully.');
+        }
+        catch (Exception $e){
+            return back()->with('error',$e->getMessage());
+        }
+
     }
     /**
      * Remove the specified resource from storage.

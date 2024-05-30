@@ -23,7 +23,7 @@
                     <h3 class="card-title">Edit Order Info</h3>
                 </div>
                 <div class="card-body">
-                    <p class="text-muted">{{session('message')}}</p>
+
                     <div class="table-responsive">
 
                         <form action="{{ route('order.update',$order->id) }}" method="POST">

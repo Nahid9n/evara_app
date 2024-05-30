@@ -22,7 +22,7 @@
                     <h3 class="card-title">Setting Form</h3>
                 </div>
                 <div class="card-body">
-                    <p class="text-muted">{{session('message')}}</p>
+
                     <form class="form-horizontal" action="{{ route('setting.update', $setting->id) }}" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')

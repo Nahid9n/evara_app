@@ -23,7 +23,7 @@
                     <h3 class="card-title">Add Color Form</h3>
                 </div>
                 <div class="card-body">
-                    <p class="text-muted">{{session('message')}}</p>
+
                     <form class="form-horizontal" action="{{ route('color.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
 

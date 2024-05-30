@@ -75,7 +75,7 @@
                     <h3 class="card-title">Add Brand Form</h3>
                 </div>
                 <div class="card-body">
-                    <p class="text-muted">{{session('message')}}</p>
+
                     <form class="form-horizontal" action="{{ route('brand.update',$brand->id) }}" method="post"
                           enctype="multipart/form-data">
                         @csrf
@@ -84,7 +84,7 @@
                             <label for="name" class="col-md-3 form-label">Brand Name</label>
                             <div class="col-md-9">
                                 <input class="form-control" value="{{ $brand->name }}" name="name" id="name"
-                                       placeholder="Brand Name" type="text"/>
+                                       placeholder="Brand Name" type="text" required/>
                                 <span class="text-danger">{{$errors->has('name') ? $errors->first('name') : ''}}</span>
                             </div>
                         </div>
@@ -110,10 +110,10 @@
                         <div class="row mb-4">
                             <label class="col-md-3 form-label">Publication Status</label>
                             <div class="col-md-9 pt-3">
-                                <label for=""><input type="radio" value="1"
-                                                     {{ $brand->status == 1 ? 'checked' : '' }} name="status"><span> Published </span></label>
-                                <label for=""><input type="radio" value="0"
-                                                     {{ $brand->status == 0 ? 'checked' : '' }} name="status"><span> Unpublished </span></label>
+                                <select class="form-control" name="status" id="">
+                                    <option value="1" {{$brand->status == 1 ? 'selected' : ''}} >Published</option>
+                                    <option value="0" {{$brand->status == 0 ? 'selected' : ''}}>Unpublished</option>
+                                </select>
                             </div>
                         </div>
 

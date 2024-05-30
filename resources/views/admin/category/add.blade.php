@@ -15,46 +15,45 @@
     </div>
     <!-- PAGE-HEADER END -->
     <div class="row">
-        <div class="col-xl-8 mx-auto">
-
-            <div class="card mt-5">
+        <div class="col">
+            <div class="card">
+                <div class="card-header border-bottom">
+                    <h3 class="card-title">Category Create Form</h3>
+                </div>
                 <div class="card-body">
-                    <p class="text-muted">{{session('message')}}</p>
-                    <div class="border p-3 rounded">
-                        <h6 class="mb-0 text-uppercase">Category Create Form</h6>
-                        <hr/>
 
-                        <form action="{{ route('category.store') }}" method="post" enctype="multipart/form-data">
-                            @csrf
-                            <div class="col-12">
-                                <label class="form-label">Category Name</label>
-                                <input type="text" value="{{ old('name') }}" name="name" class="form-control">
-                                <span class="text-danger">{{$errors->has('name') ? $errors->first('name') : ''}}</span>
-                            </div>
+                    <form action="{{ route('category.store') }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div class="col-12">
+                            <label class="form-label">Category Name <span class="text-danger">*</span></label>
+                            <input type="text" value="{{ old('name') }}" name="name" class="form-control" placeholder="category name" required>
+                            <span class="text-danger">{{$errors->has('name') ? $errors->first('name') : ''}}</span>
+                        </div>
 
-                            <div class="col-12">
-                                <label class="form-label">Category Description </label>
-                                <textarea name="description" class="form-control" ></textarea>
-                            </div>
+                        <div class="col-12">
+                            <label class="form-label">Category Description </label>
+                            <textarea name="description" class="form-control" id="" cols="30" rows="5"  placeholder="category description"></textarea>
+                        </div>
 
-                            <div class="col-12">
-                                <label class="form-label">Category Image  </label>
-                                <input type="file" id="imgInp" name="image" class="form-control">
-                                <img src="" alt="" id="categoryImage" >
+                        <div class="col-12">
+                            <label class="form-label">Category Image </label>
+                            <input type="file" id="imgInp" name="image" class="form-control">
+                            <img src="" alt="" id="categoryImage" >
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Publication Status</label>
+                            <select class="form-control" name="status" id="">
+                                <option value="1" selected>Published</option>
+                                <option value="0">Unpublished</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-success m-1">Create New Category</button>
                             </div>
-                            <div class="col-12">
-                                <label class="form-label">Publication Status</label>
-                                <input type="radio" value="1" checked name="status" /><span>Published</span>
-                                <input type="radio" value="0" name="status" /><span>Unpublished</span>
-                            </div>
-                            <div class="col-12">
-                                <div class="d-grid">
-                                    <button type="submit" class="btn btn-success m-1">Create New Category</button>
-                                </div>
-                            </div>
+                        </div>
 
-                        </form>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>

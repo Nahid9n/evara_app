@@ -23,7 +23,7 @@
                     <h3 class="card-title">All Sub Category Info</h3>
                 </div>
                 <div class="card-body">
-                    <p class="text-muted">{{session('message')}}</p>
+
                     <div class="table-responsive">
                         <table id="example3" class="table table-bordered text-nowrap border-bottom">
                             <thead>
