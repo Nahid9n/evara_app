@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Size;
 use Illuminate\Http\Request;
+use Exception;
+use Illuminate\Validation\Rule;
 
 class SizeController extends Controller
 {
@@ -30,18 +32,19 @@ class SizeController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'name' => 'required',
-//            'name' => 'required|unique:sizes,name',
-//            'code' => 'required|unique:sizes,code'
-        ],[
-            'name.required'         => 'Size name field is required',
-//            'name.unique'         => 'Size name field must be unique',
-//            'code.required'         => 'Size code name field is required',
-//            'code.unique'         => 'Size code field must be unique',
-        ]);
-        Size::newSize($request);
-        return back()->with('message', 'Size info is created successfully.');
+        try {
+            $this->validate($request,[
+                'name' => 'required',
+            ],[
+                'name.required'         => 'Size name field is required',
+            ]);
+            Size::newSize($request);
+            return back()->with('message', 'Size info is created successfully.');
+        }
+        catch (Exception $e){
+            return back()->with('error', $e->getMessage());
+        }
+
 
         /*
         $this->validate($request,[
@@ -79,8 +82,20 @@ class SizeController extends Controller
      */
     public function update(Request $request, Size $size)
     {
-        Size::updateSize($request, $size);
-        return redirect('/size')->with('message','Size info update successfully.');
+        try {
+            $this->validate($request,[
+                'name' => ['required',Rule::unique('sizes')->ignore($size->id)],
+                'slug' => Rule::unique('sizes')->ignore($size->id),
+            ],[
+                'name.required'         => 'Size name field is required',
+            ]);
+            Size::updateSize($request, $size);
+            return redirect()->route('size.index')->with('message','Size info update successfully.');
+        }
+        catch (Exception $e){
+            return back()->with('error', $e->getMessage());
+        }
+
 
     }
 

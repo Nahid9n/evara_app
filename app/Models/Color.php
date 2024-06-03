@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Color extends Model
 {
@@ -39,6 +40,7 @@ class Color extends Model
     private static function saveBasicInfo($color, $request)
     {
         $color->name           = $request->name;
+        $color->slug           = Str::slug($request->name);
         $color->code           = $request->code;
         $color->description    = $request->description;
 

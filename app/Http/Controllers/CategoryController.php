@@ -106,18 +106,13 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         try {
-            if($category->name != $request->name)
-            {
-                $this->validate($request,[
-                    'name' => [
-                        'required',
-                        Rule::unique('categories')->ignore($category->id),
-                    ]
-                ]);
-            }
+            $this->validate($request,[
+                'name' => ['required', Rule::unique('categories')->ignore($category->id)],
+                'slug' => [ Rule::unique('categories')->ignore($category->id)],
+            ]);
 
             Category::updateCategory($request, $category);
-            return redirect('/category')->with('message', 'category info update successfully.');
+            return redirect()->route('category.index')->with('message', 'category info update successfully.');
         }
         catch (Exception $e){
            return back()->with('error', $e->getMessage());

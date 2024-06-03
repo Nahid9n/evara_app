@@ -20,9 +20,6 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <p class="text-center text-success">
-                        {{ session('message') }}
-                    </p>
                     <div class="table-responsive">
                         <table class="table shopping-summery text-center">
 
@@ -40,9 +37,12 @@
                             @if (count($wishlists) > 0)
                             @foreach($wishlists as $wishListItem)
                             <tr>
-                                <td class="image product-thumbnail"><img src="{{ asset($wishListItem->product->image) }}" alt="#"></td>
+                                <td class="image product-thumbnail">
+                                    <a href="{{ route('product-detail',$wishListItem->product->slug)}}"><img src="{{ asset($wishListItem->product->image) }}" alt="#"></a>
+
+                                </td>
                                 <td class="product-des product-name">
-                                    <h5 class="product-name"><a href="{{ route('product-detail',['id' => $wishListItem->product->id])}}">{{$wishListItem->product->name}}</a></h5>
+                                    <h5 class="product-name"><a href="{{ route('product-detail',$wishListItem->product->slug)}}">{{$wishListItem->product->name}}</a></h5>
                                     <p class="font-xs">{{ $wishListItem->product->short_description }}
                                     </p>
                                 </td>
@@ -51,7 +51,7 @@
                                     <span class="color3 font-weight-bold">In Stock: {{$wishListItem->product->stock_amount}}</span>
                                 </td>
                                 <td class="text-right" data-title="Cart">
-                                    <a href="{{ route('product-detail',['id' => $wishListItem->product->id])}}" class="btn btn-sm"><i class="fi-rs-shopping-bag mr-5"></i>Add to cart</a>
+                                    <a href="{{--{{ route('product-detail',$wishListItem->product->slug)}}--}}" class="btn"><i class="fi-rs-shopping-bag mr-5"></i>Add to cart</a>
                                 </td>
                                 <td>
                                     <form action="{{ route('wishlist.destroy',$wishListItem->id) }}" method="post">

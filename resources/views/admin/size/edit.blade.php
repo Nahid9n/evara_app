@@ -1,5 +1,3 @@
-
-
 @extends('admin.master')
 @section('title','Edit Size Page')
 @section('body')
@@ -29,14 +27,14 @@
                         @csrf
                         @method('PUT')
                         <div class="row mb-4">
-                            <label for="name"  class="col-md-3 form-label">Size Name</label>
+                            <label for="name"  class="col-md-3 form-label">Size Name <span class="text-danger">*</span></label>
                             <div class="col-md-9">
                                 <input class="form-control" value="{{ $size->name }}" name="name" id="name" placeholder="Size Name" type="text"/>
                                 <span class="text-danger">{{$errors->has('name') ? $errors->first('name') : ''}}</span>
                             </div>
                         </div>
                         <div class="row mb-4">
-                            <label for="name"  class="col-md-3 form-label">Unit Code</label>
+                            <label for="name"  class="col-md-3 form-label">Size Code</label>
                             <div class="col-md-9">
                                 <input class="form-control" value="{{ $size->code }}" name="code" id="code" placeholder="Size Code" type="text"/>
                                 <span class="text-danger">{{$errors->has('code') ? $errors->first('code') : ''}}</span>
@@ -44,7 +42,7 @@
                         </div>
 
                         <div class="row mb-4">
-                            <label for="description" class="col-md-3 form-label">Unit Description</label>
+                            <label for="description" class="col-md-3 form-label">Size Description</label>
                             <div class="col-md-9">
                                 <textarea class="form-control" name="description" id="description" placeholder="Size Description" >{{ $size->description }}</textarea>
                             </div>
@@ -55,8 +53,10 @@
                         <div class="row mb-4">
                             <label class="col-md-3 form-label">Publication Status</label>
                             <div class="col-md-9 pt-3">
-                                <label for=""><input type="radio" value="1" {{ $size->status == 1 ? 'checked' : '' }} name="status"><span> Published </span></label>
-                                <label for=""><input type="radio" value="0" {{ $size->status == 0 ? 'checked' : '' }} name="status"><span> Unpublished </span></label>
+                                <select class="form-control" name="status" id="">
+                                    <option value="1" {{$size->status == 1 ? 'selected' : ''}} >Published</option>
+                                    <option value="0" {{$size->status == 0 ? 'selected' : ''}}>Unpublished</option>
+                                </select>
                             </div>
                         </div>
 

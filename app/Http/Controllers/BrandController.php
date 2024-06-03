@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Validation\Rule;
 
 class BrandController extends Controller
 {
@@ -97,12 +98,13 @@ class BrandController extends Controller
     {
         try {
             $this->validate($request,[
-                'name' => 'required'
+                'name' => 'required',
+                'slug' => [ Rule::unique('brands')->ignore($brand->id)],
             ],[
                 'name.required'         => 'Brand name field is required',
             ]);
             Brand::updateBrand($request, $brand);
-            return redirect('/brand')->with('message','brand info update successfully.');
+            return redirect()->route('brand.index')->with('message','brand info update successfully.');
         }
         catch (Exception $e){
             return back()->with('error', $e->getMessage());

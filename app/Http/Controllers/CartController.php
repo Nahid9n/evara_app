@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Cart;
+use App\Models\Cart;
+use Session;
+
 
 class CartController extends Controller
 {
@@ -17,7 +19,7 @@ class CartController extends Controller
     {
 //        return Cart::content();
         return view('website.cart.index',[
-            'products' => Cart::content()
+            'products' => Cart::where('customer_id', Session::get('customer_id'))->get(),
         ]);
 
     }
@@ -59,7 +61,56 @@ class CartController extends Controller
         return redirect('/cart')->with('messages','Add to Cart sucessfully');
 
     }
+    public function cartAdd(Request $request){
+        if(!Session::get('customer_id')){
+            return response()->json([
+                'status' => false,
+                'error' => "Please login first"
+            ]);
+        }
+        $product = Product::find($request->product_id);
+        if(!$product){
+            return response()->json([
+                'status' => false,
+                'error' => "Product not found"
+            ]);
+        }
+        $checkProductInCart = Cart::where('product_id',$request->product_id)
+            ->where('color',$request->color)
+            ->where('size',$request->size)
+            ->first();
+        if ($checkProductInCart){
+            return response()->json([
+                'status' => false,
+                'error' => "already have into cart",
+            ]);
+        }
+        else{
+            $cart = new Cart();
+            $cart->product_id = $request->product_id;
+            $cart->customer_id = Session::get('customer_id');
+            $cart->name = $product->name;
+            $cart->qty = $request->qty;
+            $cart->price = $product->selling_price;
+            $cart->row_total = ($product->selling_price * $request->qty);
+            $cart->size = $request->size;
+            $cart->color = $request->color;
+            $cart->image = $product->image;
+            $cart->code = $product->code;
+            $cart->seller_id = $product->vendor_id;
+            $cart->save();
+            return response()->json([
+                'message' => "Product added",
+                'count' => count(Cart::where('customer_id', Session::get('customer_id'))->get())
+            ]);
+        }
 
+    }
+    public function getCartDetails(){
+        $cartContents = Cart::where('customer_id', Session::get('customer_id'))->get();
+        $prices = Cart::where('customer_id', Session::get('customer_id'))->sum('row_total');
+        return view('website.cart.ajaxcartitem', compact('cartContents', 'prices'));
+    }
     /**
      * Display the specified resource.
      */

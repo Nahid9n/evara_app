@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Unit extends Model
 {
@@ -37,6 +38,7 @@ class Unit extends Model
     private static function saveBasicInfo($unit, $request)
     {
         $unit->name           = $request->name;
+        $unit->slug           = Str::slug($request->name);
         $unit->code           = $request->code;
         $unit->description    = $request->description;
 

@@ -90,7 +90,7 @@
                                     </div>
                                     <div class="product-content-wrap">
                                         <div class="product-category">
-                                            <a href="shop-grid-right.html">Music</a>
+                                            <a href="{{route('product-category',$product->category->slug)}}">{{$product->category->name}}</a>
                                         </div>
                                         <h2><a href="{{route('product-detail',$product->id)}}">{{$product->name}}</a></h2>
                                         <div class="rating-result" title="90%">
@@ -115,16 +115,16 @@
                                     <div class="product-cart-wrap mb-30">
                                         <div class="product-img-action-wrap">
                                             <div class="product-img product-img-zoom">
-                                                <a href="shop-product-right.html">
-                                                    <img class="default-img" src="assets/imgs/shop/product-2-1.jpg" alt="">
-                                                    <img class="hover-img" src="assets/imgs/shop/product-2-2.jpg" alt="">
+                                                <a href="#">
+                                                    <img class="default-img" src="#" alt="">
+                                                    <img class="hover-img" src="#" alt="">
                                                 </a>
                                             </div>
                                             <div class="product-action-1">
                                                 <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal">
                                                     <i class="fi-rs-search"></i></a>
-                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                                                <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="#"><i class="fi-rs-heart"></i></a>
+                                                <a aria-label="Compare" class="action-btn hover-up" href="#"><i class="fi-rs-shuffle"></i></a>
                                             </div>
                                             <div class="product-badges product-badges-position product-badges-mrg">
                                                 <span class="hot">Hot</span>
@@ -132,9 +132,9 @@
                                         </div>
                                         <div class="product-content-wrap">
                                             <div class="product-category">
-                                                <a href="shop-grid-right.html">Music</a>
+                                                <a href="#">Music</a>
                                             </div>
-                                            <h2><a href="shop-product-right.html">Colorful Pattern Shirts</a></h2>
+                                            <h2><a href="#">Colorful Pattern Shirts</a></h2>
                                             <div class="rating-result" title="90%">
                                             <span>
                                                 <span>90%</span>
@@ -145,7 +145,7 @@
                                                 <span class="old-price">$245.8</span>
                                             </div>
                                             <div class="product-action-1 show">
-                                                <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.html"><i class="fi-rs-shopping-bag-add"></i></a>
+                                                <a aria-label="Add To Cart" class="action-btn hover-up" href="#"><i class="fi-rs-shopping-bag-add"></i></a>
                                             </div>
                                         </div>
                                     </div>

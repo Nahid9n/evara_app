@@ -38,22 +38,25 @@
                                                          alt="product image" class="img-fluid" style="width:100%; height:550px;"/>
                                                 </figure>
                                             @endforeach
+                                            <figure class="border-radius-10">
+                                                <img src="{{asset($product->image)}}" alt="product image" class="img-fluid" style="width:100%; height:550px;"/>
+                                            </figure>
+
                                         </div>
                                         <!-- THUMBNAILS -->
                                         <div class="slider-nav-thumbnails pl-15 pr-15">
                                             @foreach($product->productImages as $productImage)
                                                 <div><img src="{{asset($productImage->image)}}" alt="product image" width="100" height="100"/></div>
                                             @endforeach
+                                            <div><img src="{{asset($product->image)}}" alt="product image" width="100" height="100"/></div>
+                                            <div><img src="{{asset($product->back_image)}}" alt="product image" width="100" height="100"/></div>
                                         </div>
                                     </div>
                                     <!-- End Gallery -->
                                 </div>
 {{-- =========  form ========================  =========================================== --}}
                                 <div class="col-md-6 col-sm-12 col-xs-12">
-                                    <form action="{{ route('cart.store') }}" method="post">
-                                        @csrf
                                         <input type="hidden" name="id" value="{{ $product->id }}">
-
                                         <div class="detail-info">
                                             <h2 class="title-detail">{{ $product->name }}</h2>
                                             <div class="product-detail-rating">
@@ -113,50 +116,47 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                            <div class="attr-detail attr-color mb-15">
-                                                <strong class="mr-10">Color</strong>
-                                                <div class="mt-2">
-                                                    @foreach($product->colors as $key => $color)
-                                                        <label  for="">
-                                                            <input type="radio" name="color" {{ $key == 0 ? 'checked' : '' }} style="width: 20px; height: 20px" value="{{ $color->color->name ?? '' }}"/>
-                                                            {{ $color->color->name ?? '' }}
-                                                        </label>
-                                                    @endforeach
+                                            <form action="{{route('cart.ad')}}" method="post" class="addTocart">
+                                                @csrf
+                                                <input hidden type="text" name="product_id" value="{{ $product->id }}">
+                                                <div class="attr-detail attr-color mb-15">
+                                                    <strong class="mr-10">Color</strong>
+                                                    <ul class="list-filter color-filter">
+                                                        <li>
+                                                            <select class="form-control" name="color" id="">
+                                                                <option label="" selected disabled>select color</option>
+                                                                @foreach($product->colors as $key => $color)
+                                                                    <option value="{{$color->color->name}}" style="background-color: {{ $color->color->code }}">{{ $color->color->name ?? '' }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </li>
+                                                    </ul>
                                                 </div>
-
-                                            </div>
-                                            <div class="attr-detail attr-size">
-                                                <strong class="mr-10">Size</strong>
-
-                                                <div class="mt-2">
-                                                    @foreach($product->sizes as $key1 => $size)
-                                                        <label for="">
-                                                            <input type="radio" name="size" {{ $key1 == 0 ? 'checked' : '' }} style="width: 20px; height: 20px" value="{{ $size->size->code ?? '' }}">
-                                                            {{ $size->size->name ?? ''}}
-                                                        </label>
-                                                    @endforeach
+                                                <div class="attr-detail attr-size">
+                                                    <strong class="mr-10">Size</strong>
+                                                    <ul class="list-filter size-filter font-small">
+                                                        <li>
+                                                            <select class="form-control" name="size" id="">
+                                                                <option label="" selected disabled>select size</option>
+                                                                @foreach($product->sizes as $key1 => $size)
+                                                                    <option value="{{$size->size->name}}" >{{ $size->size->name ?? '' }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </li>
+                                                    </ul>
                                                 </div>
-
-
-
-                                            </div>
-                                            <div class="bt-1 border-color-1 mt-30 mb-30"></div>
-                                            <div class="detail-extralink">
-                                                <div class="row">
-                                                    <input type="number" name="qty" class="form-control w-75" value="1" min="1" />
+                                                <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+                                                <div class="detail-extralink">
+                                                    <div class="row">
+                                                        <input type="number" name="qty" class="form-control w-100" value="1" min="1"  max="{{ $product->stock_amount }}"/>
+                                                    </div>
+                                                    <div class="product-extra-link2">
+                                                        <button type="submit" class="button button-add-to-cart btn-sm mx-2">Add to cart</button>
+                                                        <a aria-label="Add To Wishlist" class="action-btn hover-up wishlist" id="wishlist{{$key}}"  href="#{{--{{ route('wishlist.ad',$product->id) }}--}}" data-value="{{$product->id}}"><i class="fi-rs-heart"></i></a>
+                                                        <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+                                                    </div>
                                                 </div>
-                                                <div class="product-extra-link2">
-
-                                                    <button type="submit" class="button button-add-to-cart">Add to
-                                                        cart
-                                                    </button>
-                                                    <a aria-label="Add To Wishlist" class="action-btn hover-up"
-                                                       href="{{ route('wishlist.ad',$product->id) }}"><i class="fi-rs-heart"></i></a>
-                                                    <a aria-label="Compare" class="action-btn hover-up"
-                                                       href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
-                                                </div>
-                                            </div>
-
+                                            </form>
 
                                             <ul class="product-meta font-xs color-grey mt-50">
                                                 <li class="mb-5">SKU: <a href="#">FWM15VKT</a></li>
@@ -168,10 +168,9 @@
                                                 </li>
                                             </ul>
                                         </div>
-
-                                    </form>
                                     <!-- Detail Info -->
                                 </div>
+
                             </div>
                             <div class="row">
                                 <div class="col-lg-12 m-auto entry-main-content">

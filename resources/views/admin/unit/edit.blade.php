@@ -29,16 +29,16 @@
                         @csrf
                         @method('PUT')
                         <div class="row mb-4">
-                            <label for="name"  class="col-md-3 form-label">Unit Name</label>
+                            <label for="name"  class="col-md-3 form-label">Unit Name <span class="text-danger">*</span></label>
                             <div class="col-md-9">
-                                <input class="form-control" value="{{ $unit->name }}" name="name" id="name" placeholder="Unit Name" type="text"/>
+                                <input class="form-control" value="{{ $unit->name }}" name="name" id="name" placeholder="Unit Name" type="text" required/>
                                 <span class="text-danger">{{$errors->has('name') ? $errors->first('name') : ''}}</span>
                             </div>
                         </div>
                         <div class="row mb-4">
-                            <label for="name"  class="col-md-3 form-label">Unit Code</label>
+                            <label for="name"  class="col-md-3 form-label">Unit Code <span class="text-danger">*</span></label>
                             <div class="col-md-9">
-                                <input class="form-control" value="{{ $unit->code }}" name="code" id="code" placeholder="Unit Code" type="text"/>
+                                <input class="form-control" value="{{ $unit->code }}" name="code" id="code" placeholder="Unit Code" type="text" required/>
                                 <span class="text-danger">{{$errors->has('code') ? $errors->first('code') : ''}}</span>
                             </div>
                         </div>
@@ -55,8 +55,10 @@
                         <div class="row mb-4">
                             <label class="col-md-3 form-label">Publication Status</label>
                             <div class="col-md-9 pt-3">
-                                <label for=""><input type="radio" value="1" {{ $unit->status == 1 ? 'checked' : '' }} name="status"><span> Published </span></label>
-                                <label for=""><input type="radio" value="0" {{ $unit->status == 0 ? 'checked' : '' }} name="status"><span> Unpublished </span></label>
+                                <select class="form-control" name="status" id="">
+                                    <option value="1" {{$unit->status == 1 ? 'selected' : ''}} >Published</option>
+                                    <option value="0" {{$unit->status == 0 ? 'selected' : ''}}>Unpublished</option>
+                                </select>
                             </div>
                         </div>
 

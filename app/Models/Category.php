@@ -5,6 +5,7 @@ namespace App\Models;
 use http\Env\Request;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Category extends Model
 {
@@ -152,6 +153,7 @@ class Category extends Model
     private static function saveBasicInfo($category, $request, $imageUrl)
     {
         $category->name           = $request->name;
+        $category->slug           = Str::slug($request->name);
         $category->description    = $request->description;
         $category->image          = $imageUrl;
         $category->status         = $request->status;

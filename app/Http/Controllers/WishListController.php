@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\WishList;
+use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Session;
 
@@ -11,30 +12,40 @@ class WishListController extends Controller
 
     private $customer, $wishListCheck, $wishList;
 
-    public function wishListAdd($id)
+    public function wishListAdd()
     {
 
         $this->customer = Session::get('customer_id');
         if ($this->customer) {
-            $this->wishListCheck = WishList::where('customer_id', $this->customer)
-                ->where('product_id', $id)
-                ->first();
+            $this->wishListCheck = WishList::where('customer_id', $this->customer)->where('product_id', $_GET['product_id'])->first();
             if (!$this->wishListCheck) {
                 $this->wishList = new WishList();
                 $this->wishList->customer_id = $this->customer;
-                $this->wishList->product_id = $id;
+                $this->wishList->product_id = $_GET['product_id'];
                 $this->wishList->date = date('Y-m-d');
                 $this->wishList->timestamp = strtotime(date('Y-m-d'));
                 $this->wishList->save();
 
-                return back()->with('message', 'Product added to wishlist.');
+                return response()->json([
+                    'message' => "Product added to wishlist.",
+                    'count' => count(WishList::where('customer_id', Session::get('customer_id'))->get()),
+                ]);
             } else {
-                return back()->with('message', 'Product already in wishlist.');
+                Toastr::error("Product already in wishlist.");
+                return response()->json([
+                    'status' => false,
+                    'error' => "Product already in wishlist."
+                ]);
             }
 
         } else {
 //            return back()->with('message','Please login/register for ad to wishlist.');
-            return redirect('/login-register')->with('message', 'Please login/register for ad to wishlist.');
+            Toastr::error("Please login/register for ad to wishlist.");
+            return response()->json([
+                'status' => false,
+                'error' => "Please login/register for ad to wishlist."
+            ]);
+
 
         }
 

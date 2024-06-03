@@ -1,6 +1,7 @@
 
 
 @if(\Request::route()->getname() == "home")
+{{--
 
 <!-- Modal -->
 <div class="modal fade custom-modal" id="onloadModal" tabindex="-1" aria-labelledby="onloadModalLabel" aria-hidden="true">
@@ -27,6 +28,7 @@
         </div>
     </div>
 </div>
+--}}
 
 @endif
 <!-- Quick view -->
@@ -256,34 +258,52 @@
                             <div class="header-action-icon-2">
                                 <a href="{{ route('wishlist.index') }}">
                                     <img class="svgInject" alt="Evara" src="{{asset('/')}}website/assets/imgs/theme/icons/icon-heart.svg">
-                                    <span class="pro-count blue">{{count($wishlists)}}</span>
+                                    <span class="pro-count blue" id="wishlistCartCount"><small>{{ count($wishlists) }}</small></span>
                                 </a>
                             </div>
                             <div class="header-action-icon-2">
                                 <a class="mini-cart-icon" href="{{ route('cart.index') }}">
                                     <img alt="Evara" src="{{asset('/')}}website/assets/imgs/theme/icons/icon-cart.svg">
-                                    <span class="pro-count blue">{{ count( Cart::content() ) }}</span>
+                                    <span class="pro-count blue" id="CartItemCount"><small>{{ \App\Models\Cart::where('customer_id',Session::get('customer_id'))->count() }}</small></span>
                                 </a>
-                                <div class="cart-dropdown-wrap cart-dropdown-hm2">
+                                <div class="cart-dropdown-wrap cart-dropdown-hm2" id="cartItems">
+                                    {{-- div append here ajaxcartitem blade --}}
                                     <ul>
-
                                         @php( $sum = 0 )
-                                        @foreach(Cart::content() as $cartItem)
+                                        @php($cartItems = \App\Models\Cart::where('customer_id',Session::get('customer_id'))->latest()->take(5)->get())
+                                        @php($seeALlCartItems = \App\Models\Cart::where('customer_id',Session::get('customer_id'))->count())
+                                        @foreach($cartItems as $cartItem)
                                         <li>
-                                            <div class="shopping-cart-img">
-                                                <a href=""><img alt="Evara" src="{{asset($cartItem->options->image)}}"></a>
-                                            </div>
-                                            <div class="shopping-cart-title">
-                                                <h4><a href="">{{ $cartItem->name }}</a></h4>
-                                                <h4><span>{{ $cartItem->qty }} × </span>{{ $cartItem->price }}</h4>
-                                            </div>
-                                            <div class="shopping-cart-delete">
-                                                <a href="#"><i class="fi-rs-cross-small"></i></a>
+                                            <div class="row">
+                                                <div class="col-2">
+                                                    <a href="">
+                                                        <img alt="Evara" src="{{asset($cartItem->image)}}">
+                                                    </a>
+                                                </div>
+                                                <div class="col-9">
+                                                    <div class="shopping-cart-title">
+                                                        <h4><a href="">{{ $cartItem->name }}</a></h4>
+                                                        <h5>
+                                                            <span>{{ $cartItem->qty }} × {{ $cartItem->price }}</span>
+                                                            <span> = {{ $cartItem->qty * $cartItem->price }}</span>
+
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                                <div class="col-1">
+                                                    <div class="shopping-cart-delete">
+                                                        <a href="#"><i class="fi-rs-cross-small"></i></a>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                         </li>
-                                            @php($sum = $sum + $cartItem->subtotal)
+                                            @php($sum = $sum + $cartItem->row_total)
                                         @endforeach
-
+                                        @if($seeALlCartItems > 4)
+                                        <li class="justify-content-center">
+                                            <a href="{{ route('cart.index') }}">See All</a></li>
+                                        @endif
                                     </ul>
                                     <div class="shopping-cart-footer">
                                         <div class="shopping-cart-total">
@@ -317,7 +337,7 @@
                             <ul>
                                 @foreach($categories as $category)
                                     <li class="{{ count($category->subCategory) > 0 ? 'has-children' : '' }}">
-                                        <a href="{{route('product-category',['id' => $category->id])}}"><i class="evara-font-dress"></i>{{$category->name}}</a>
+                                        <a href="{{route('product-category',$category->slug)}}"><i class="evara-font-dress"></i>{{$category->name}}</a>
                                         @if(count($category->subCategory) > 0)
                                             <div class="dropdown-menu">
                                                 <ul class="mega-menu d-lg-flex">
