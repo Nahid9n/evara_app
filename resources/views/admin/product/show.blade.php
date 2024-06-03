@@ -20,10 +20,36 @@
     <div class="row">
         <div class="col">
             <div class="card">
-                <div class="card-header border-bottom">
-                    <h3 class="card-title">Product Detail Information</h3>
+                <div class="card-header row border-bottom">
+                    <div class="col-6">
+                        <h3 class="card-title">Product Details Table</h3>
+                    </div>
+                    <div class="col-6">
+                        <a href="{{route('product.index')}}" class="btn btn-success my-1 float-end mx-2 text-center">All Product</a>
+                        <a href="{{route('product.edit', $product->id)}}" class="btn btn-warning my-1 float-end mx-2 text-center">Edit</a>
+                    </div>
                 </div>
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 text-center shadow">
+                            <img src="{{asset($product->image ?? '')}}" alt="" width="300" height="350">
+                            <p class="text-center">Product Front Image</p>
+                        </div>
+                        <div class="col-md-3 text-center shadow">
+                            <img src="{{asset($product->back_image ?? '')}}" alt="" width="300" height="350">
+                            <p class="text-center">Product Back Image</p>
+                        </div>
+
+                        <div class="col-md-6 shadow text-center">
+                            <p class="text-center my-2 fw-bold">Other Images</p>
+                            @if(isset($product->productImages))
+                                @foreach($product->productImages as $productImage)
+                                    <img src="{{asset($productImage->image)}}" alt="" class="m-1" height="200" width="150"/>
+                                @endforeach
+                            @endif
+
+                        </div>
+                    </div>
                     <table class="table table-bordered table-hover">
                         <tr>
                             <th>Product ID</th>
@@ -36,20 +62,6 @@
                         <tr>
                             <th>Product Code</th>
                             <td>{{$product->code}}</td>
-                        </tr>
-                        <tr>
-                            <th>Product Image</th>
-                            <td><img src="{{asset($product->image)}}" alt="" height="40" width="60"/></td>
-                        </tr>
-                        <tr>
-                            <th>Product Other Image</th>
-                            <td>
-                                @foreach($product->productImages as $productImage)
-                                    <img src="{{asset($productImage->image)}}" alt="" height="40" width="60"/>
-                                @endforeach
-                            </td>
-
-
                         </tr>
                         <tr>
                             <th>Category Name</th>

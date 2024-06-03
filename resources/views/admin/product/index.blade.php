@@ -19,8 +19,14 @@
     <div class="row">
         <div class="col">
             <div class="card">
-                <div class="card-header border-bottom">
-                    <h3 class="card-title">All Product Info</h3>
+                <div class="card-header row border-bottom">
+                    <div class="col-6">
+                        <h3 class="card-title">All Product Info</h3>
+                    </div>
+                    <div class="col-6">
+{{--                        <a href="{{route('product.index')}}" class="btn btn-success my-1 float-end mx-2 text-center">All Product</a>--}}
+                        <a href="{{route('product.create')}}" class="btn btn-warning my-1 float-end mx-2 text-center">+add</a>
+                    </div>
                 </div>
                 <div class="card-body">
 

@@ -13,6 +13,8 @@ use App\Models\Size;
 use App\Models\SubCategory;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Exception;
 
 class ProductController extends Controller
 {
@@ -60,12 +62,27 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-//        return $request;
-        $this->product = Product::newProduct($request);
-        ProductColor::newProductColor($request->colors , $this->product->id);
-        ProductSize::newProductSize($request->sizes, $this->product->id);
-        ProductImage::newProductImage($request->other_images,$this->product->id);
-        return back()->with('message','Product info save successfully');
+
+        try {
+//            $this->validate($request,[
+//                'name' => ['required', Rule::unique('colors')->ignore($color->id)],
+//                'slug' => Rule::unique('colors')->ignore($color->id)
+//            ]);
+
+            $this->product = Product::newProduct($request);
+            if ($request->colors){
+                ProductColor::newProductColor($request->colors , $this->product->id);
+            }
+            ProductSize::newProductSize($request->sizes, $this->product->id);
+            if ($request->other_images){
+                ProductImage::newProductImage($request->other_images,$this->product->id);
+            }
+            return back()->with('message','Product info save successfully');
+        }
+        catch (Exception $e){
+            return back()->with('error', $e->getMessage());
+        }
+
 
     }
 
@@ -101,15 +118,24 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        Product::updateProduct($request,$product);
-        ProductColor::updateProductColor($request->colors,$product->id);
-        ProductSize::updateProductSize($request->sizes,$product->id);
-        if ($request->other_images){
-            ProductImage::updateProductImage($request->other_images,$product->id);
+
+        try {
+            Product::updateProduct($request,$product);
+            if ($request->colors){
+                ProductColor::updateProductColor($request->colors,$product->id);
+            }
+            if ($request->sizes){
+                ProductSize::updateProductSize($request->sizes,$product->id);
+            }
+            if ($request->other_images){
+                ProductImage::updateProductImage($request->other_images,$product->id);
+            }
+            return redirect()->route('product.index')->with('message','Product info update successfully.');
+        }
+        catch (Exception $e){
+            return back()->with('error', $e->getMessage());
         }
 
-
-        return redirect('/product')->with('message','Product info update successfully.');
 
     }
 

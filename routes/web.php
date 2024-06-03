@@ -49,10 +49,10 @@ use App\Http\Controllers\Vendor\VendorProductController;
 
 Route::get('/', [EvaraController::class,'index'])->name('home');
 //Route::get('/product-category', [EvaraController::class,'category'])->name('product-category');
-Route::get('/product-category/{id}', [EvaraController::class,'category'])->name('product-category');
+Route::get('/product-category/{slug}', [EvaraController::class,'category'])->name('product-category');
 Route::get('/product-sub-category/{id}', [EvaraController::class,'subCategory'])->name('product-sub-category');
 Route::get('/product-all', [EvaraController::class,'allProduct'])->name('product-all');
-Route::get('/product-detail/{id}', [EvaraController::class,'product'])->name('product-detail');
+Route::get('/product-detail/{slug}', [EvaraController::class,'productDetails'])->name('product-detail');
 
 Route::get('/about-us', [PagesController::class,'about'])->name('about');
 Route::get('/purchase-guide', [PagesController::class,'purchaseGuide'])->name('purchase-guide');
@@ -105,8 +105,9 @@ Route::get('/my-dashboard',[CustomerAuthController::class,'dashboard'])->name('c
 
 //Wishlist
 Route::resource('wishlist',WishListController::class);
-Route::get('/wishlist-ad/{id}', [WishListController::class,'wishListAdd'])->name('wishlist.ad');
-
+Route::get('/wishlist-ad', [WishListController::class,'wishListAdd'])->name('wishlist.ad');
+Route::post('/cart-ad', [CartController::class,'cartAdd'])->name('cart.ad');
+Route::get('get-cart-details', [CartController::class, 'getCartDetails'])->name('get-cart-details');
 
 // SSLCOMMERZ Start
 Route::get('/example1', [SslCommerzPaymentController::class, 'exampleEasyCheckout']);

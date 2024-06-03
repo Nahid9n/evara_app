@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Exception;
+use Illuminate\Validation\Rule;
 
 class UnitController extends Controller
 {
@@ -13,7 +15,7 @@ class UnitController extends Controller
     public function index()
     {
         return view('admin.unit.index',[
-            'units' => Unit::all()
+            'units' => Unit::latest()->get(),
         ]);
 
     }
@@ -31,13 +33,21 @@ class UnitController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'name' => 'required'
-        ],[
-            'name.required'         => 'Unit name field is required',
-        ]);
-        Unit::newUnit($request);
-        return back()->with('message', 'Unit info is created successfully.');
+        try {
+            $this->validate($request,[
+                'name' => 'required | unique:units,name',
+                'code' => 'required'
+            ],[
+                'name.required'         => 'Unit name field is required',
+            ]);
+            Unit::newUnit($request);
+            return back()->with('message', 'Unit info is created successfully.');
+        }
+        catch (Exception $exception){
+            return back()->with('error', $exception->getMessage());
+        }
+
+
     }
 
     /**
@@ -45,8 +55,14 @@ class UnitController extends Controller
      */
     public function show(Unit $unit)
     {
-        Unit::checkStatus($unit);
-        return back()->with('message','Unit is updated');
+        try {
+            Unit::checkStatus($unit);
+            return back()->with('message','Unit is updated');
+        }
+        catch (Exception $exception){
+            return back()->with('error', $exception->getMessage());
+        }
+
     }
 
     /**
@@ -64,8 +80,20 @@ class UnitController extends Controller
      */
     public function update(Request $request, Unit $unit)
     {
-        Unit::updateUnit($request, $unit);
-        return redirect('/unit')->with('message','Unit info update successfully.');
+        try {
+            $this->validate($request,[
+                'name' => ['required', Rule::unique('units')->ignore($unit->id)],
+                'slug' => Rule::unique('units')->ignore($unit->id),
+                'code' => 'required',
+            ]);
+
+            Unit::updateUnit($request, $unit);
+            return redirect()->route('unit.index')->with('message','Unit info update successfully.');
+        }
+        catch (Exception $e){
+            return back()->with('error', $e->getMessage());
+        }
+
     }
 
     /**
@@ -73,7 +101,13 @@ class UnitController extends Controller
      */
     public function destroy(Unit $unit)
     {
-        Unit::deleteUnit($unit);
-        return back()->with('message', 'Delete Unit Successfully');
+        try {
+            Unit::deleteUnit($unit);
+            return back()->with('message', 'Delete Unit Successfully');
+        }
+        catch (Exception $exception){
+            return back()->with('error', $exception->getMessage());
+        }
+
     }
 }

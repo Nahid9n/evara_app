@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Brand extends Model
 {
@@ -111,6 +112,7 @@ class Brand extends Model
     private static function saveBasicInfo($brand, $request, $imageUrl)
     {
         $brand->name           = $request->name;
+        $brand->slug           = Str::slug($request->name);
         $brand->description    = $request->description;
         $brand->image          = $imageUrl;
         $brand->status         = $request->status;

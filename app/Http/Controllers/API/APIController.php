@@ -18,7 +18,7 @@ class APIController extends Controller
     public function getProductBySearchText()
     {
         $this->searchText   = $_GET['search_text'];
-        $this->products     = Product::where('status', 1)->where('name', 'LIKE', "%{$this->searchText}%")->get(['id', 'name', 'image', 'selling_price', 'regular_price']);
+        $this->products     = Product::where('status', 1)->where('name', 'LIKE', "%{$this->searchText}%")->get(['id','slug','category_id','brand_id', 'name', 'image', 'selling_price', 'regular_price']);
         foreach ($this->products as $product)
         {
             //   $product->image = admin/img/product-img/1699934833.jpg

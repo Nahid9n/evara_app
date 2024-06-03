@@ -33,34 +33,34 @@
                                 @php($sum = 0)
                                 @foreach($products as $key=> $product)
                                     <tr>
-                                        <td class="image product-thumbnail"><img src="{{ asset($product->options->image) }}" alt="#"></td>
+                                        <td class="image product-thumbnail"><img src="{{ asset($product->image ?? '') }}" alt="#"></td>
                                         <td class="product-des product-name">
-                                            <h5 class="product-name"><a href="{{route('product-detail', ['id' => $product->id])}}" target="_blank">{{ $product->name }}</a></h5>
+                                            <h5 class="product-name"><a href="{{route('product-detail',$product->product->slug)}}" target="_blank">{{ $product->name }}</a></h5>
                                             <p class="font-xs">
-                                                <span class="fw-bold">Color: </span> {{$product->options->color}} <br/>
-                                                <span class="fw-bold">Size: </span> {{$product->options->size}} <br/>
+                                                <span class="fw-bold">Color: </span> {{$product->color}} <br/>
+                                                <span class="fw-bold">Size: </span> {{$product->size}} <br/>
                                             </p>
                                         </td>
                                         <td class="price" data-title="Price"><span>TK. {{ $product->price }} </span></td>
                                         <td class="text-center" data-title="Stock">
                                             <div class=" w-25 m-auto">
                                                 <input type="number" name="data[{{$key}}][qty]" min="1" class="form-control" value="{{$product->qty}}"/>
-                                                <input type="hidden" name="data[{{$key}}][rowId]" class="form-control" value="{{$product->rowId}}"/>
+{{--                                                <input type="hidden" name="data[{{$key}}][rowId]" class="form-control" value="{{$product->rowId}}"/>--}}
                                             </div>
                                         </td>
 
 {{--                                        <input type="number" name="dat[{{$key}}][qty]" class="form-control" value="{{$product->qty}}"/>--}}
 
                                         <td class="text-right" data-title="Cart">
-                                            <span>TK. {{$product->subtotal}} </span>
+                                            <span>TK. {{$product->row_total}} </span>
                                         </td>
                                         <td class="action" data-title="Remove">
-                                            <a href="{{route('cart.delete', ['rowId' => $product->rowId])}}" onclick="return confirm('Are you sure to delete this..');" class="btn bg-danger border-0 btn-sm">
+                                            <a href="{{--{{route('cart.delete', ['rowId' => $product->rowId])}}--}}" onclick="return confirm('Are you sure to delete this..');" class="btn bg-danger border-0 btn-sm">
                                                 <i class="fi-rs-trash"></i>
                                             </a>
                                         </td>
                                     </tr>
-                                    @php($sum = $sum + $product->subtotal)
+                                    @php($sum = $sum + $product->row_total)
                                 @endforeach
                                 <tr>
                                     <td colspan="6" class="text-end">

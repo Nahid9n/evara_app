@@ -9,6 +9,7 @@ use App\Models\Feature;
 use App\Models\Product;
 use App\Models\ProductOffer;
 use Illuminate\Http\Request;
+use Exception;
 
 class EvaraController extends Controller
 {
@@ -22,7 +23,7 @@ class EvaraController extends Controller
          // 'products' => Product::where('status',1)
               ->orderBy('id','desc')
               ->take(12)
-              ->get(['id','name','image','category_id','regular_price','selling_price']),
+              ->get(['id','name','image','category_id','brand_id','regular_price','selling_price','slug']),
             'latestProducts' => Product::where('status',1)->take(12)->latest()->get(),
 //          'product_offers' => ProductOffer::all(),
           'product_offers'  => ProductOffer::where('status',1)->orderBy('id','desc')->take(4)->get(),
@@ -37,15 +38,13 @@ class EvaraController extends Controller
       ]);
     }
 
-    public function category($id)
+    public function category($slug)
     {
-        //        return 'ok';
+        $category = Category::where('slug',$slug)->first();
+        $products = Product::where('category_id',$category->id)->orderBy('id','desc')->get(['id','name','slug','category_id','image','back_image','regular_price','selling_price']);
         return view('website.category.index',[
-            'products' => Product::where('category_id',$id)
-                ->orderBy('id','desc')
-                ->get(['id','name','image','regular_price','selling_price']),
-
-            'categories' => Category::all(),
+            'products' => $products,
+            'categories' => Category::where('status',1)->latest()->get(),
 
         ]);
     }
@@ -56,9 +55,9 @@ class EvaraController extends Controller
         return view('website.category.index',[
             'products' => Product::where('sub_category_id',$id)
                 ->orderBy('id','desc')
-                ->get(['id','name','image','regular_price','selling_price']),
+                ->get(['id','name','slug','image','regular_price','selling_price']),
 
-            'categories' => Category::all(),
+            'categories' => Category::where('status',1)->latest()->get(),
 
         ]);
     }
@@ -69,28 +68,34 @@ class EvaraController extends Controller
             'products' => Product::where('status',1)->latest()->paginate(12),
         ]);
     }
-    public function product($id)
+    public function productDetails($slug)
     {
-        $this->product = Product::find($id);
+        try {
+            $product = Product::where('slug',$slug)->first();
 
-        $this->productOffer = ProductOffer::where('product_id', $id)->orderBy('id', 'desc')->first();
-        if ($this->productOffer)
-        {
-            $this->discount = $this->productOffer;
+            $productOffer = ProductOffer::where('product_id', $product->id)->orderBy('id', 'desc')->first();
+            if ($productOffer)
+            {
+                $discount = $productOffer;
+            }
+            else
+            {
+                $discount = '';
+            }
+
+            return view('website.product.index', [
+                'product' => $product,
+                'category_products' => Product::where('category_id',$product->category_id)
+                    ->orderBy('id','desc')
+                    ->take(4)
+                    ->get(['id','name','slug','image','selling_price','regular_price']),
+                'discount'  => $discount,
+            ]);
         }
-        else
-        {
-            $this->discount = '';
+        catch (Exception $exception){
+            return back()->with('error',$exception->getMessage());
         }
 
-        return view('website.product.index', [
-            'product' => $this->product,
-            'category_products' => Product::where('category_id',$this->product->category_id)
-            ->orderBy('id','desc')
-            ->take(4)
-            ->get(['id','name','image','selling_price','regular_price']),
-            'discount'  => $this->discount,
-        ]);
     }
 
 }

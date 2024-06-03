@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Color;
 use Illuminate\Http\Request;
+use Exception;
+use Illuminate\Validation\Rule;
 
 class ColorController extends Controller
 {
@@ -13,7 +15,7 @@ class ColorController extends Controller
     public function index()
     {
         return view('admin.color.index',[
-            'colors' => Color::all()
+            'colors' => Color::latest()->get(),
         ]);
 
     }
@@ -31,13 +33,19 @@ class ColorController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'name' => 'required'
-        ],[
-            'name.required'         => 'Color name field is required',
-        ]);
-        Color::newColor($request);
-        return back()->with('message', 'Color info is created successfully.');
+        try {
+            $this->validate($request,[
+                'name' => 'required'
+            ],[
+                'name.required'         => 'Color name field is required',
+            ]);
+            Color::newColor($request);
+            return back()->with('message', 'Color info is created successfully.');
+        }
+        catch (Exception $e){
+            return back()->with('error', $e->getMessage());
+        }
+
 
     }
 
@@ -65,8 +73,18 @@ class ColorController extends Controller
      */
     public function update(Request $request, Color $color)
     {
-        Color::updateColor($request, $color);
-        return redirect('/color')->with('message','Color info update successfully.');
+        try {
+            $this->validate($request,[
+                'name' => ['required', Rule::unique('colors')->ignore($color->id)],
+                'slug' => Rule::unique('colors')->ignore($color->id)
+            ]);
+
+            Color::updateColor($request, $color);
+            return redirect()->route('color.index')->with('message','Color info update successfully.');
+        }
+        catch (Exception $e){
+            return back()->with('error', $e->getMessage());
+        }
 
     }
 

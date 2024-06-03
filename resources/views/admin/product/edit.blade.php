@@ -149,6 +149,13 @@
                                 <img src="{{ asset($product->image) }}" alt="" height="100" width="100" />
                             </div>
                         </div>
+                        <div class="row mb-4">
+                            <label for="imgInp" class="col-md-3 form-label">Product Back Image</label>
+                            <div class="col-md-9">
+                                <input type="file" name="back_image" class="dropify" data-height="200" />
+                                <img src="{{ asset($product->back_image) }}" alt="" height="100" width="100" />
+                            </div>
+                        </div>
 
                         <div class="row mb-4">
                             <label  class="col-md-3 form-label">Product Other Image</label>
@@ -180,8 +187,10 @@
                         <div class="row mb-4">
                             <label class="col-md-3 form-label">Publication Status</label>
                             <div class="col-md-9 pt-3">
-                                <label><input type="radio" value="1" {{ $product->status == 1 ? 'checked' : '' }} name="status"> Published </label>
-                                <label><input type="radio" value="0" {{ $product->status == 0 ? 'checked' : '' }} name="status"> Unpublished </label>
+                                <select class="form-control" name="status" id="">
+                                    <option value="1" {{ $product->status == 1 ? 'selected' : '' }}>Published</option>
+                                    <option value="0" {{ $product->status == 0 ? 'selected' : '' }}>Unpublished</option>
+                                </select>
                             </div>
                         </div>
 

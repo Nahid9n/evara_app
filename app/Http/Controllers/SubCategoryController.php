@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Validation\Rule;
 
 class SubCategoryController extends Controller
 {
@@ -95,12 +96,13 @@ class SubCategoryController extends Controller
             $this->validate($request,[
                 'category_id' => 'required',
                 'name' => 'required',
+                'slug' => [ Rule::unique('sub_categories')->ignore($subCategory->id)],
             ],[
                 'category_id.required' => 'Category Name field is required',
                 'name.required' => 'Sub Category Name field is required',
             ]);
             SubCategory::updateSubCategory($request, $subCategory);
-            return redirect('/sub-category')->with('message', 'Sub category info update successfully.');
+            return redirect()->route('sub-category.index')->with('message', 'Sub category info update successfully.');
         }
         catch (Exception $e){
             return back()->with('error',$e->getMessage());
@@ -113,14 +115,20 @@ class SubCategoryController extends Controller
     private static $subCategory;
     public function destroy(SubCategory $subCategory)
     {
-        self::$subCategory = SubCategory::find($subCategory->id);
-        if (self::$subCategory->image) {
-            if (file_exists(self::$subCategory->image)) {
-                unlink(self::$subCategory->image);
+        try {
+            self::$subCategory = SubCategory::find($subCategory->id);
+            if (self::$subCategory->image) {
+                if (file_exists(self::$subCategory->image)) {
+                    unlink(self::$subCategory->image);
+                }
             }
+            self::$subCategory->delete();
+            return back()->with('message','Delete Sub category Successfully');
         }
-        self::$subCategory->delete();
-        return back()->with('message','Delete Sub category Successfully');
+        catch (Exception $e){
+            return back()->with('error',$e->getMessage());
+        }
+
     }
 
     /*

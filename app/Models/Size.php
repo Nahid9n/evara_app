@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Size extends Model
 {
@@ -38,6 +39,7 @@ class Size extends Model
     private static function saveBasicInfo($size, $request)
     {
         $size->name           = $request->name;
+        $size->slug           = Str::slug($request->name);
         $size->code           = $request->code;
         $size->description    = $request->description;
 

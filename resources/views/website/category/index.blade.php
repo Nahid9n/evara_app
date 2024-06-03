@@ -71,9 +71,9 @@
                                 <div class="product-cart-wrap mb-30">
                                     <div class="product-img-action-wrap">
                                         <div class="product-img product-img-zoom">
-                                            <a href="{{ route('product-detail',$product->id) }}">
+                                            <a href="{{ route('product-detail',$product->slug) }}">
                                                 <img class="default-img" src="{{asset($product->image)}}" height="300px" alt="">
-                                                <img class="hover-img" src="{{asset($product->image)}}" height="300px" alt="">
+                                                <img class="hover-img" src="{{asset($product->back_image)}}" height="300px" alt="">
                                             </a>
                                         </div>
                                         <div class="product-action-1">
@@ -87,7 +87,8 @@
                                     </div>
                                     <div class="product-content-wrap">
 
-                                        <h2><a href="{{route('product-detail',['id' => $product->id])}}">{{ $product->name }}</a></h2>
+                                        <p><a href="{{route('product-category',$product->category->slug)}}"><small>{{$product->category->name}}</small></a></p>
+                                        <h2><a href="{{route('product-detail',$product->slug)}}">{{ $product->name }}</a></h2>
                                         <div class="rating-result" title="90%">
                                             <span>
                                                 <span>90%</span>
@@ -98,7 +99,7 @@
                                             <span class="old-price"> Tk. {{ $product->regular_price }}</span>
                                         </div>
                                         <div class="product-action-1 show">
-                                            <a aria-label="Add To Cart" class="action-btn hover-up" href="{{ route('product-detail',$product->id) }}"><i class="fi-rs-shopping-bag-add"></i></a>
+                                            <a aria-label="Add To Cart" class="action-btn hover-up" href="{{ route('product-detail',$product->slug) }}"><i class="fi-rs-shopping-bag-add"></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -125,7 +126,7 @@
                         <h5 class="section-title style-1 mb-30 wow fadeIn animated">Category</h5>
                         <ul class="categories">
                             @foreach($categories as $category)
-                                <li><a href="{{route('product-category',['id' => $category->id])}}">{{($category->name)}}</a></li>
+                                <li><a href="{{route('product-category',$category->slug)}}">{{($category->name)}}</a></li>
                             @endforeach
                         </ul>
                     </div>

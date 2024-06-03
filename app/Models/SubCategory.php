@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class SubCategory extends Model
 {
@@ -94,7 +95,9 @@ class SubCategory extends Model
 
     private static function saveBasicInfo($subCategory, $request, $imageUrl)
     {
+        $category = Category::find($request->category_id);
         $subCategory->category_id    = $request->category_id;
+        $subCategory->slug           = $category->name.'-'.Str::slug($request->name);
         $subCategory->name           = $request->name;
         $subCategory->description    = $request->description;
         $subCategory->image          = $imageUrl;

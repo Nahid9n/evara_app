@@ -1,4 +1,3 @@
-
 @extends('website.master')
 @section('title','Popular E-commerce Website in Bangladesh')
 @section('body')
@@ -15,8 +14,7 @@
                                     <h2 class="animated fw-900">{{ $product_offer->title_two }}</h2>
                                     <h1 class="animated fw-900 text-brand">{{ $product_offer->title_three }}</h1>
                                     <p class="animated">{{ $product_offer->description }}</p>
-                                    <a class="animated btn btn-brush btn-brush-3" href="{{route('product-detail', ['id' => $product_offer->product_id])}}"> Shop
-                                        Now </a>
+                                    <a class="animated btn btn-brush btn-brush-3" href="{{route('product-detail',$product_offer->product->slug ?? '')}}"> Shop Now </a>
                                 </div>
                             </div>
                             <div class="col-lg-7 col-md-6">
@@ -56,9 +54,9 @@
                     @foreach($categories as $category)
                         <div class="card-1 text-center" style="height: 200px">
                             <figure class="img-hover-scale overflow-hidden justify-content-center">
-                                <a href="#"><img src="{{ asset($category->image)}}" width="100" height="100" alt=""></a>
+                                <a href="{{route('product-category',$category->slug)}}"><img src="{{ asset($category->image)}}" width="100" height="100" alt=""></a>
                             </figure>
-                            <h5><a href="{{route('product-category',['id' => $category->id])}}">{{($category->name)}}</a></h5>
+                            <h5><a href="{{route('product-category',$category->slug)}}">{{($category->name)}}</a></h5>
                         </div>
                     @endforeach
                 </div>
@@ -91,14 +89,14 @@
                                 <div class="product-cart-wrap mb-30">
                                     <div class="product-img-action-wrap">
                                         <div class="product-img product-img-zoom">
-                                            <a href="{{ route('product-detail',$product->id) }}">
+                                            <a href="{{ route('product-detail',$product->slug) }}">
                                                 <img class="default-img" src="{{asset($product->image)}}" height="300" alt="">
-                                                <img class="hover-img" src="{{asset($product->image)}}" alt="">
+                                                <img class="hover-img" src="{{asset($product->back_image)}}" alt="">
                                             </a>
                                         </div>
                                         <div class="product-action-1">
                                             <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#latestViewModal{{$key}}"><i class="fi-rs-eye"></i></a>
-                                            <a aria-label="Add To Wishlist" class="action-btn hover-up" href="{{ route('wishlist.ad',$product->id) }}"><i class="fi-rs-heart"></i></a>
+                                            <a aria-label="Add To Wishlist" class="action-btn hover-up wishlist" id="wishlist{{$key}}"  href="#{{--{{ route('wishlist.ad',$product->id) }}--}}" data-value="{{$product->id}}"><i class="fi-rs-heart"></i></a>
                                             <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
                                         </div>
                                         <div class="product-badges product-badges-position product-badges-mrg">
@@ -107,9 +105,9 @@
                                     </div>
                                     <div class="product-content-wrap">
                                         <div class="product-category">
-                                            <a href="shop-grid-right.html">{{$product->category->name}}</a>
+                                            <a href="{{route('product-category',$product->category->slug)}}">{{$product->category->name}}</a>
                                         </div>
-                                        <h2><a href="{{ route('product-detail',$product->id) }}">{{$product->name}}</a></h2>
+                                        <h2><a href="{{ route('product-detail',$product->slug) }}">{{$product->name}}</a></h2>
                                         <div class="rating-result" title="90%">
                                             <span>
                                                 <span>90%</span>
@@ -120,7 +118,7 @@
                                             <span class="old-price">{{$product->regular_price}}</span>
                                         </div>
                                         <div class="product-action-1 show">
-                                            <a aria-label="Add To Cart" class="action-btn hover-up" href="{{ route('product-detail',$product->id) }}"><i class="fi-rs-shopping-bag-add"></i></a>
+                                            <a aria-label="Add To Cart" class="action-btn hover-up" href="{{ route('product-detail',$product->slug) }}"><i class="fi-rs-shopping-bag-add"></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -142,12 +140,21 @@
                                                                          alt="product image" class="img-fluid" style="width:100%; height:550px;"/>
                                                                 </figure>
                                                             @endforeach
+                                                            <figure class="border-radius-10">
+                                                                <img src="{{asset($product->image)}}" alt="product image" class="img-fluid" style="width:100%; height:550px;"/>
+                                                            </figure>
+                                                            <figure class="border-radius-10">
+                                                                <img src="{{asset($product->back_image)}}" alt="product image" class="img-fluid" style="width:100%; height:550px;"/>
+                                                            </figure>
+
                                                         </div>
                                                         <!-- THUMBNAILS -->
                                                         <div class="slider-nav-thumbnails pl-15 pr-15">
                                                             @foreach($product->productImages as $productImage)
                                                                 <div><img src="{{asset($productImage->image)}}" alt="product image" width="100" height="80"/></div>
                                                             @endforeach
+                                                                <div><img src="{{asset($product->image)}}" alt="product image" width="100" height="80"/></div>
+                                                                <div><img src="{{asset($product->back_image)}}" alt="product image" width="100" height="80"/></div>
                                                         </div>
                                                     </div>
                                                     <!-- End Gallery -->
@@ -188,43 +195,48 @@
                                                             <p class="font-sm">{{ $product->short_description }}</p>
                                                         </div>
 
-                                                        <div class="attr-detail attr-color mb-15">
-                                                            <strong class="mr-10">Color</strong>
-                                                            <ul class="list-filter color-filter">
-                                                                <li>
-                                                                    <select class="form-control" name="color" id="">
-                                                                        <option label="" >select color</option>
-                                                                        @foreach($product->colors as $key => $color)
-                                                                        <option value="" style="background-color: {{ $color->color->code }}">{{ $color->color->name ?? '' }}</option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="attr-detail attr-size">
-                                                            <strong class="mr-10">Size</strong>
-                                                            <ul class="list-filter size-filter font-small">
-                                                                <li>
-                                                                    <select class="form-control" name="color" id="">
-                                                                        <option label="" >select size</option>
-                                                                        @foreach($product->sizes as $key1 => $size)
-                                                                            <option value="" >{{ $size->size->name ?? '' }}</option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="bt-1 border-color-1 mt-30 mb-30"></div>
-                                                        <div class="detail-extralink">
-                                                            <div class="row">
-                                                                <input type="number" name="qty" class="form-control w-100" value="1" min="1"  max="{{ $product->stock_amount }}"/>
+                                                        <form action="{{route('cart.ad')}}" method="post" class="addTocart">
+                                                            @csrf
+                                                            <input hidden type="text" name="product_id" value="{{ $product->id }}">
+                                                            <div class="attr-detail attr-color mb-15">
+                                                                <strong class="mr-10">Color</strong>
+                                                                <ul class="list-filter color-filter">
+                                                                    <li>
+                                                                        <select class="form-control" name="color" id="">
+                                                                            <option label="" selected disabled>select color</option>
+                                                                            @foreach($product->colors as $key => $color)
+                                                                                <option value="{{$color->color->name}}" style="background-color: {{ $color->color->code }}">{{ $color->color->name ?? '' }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </li>
+                                                                </ul>
                                                             </div>
-                                                            <div class="product-extra-link2">
-                                                                <button type="submit" class="button button-add-to-cart btn-sm mx-2">Add to cart</button>
-                                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                                                                <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+                                                            <div class="attr-detail attr-size">
+                                                                <strong class="mr-10">Size</strong>
+                                                                <ul class="list-filter size-filter font-small">
+                                                                    <li>
+                                                                        <select class="form-control" name="size" id="">
+                                                                            <option label="" selected disabled>select size</option>
+                                                                            @foreach($product->sizes as $key1 => $size)
+                                                                                <option value="{{$size->size->name}}" >{{ $size->size->name ?? '' }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </li>
+                                                                </ul>
                                                             </div>
-                                                        </div>
+                                                            <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+                                                            <div class="detail-extralink">
+                                                                <div class="row">
+                                                                    <input type="number" name="qty" class="form-control w-100" value="1" min="1"  max="{{ $product->stock_amount }}"/>
+                                                                </div>
+                                                                <div class="product-extra-link2">
+                                                                    <button type="submit" class="button button-add-to-cart btn-sm mx-2">Add to cart</button>
+                                                                    <a aria-label="Add To Wishlist" class="action-btn hover-up wishlist" id="wishlist{{$key}}"  href="#{{--{{ route('wishlist.ad',$product->id) }}--}}" data-value="{{$product->id}}"><i class="fi-rs-heart"></i></a>
+                                                                    <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+
                                                         <ul class="product-meta font-xs color-grey mt-50">
                                                             <li class="mb-5">SKU: <a href="#">{{$product->code}}</a></li>
                                                             <li class="mb-5">Tags: <a href="#" rel="tag">Cloth</a>, <a href="#" rel="tag">Women</a>, <a href="#" rel="tag">Dress</a> </li>
@@ -244,19 +256,19 @@
                 <div class="tab-pane fade  " id="tab-one" role="tabpanel" aria-labelledby="tab-one">
                     <div class="row product-grid-4">
 
-                        @foreach($products as $product)
+                        @foreach($products as $key=>$product)
                             <div class="col-lg-3 col-md-4 col-12 col-sm-6 mb-4">
                                 <div class="product-cart-wrap mb-30 h-100">
                                     <div class="product-img-action-wrap">
                                         <div class="product-img product-img-zoom">
-                                            <a href="{{ route('product-detail',$product->id) }}">
+                                            <a href="{{ route('product-detail',$product->slug) }}">
                                                 <img class="default-img" src="{{asset($product->image)}}" height="300" alt="">
-                                                <img class="hover-img" src="{{asset($product->image)}}" alt="">
+                                                <img class="hover-img" src="{{asset($product->back_image)}}" alt="">
                                             </a>
                                         </div>
                                         <div class="product-action-1">
-                                            <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
-                                            <a aria-label="Add To Wishlist" class="action-btn hover-up" href="{{ route('wishlist.ad',$product->id) }}"><i class="fi-rs-heart"></i></a>
+                                            <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#featuredViewModal{{$key}}"><i class="fi-rs-eye"></i></a>
+                                            <a aria-label="Add To Wishlist" class="action-btn hover-up wishlist" id="wishlist{{$key}}"  href="#{{--{{ route('wishlist.ad',$product->id) }}--}}" data-value="{{$product->id}}"><i class="fi-rs-heart"></i></a>
                                         </div>
                                         <div class="product-badges product-badges-position product-badges-mrg">
                                             <span class="hot">Hot</span>
@@ -264,7 +276,7 @@
                                     </div>
                                     <div class="product-content-wrap">
                                         <div class="product-category">
-                                            <a href="#">{{$product->category->name}}</a>
+                                            <a href="{{route('product-category',$product->category->slug)}}">{{$product->category->name}}</a>
                                         </div>
                                         <h2><a href="#">{{$product->name}}</a></h2>
                                         <div class="rating-result" title="90%">
@@ -277,13 +289,13 @@
                                             <span class="old-price">{{$product->regular_price}}</span>
                                         </div>
                                         <div class="product-action-1 show">
-                                            <a aria-label="Add To Cart" class="action-btn hover-up" href="{{ route('product-detail',$product->id) }}"><i class="fi-rs-shopping-bag-add"></i></a>
+{{--                                            <a aria-label="Add To Cart" class="action-btn hover-up" href="{{ route('product-detail',$product->slug) }}"><i class="fi-rs-shopping-bag-add"></i></a>--}}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <!-- Quick view -->
-                            <div class="modal fade custom-modal" id="quickViewModal" tabindex="-1" aria-labelledby="quickViewModalLabel" aria-hidden="true">
+                            <div class="modal fade custom-modal" id="featuredViewModal{{$key}}" tabindex="-1" aria-labelledby="latestViewModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -294,37 +306,27 @@
                                                         <span class="zoom-icon"><i class="fi-rs-search"></i></span>
                                                         <!-- MAIN SLIDES -->
                                                         <div class="product-image-slider">
+                                                            @foreach($product->productImages as $productImage)
+                                                                <figure class="border-radius-10">
+                                                                    <img src="{{asset($productImage->image)}}"
+                                                                         alt="product image" class="img-fluid" style="width:100%; height:550px;"/>
+                                                                </figure>
+                                                            @endforeach
                                                             <figure class="border-radius-10">
-                                                                <img src="{{asset('/')}}website/assets/imgs/shop/product-16-2.jpg" alt="product image">
+                                                                <img src="{{asset($product->image)}}" alt="product image" class="img-fluid" style="width:100%; height:550px;"/>
                                                             </figure>
                                                             <figure class="border-radius-10">
-                                                                <img src="{{asset('/')}}website/assets/imgs/shop/product-16-1.jpg" alt="product image">
+                                                                <img src="{{asset($product->back_image)}}" alt="product image" class="img-fluid" style="width:100%; height:550px;"/>
                                                             </figure>
-                                                            <figure class="border-radius-10">
-                                                                <img src="{{asset('/')}}website/assets/imgs/shop/product-16-3.jpg" alt="product image">
-                                                            </figure>
-                                                            <figure class="border-radius-10">
-                                                                <img src="{{asset('/')}}website/assets/imgs/shop/product-16-4.jpg" alt="product image">
-                                                            </figure>
-                                                            <figure class="border-radius-10">
-                                                                <img src="{{asset('/')}}website/assets/imgs/shop/product-16-5.jpg" alt="product image">
-                                                            </figure>
-                                                            <figure class="border-radius-10">
-                                                                <img src="{{asset('/')}}website/assets/imgs/shop/product-16-6.jpg" alt="product image">
-                                                            </figure>
-                                                            <figure class="border-radius-10">
-                                                                <img src="{{asset('/')}}website/assets/imgs/shop/product-16-7.jpg" alt="product image">
-                                                            </figure>
+
                                                         </div>
                                                         <!-- THUMBNAILS -->
                                                         <div class="slider-nav-thumbnails pl-15 pr-15">
-                                                            <div><img src="{{asset('/')}}website/assets/imgs/shop/thumbnail-3.jpg" alt="product image"></div>
-                                                            <div><img src="{{asset('/')}}website/assets/imgs/shop/thumbnail-4.jpg" alt="product image"></div>
-                                                            <div><img src="{{asset('/')}}website/assets/imgs/shop/thumbnail-5.jpg" alt="product image"></div>
-                                                            <div><img src="{{asset('/')}}website/assets/imgs/shop/thumbnail-6.jpg" alt="product image"></div>
-                                                            <div><img src="{{asset('/')}}website/assets/imgs/shop/thumbnail-7.jpg" alt="product image"></div>
-                                                            <div><img src="{{asset('/')}}website/assets/imgs/shop/thumbnail-8.jpg" alt="product image"></div>
-                                                            <div><img src="{{asset('/')}}website/assets/imgs/shop/thumbnail-9.jpg" alt="product image"></div>
+                                                            @foreach($product->productImages as $productImage)
+                                                                <div><img src="{{asset($productImage->image)}}" alt="product image" width="100" height="80"/></div>
+                                                            @endforeach
+                                                            <div><img src="{{asset($product->image)}}" alt="product image" width="100" height="80"/></div>
+                                                            <div><img src="{{asset($product->back_image)}}" alt="product image" width="100" height="80"/></div>
                                                         </div>
                                                     </div>
                                                     <!-- End Gallery -->
@@ -340,10 +342,10 @@
                                                 </div>
                                                 <div class="col-md-6 col-sm-12 col-xs-12">
                                                     <div class="detail-info">
-                                                        <h3 class="title-detail mt-30">Colorful Pattern Shirts HD450</h3>
+                                                        <h3 class="title-detail mt-30">{{$product->name}}</h3>
                                                         <div class="product-detail-rating">
                                                             <div class="pro-details-brand">
-                                                                <span> Brands: <a href="shop-grid-right.html">Bootstrap</a></span>
+                                                                <span> Brands: <a href="shop-grid-right.html">{{ $product->brand->name }}</a></span>
                                                             </div>
                                                             <div class="product-rate-cover text-end">
                                                                 <div class="product-rate d-inline-block">
@@ -355,55 +357,62 @@
                                                         </div>
                                                         <div class="clearfix product-price-cover">
                                                             <div class="product-price primary-color float-left">
-                                                                <ins><span class="text-brand">$120.00</span></ins>
-                                                                <ins><span class="old-price font-md ml-15">$200.00</span></ins>
+                                                                <ins><span class="text-brand">{{$product->selling_price}}</span></ins>
+                                                                <ins><span class="old-price font-md ml-15">{{$product->regular_price}}</span></ins>
                                                                 <span class="save-price  font-md color3 ml-15">25% Off</span>
                                                             </div>
                                                         </div>
                                                         <div class="bt-1 border-color-1 mt-15 mb-15"></div>
                                                         <div class="short-desc mb-30">
-                                                            <p class="font-sm">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquam rem officia, corrupti reiciendis minima nisi modi,!</p>
+                                                            <p class="font-sm">{{ $product->short_description }}</p>
                                                         </div>
 
-                                                        <div class="attr-detail attr-color mb-15">
-                                                            <strong class="mr-10">Color</strong>
-                                                            <ul class="list-filter color-filter">
-                                                                <li><a href="#" data-color="Red"><span class="product-color-red"></span></a></li>
-                                                                <li><a href="#" data-color="Yellow"><span class="product-color-yellow"></span></a></li>
-                                                                <li class="active"><a href="#" data-color="White"><span class="product-color-white"></span></a></li>
-                                                                <li><a href="#" data-color="Orange"><span class="product-color-orange"></span></a></li>
-                                                                <li><a href="#" data-color="Cyan"><span class="product-color-cyan"></span></a></li>
-                                                                <li><a href="#" data-color="Green"><span class="product-color-green"></span></a></li>
-                                                                <li><a href="#" data-color="Purple"><span class="product-color-purple"></span></a></li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="attr-detail attr-size">
-                                                            <strong class="mr-10">Size</strong>
-                                                            <ul class="list-filter size-filter font-small">
-                                                                <li><a href="#">S</a></li>
-                                                                <li class="active"><a href="#">M</a></li>
-                                                                <li><a href="#">L</a></li>
-                                                                <li><a href="#">XL</a></li>
-                                                                <li><a href="#">XXL</a></li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="bt-1 border-color-1 mt-30 mb-30"></div>
-                                                        <div class="detail-extralink">
-                                                            <div class="detail-qty border radius">
-                                                                <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
-                                                                <span class="qty-val">1</span>
-                                                                <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
+                                                        <form action="{{route('cart.ad')}}" method="post" class="addTocart">
+                                                            @csrf
+                                                            <input hidden type="text" name="product_id" value="{{ $product->id }}">
+                                                            <div class="attr-detail attr-color mb-15">
+                                                                <strong class="mr-10">Color</strong>
+                                                                <ul class="list-filter color-filter">
+                                                                    <li>
+                                                                        <select class="form-control" name="color" id="">
+                                                                            <option label="" selected disabled>select color</option>
+                                                                            @foreach($product->colors as $key => $color)
+                                                                                <option value="{{$color->color->name}}" style="background-color: {{ $color->color->code }}">{{ $color->color->name ?? '' }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </li>
+                                                                </ul>
                                                             </div>
-                                                            <div class="product-extra-link2">
-                                                                <button type="submit" class="button button-add-to-cart">Add to cart</button>
-                                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                                                                <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+                                                            <div class="attr-detail attr-size">
+                                                                <strong class="mr-10">Size</strong>
+                                                                <ul class="list-filter size-filter font-small">
+                                                                    <li>
+                                                                        <select class="form-control" name="size" id="">
+                                                                            <option label="" selected disabled>select size</option>
+                                                                            @foreach($product->sizes as $key1 => $size)
+                                                                                <option value="{{$size->size->name}}" >{{ $size->size->name ?? '' }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </li>
+                                                                </ul>
                                                             </div>
-                                                        </div>
+                                                            <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+                                                            <div class="detail-extralink">
+                                                                <div class="row">
+                                                                    <input type="number" name="qty" class="form-control w-100" value="1" min="1"  max="{{ $product->stock_amount }}"/>
+                                                                </div>
+                                                                <div class="product-extra-link2">
+                                                                    <button type="submit" class="button button-add-to-cart btn-sm mx-2">Add to cart</button>
+                                                                    <a aria-label="Add To Wishlist" class="action-btn hover-up wishlist" id="wishlist{{$key}}"  href="#{{--{{ route('wishlist.ad',$product->id) }}--}}" data-value="{{$product->id}}"><i class="fi-rs-heart"></i></a>
+                                                                    <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+
                                                         <ul class="product-meta font-xs color-grey mt-50">
-                                                            <li class="mb-5">SKU: <a href="#">FWM15VKT</a></li>
+                                                            <li class="mb-5">SKU: <a href="#">{{$product->code}}</a></li>
                                                             <li class="mb-5">Tags: <a href="#" rel="tag">Cloth</a>, <a href="#" rel="tag">Women</a>, <a href="#" rel="tag">Dress</a> </li>
-                                                            <li>Availability:<span class="in-stock text-success ml-5">8 Items In Stock</span></li>
+                                                            <li>Availability:<span class="in-stock text-success ml-5">{{$product->stock_amount}} Items In Stock</span></li>
                                                         </ul>
                                                     </div>
                                                     <!-- Detail Info -->
@@ -476,11 +485,11 @@
         <div class="container">
             @foreach($ad04s as $ad04)
             <div class="banner-img banner-big wow fadeIn animated f-none">
-                <img src="{{asset($ad04->product->image)}}" height="300px" width="100%" alt="">
+                <img src="{{asset($ad04->product->image ?? '')}}" height="300px" width="100%" alt="">
                 <div class="banner-text d-md-block d-none">
                     <h4 class="mb-15 mt-40 text-brand">{{$ad04->title}}</h4>
                     <h1 class="fw-600 mb-20">{{$ad04->sub_title}}</h1>
-                    <a href="{{ route('product-detail',$ad04->product->id) }}" class="btn">Learn More <i class="fi-rs-arrow-right"></i></a>
+                    <a href="{{ route('product-detail',$ad04->product->slug ?? '') }}" class="btn">Learn More <i class="fi-rs-arrow-right"></i></a>
                 </div>
             </div>
 
@@ -497,7 +506,7 @@
                         <div class="banner-text">
                             <span>{{ $product_offer->title_one }}</span>
                             <h4>{{ $product_offer->title_two }} <br>{{ $product_offer->title_three }}</h4>
-                            <a class="btn btn-success" href="{{route('product-detail', ['id' => $product_offer->product_id])}}">Shop Now <i class="fi-rs-arrow-right"></i></a>
+                            <a class="btn btn-success" href="{{route('product-detail', $product_offer->product->slug ?? '' )}}">Shop Now <i class="fi-rs-arrow-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -515,7 +524,7 @@
                     <div class="product-cart-wrap small hover-up">
                         <div class="product-img-action-wrap">
                             <div class="product-img product-img-zoom">
-                                <a href="{{ route('product-detail',$vendor_product->id)}}">
+                                <a href="{{ route('product-detail',$vendor_product->slug)}}">
                                     <img class="default-img" src="{{asset($vendor_product->image)}}"  height="200" alt="">
                                     <img class="hover-img" src="{{asset($vendor_product->image)}}" alt="">
                                 </a>
@@ -530,7 +539,7 @@
                             </div>
                         </div>
                         <div class="product-content-wrap">
-                            <h2><a href="{{route('product-detail', ['id' => $vendor_product->id])}}">{{$vendor_product->name}}</a></h2>
+                            <h2><a href="{{route('product-detail', $vendor_product->slug)}}">{{$vendor_product->name}}</a></h2>
                             <div class="rating-result" title="90%">
                                     <span>
                                     </span>

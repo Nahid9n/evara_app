@@ -27,6 +27,29 @@
 <script src="{{asset('/')}}website/assets/js/maind134.js?v=3.4"></script>
 <script src="{{asset('/')}}website/assets/js/shopd134.js?v=3.4"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    toastr.options = {
+        "progressBar" : true,
+        "closeButton" : true,
+    }
+    @if(Session::has('message'))
+    toastr.success("{{ Session::get('message') }}");
+
+    @elseif(Session::has('warning'))
+    toastr.warning("{{ Session::get('warning') }}");
+
+    @elseif(Session::has('info'))
+    toastr.info("{{ Session::get('info') }}");
+
+    @elseif(Session::has('error'))
+    toastr.error("{{ Session::get('error') }}");
+    @endif
+</script>
+
+<script src="{{asset('/')}}website/assets/js/toastr.min.js"></script>
+{!! Toastr::message() !!}
 
 
 {{--      Product datails                  --}}
@@ -91,17 +114,18 @@
                             div += '<div class="slider-arrow slider-arrow-2 carausel-6-columns-arrow" id="carausel-6-columns-2-arrows"></div>';
                             div += '<div class="carausel-6-columns carausel-arrow-center row">';
                                 $.each(response, function (key, value) {
+                                    var slug = value.slug;
                                 div += '<div class="product-cart-wrap small hover-up col-md-4">';
                                     div += '<div class="product-img-action-wrap">';
                                         div += '<div class="product-img product-img-zoom">';
-                                            div += '<a href="http://localhost/evara/public/product-detail/'+value.id+'">';
+                                            div += '<a href="/product-detail/'+value.slug+'">';
                                                 div += '<img class="default-img" src="'+value.image+'"  height="200" alt=""/>';
                                                 div += '<img class="hover-img" src="'+value.image+'" height="200" alt=""/>';
                                             div += '</a>';
                                         div += '</div>';
                                     div += '</div>';
                                     div += '<div class="product-content-wrap">';
-                                        div += '<h2><a href=""> '+value.name+' </a></h2>';
+                                        div += '<h2><a href="/product-detail/'+value.slug+'"> '+value.name+' </a></h2>';
                                         div += '<div class="rating-result" title="90%">';
                                             div += '<span></span>';
                                         div += '</div>';
@@ -121,5 +145,76 @@
                 $('#mainContainer').append(div);
             }
         });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('.wishlist').on('click', function(e) {
+            e.preventDefault();
+            var id = $(this).data('value');
+            $.ajax({
+                url: "{{ route('wishlist.ad') }}",
+                type: "GET",
+                dataType: 'json',
+                data: {
+                    product_id: id,
+                },
+                success: function(res) {
+                    if (res.status !== false) {
+                        toastr.success(res.message);
+                        $('#wishlistCartCount').empty('');
+                        $('#wishlistCartCount').append('<span class="old-price"> '+res.count+'</span>');
+                    } else {
+                        toastr.error(res.error);
+                    }
+                },
+
+                error: function(xhr, status, error) {
+                    console.error(xhr);
+                }
+            });
+        });
+
+        $(document).on('submit', '.addTocart', function(e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            var url = $(this).attr('action');
+            $.ajax({
+                url: url,
+                type: "post",
+                dataType: 'json',
+                data: formData,
+                success: function(res) {
+                    if (res.status !== false) {
+                        toastr.success(res.message);
+                        $('#CartItemCount').empty('');
+                        $('#CartItemCount').append('<span class="old-price"> '+res.count+'</span>');
+                        getCartDetails();
+
+                    } else {
+                        toastr.error(res.error);
+                    }
+                },
+
+                error: function(xhr, status, error) {
+                    console.error(xhr);
+                }
+            });
+        });
+        function getCartDetails() {
+            $.ajax({
+                url: "{{ route('get-cart-details') }}",
+                type: "GET",
+                dataType: 'html',
+                success: function(res) {
+                    $('#cartItems').empty('');
+                    $('#cartItems').append(res);
+                }
+            });
+        }
+
+
+
+
     });
 </script>
