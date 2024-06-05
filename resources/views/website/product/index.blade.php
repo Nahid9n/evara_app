@@ -61,7 +61,7 @@
                                             <h2 class="title-detail">{{ $product->name }}</h2>
                                             <div class="product-detail-rating">
                                                 <div class="pro-details-brand">
-                                                    <span> Brands: {{ $product->brand->name }} </span>
+                                                    <a href="{{route('product-brand',$product->brand->slug)}}"><span> Brands: {{ $product->brand->name }} </span></a>
                                                 </div>
                                                 <div class="product-rate-cover text-end">
                                                     <div class="product-rate d-inline-block">
@@ -101,20 +101,6 @@
                                                 @else
                                                     <p>{{ $product->short_description }}</p>
                                                 @endif
-                                            </div>
-                                            <div class="product_sort_info font-xs mb-30">
-                                                <ul>
-                                                    <li class="mb-10"><i class="fi-rs-crown mr-5"></i> 1 Year AL Jazeera
-                                                        Brand
-                                                        Warranty
-                                                    </li>
-                                                    <li class="mb-10"><i class="fi-rs-refresh mr-5"></i> 30 Day Return
-                                                        Policy
-                                                    </li>
-                                                    <li><i class="fi-rs-credit-card mr-5"></i> Cash on Delivery
-                                                        available
-                                                    </li>
-                                                </ul>
                                             </div>
                                             <form action="{{route('cart.ad')}}" method="post" class="addTocart">
                                                 @csrf

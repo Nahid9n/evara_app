@@ -1,12 +1,6 @@
-
-
 @extends('website.master')
-@section('title', 'Product Category Page')
-
+@section('title', 'Product Brand Page')
 @section('body')
-
-
-
     <div class="page-header breadcrumb-wrap">
         <div class="container">
             <div class="breadcrumb">
@@ -249,25 +243,20 @@
                         <h5 class="section-title style-1 wow fadeIn animated">Category</h5>
                         @foreach($categories as $category)
                             <div class="form-check">
-                                <input type="checkbox" id="{{ $category->id }}" onclick="filter(); setSubCategory({{ $category->id }})" {{$categorySlug == $category->slug ? 'checked':''}} class="form-check-input categoryCheckBox"  value="{{ $category->id }}">
+                                <input type="checkbox" id="{{ $category->id }}" onclick="filter(); setSubCategory({{ $category->id }})" class="form-check-input categoryCheckBox"  value="{{ $category->id }}">
                                 <label class="form-check-label">{{ $category->name }}</label>
                             </div>
                         @endforeach
                     </div>
                     <div class="widget-category p-2 mb-2 scrollable-layout" id="subCategoryId">
                         <h5 class="section-title style-1 wow fadeIn animated">Select Your Choice</h5>
-                        @foreach($subcategories as $subcategory)
-                            <div class="form-check">
-                                <input type="checkbox" id="{{ $subcategory->id }}" onclick="filter()" class="form-check-input subCategoryCheckBox"  value="{{ $subcategory->id }}">
-                                <label class="form-check-label">{{ $subcategory->name }}</label>
-                            </div>
-                        @endforeach
+                        <p>please select a category</p>
                     </div>
                     <div class="widget-category  p-2 mb-2">
                         <h5 class="section-title style-1 wow fadeIn animated">Brand</h5>
                         @foreach($brands as $brand)
                             <div class="form-check">
-                                <input type="checkbox" id="{{ $brand->id }}" onclick="filter()" class="form-check-input brandCheckBox" value="{{ $brand->id }}">
+                                <input type="checkbox" id="{{ $brand->id }}" onclick="filter()" {{$brandSlug == $brand->slug ? 'checked':''}} class="form-check-input brandCheckBox" value="{{ $brand->id }}">
                                 <label class="form-check-label">{{ $brand->name }}</label>
                             </div>
                         @endforeach

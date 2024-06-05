@@ -174,7 +174,8 @@
 
 </script>
 
-
+<!-- Internal Input tags js-->
+<script src="{{ asset('/') }}admin/assets/plugins/inputtags/inputtags.js"></script>
 
 
 

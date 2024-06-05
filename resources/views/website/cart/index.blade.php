@@ -13,6 +13,9 @@
 
         <div class="container">
             <div class="row">
+                @php($sum = 0)
+                @php($ids = array())
+
                 <div class="col-12">
                     <form action="{{route('cart.update-product')}}" method="post">
                         @csrf
@@ -30,8 +33,8 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @php($sum = 0)
                                 @foreach($products as $key=> $product)
+                                    @php(array_push($ids,$product->id))
                                     <tr>
                                         <td class="image product-thumbnail"><img src="{{ asset($product->image ?? '') }}" alt="#"></td>
                                         <td class="product-des product-name">
@@ -41,10 +44,11 @@
                                                 <span class="fw-bold">Size: </span> {{$product->size}} <br/>
                                             </p>
                                         </td>
-                                        <td class="price" data-title="Price"><span>TK. {{ $product->price }} </span></td>
+                                        <td class="price" data-title="Price"><span>TK. {{ $product->product->selling_price }} </span></td>
                                         <td class="text-center" data-title="Stock">
-                                            <div class=" w-25 m-auto">
-                                                <input type="number" name="data[{{$key}}][qty]" min="1" class="form-control" value="{{$product->qty}}"/>
+                                            <div class=" w-50 m-auto">
+                                                <input type="number" name="qty" class="form-control w-100" value="1" min="1"  max="{{ $product->product->stock_amount }}"/>
+{{--                                                <input type="number" name="data[{{$key}}][qty]" min="1" class="form-control" value="{{ $product->qty }}"/>--}}
 {{--                                                <input type="hidden" name="data[{{$key}}][rowId]" class="form-control" value="{{$product->rowId}}"/>--}}
                                             </div>
                                         </td>
@@ -52,21 +56,16 @@
 {{--                                        <input type="number" name="dat[{{$key}}][qty]" class="form-control" value="{{$product->qty}}"/>--}}
 
                                         <td class="text-right" data-title="Cart">
-                                            <span>TK. {{$product->row_total}} </span>
+                                            <span>TK. {{$total = $product->product->selling_price * $product->qty}} </span>
                                         </td>
                                         <td class="action" data-title="Remove">
-                                            <a href="{{--{{route('cart.delete', ['rowId' => $product->rowId])}}--}}" onclick="return confirm('Are you sure to delete this..');" class="btn bg-danger border-0 btn-sm">
+                                            <a href="{{route('cart.delete', $product->id)}}" onclick="return confirm('Are you sure to remove this..');" class="btn bg-danger border-0 btn-sm">
                                                 <i class="fi-rs-trash"></i>
                                             </a>
                                         </td>
                                     </tr>
-                                    @php($sum = $sum + $product->row_total)
+                                    @php($sum = $sum + $total)
                                 @endforeach
-                                <tr>
-                                    <td colspan="6" class="text-end">
-                                        <a href="#" class="text-muted"> <i class="fi-rs-cross-small"></i> Clear Cart</a>
-                                    </td>
-                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -75,7 +74,14 @@
                             <a href="{{route('home')}}" class="btn"><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
                         </div>
                     </form>
-                    <div class="divider center_icon mt-50 mb-50"><i class="fi-rs-fingerprint"></i></div>
+                    <div class="row text-end">
+                        <form action="{{route('cart.clear')}}" method="post">
+                            @csrf
+                            <input type="hidden" value="{{ json_encode($ids) }}" name="ids">
+                            <button type="submit" class="btn btn-sm btn-danger bg-danger px-5" onclick="return confirm('Are you sure to remove this..');">Clear Cart</button>
+                        </form>
+                    </div>
+                    <hr>
                     <div class="row mb-50">
                         <div class="col-lg-6 col-md-12">
                             <div class="heading_s1 mb-3">

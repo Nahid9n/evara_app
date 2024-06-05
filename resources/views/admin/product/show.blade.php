@@ -138,6 +138,19 @@
                                 {{$product->sales_count}}
                             </td>
                         </tr>
+                         <tr>
+                            <th>Tags</th>
+                            <td>
+                                <input type="text" data-role="tagsinput" name="tags" class="form-control" value="{{ $product->tags }}" placeholder="type & press enter" readonly disabled>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Refund Status</th>
+                            <td>
+                                {{ $product->refund == 1 ? "refundable" : "Not refundable" }}
+                            </td>
+                        </tr>
                         <tr>
                             <th>Featured Status</th>
                             <td>

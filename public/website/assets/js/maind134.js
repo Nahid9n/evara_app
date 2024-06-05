@@ -45,14 +45,14 @@
         $("#slider-range").slider({
             range: true,
             min: 0,
-            max: 500,
-            values: [130, 250],
+            max: 10000,
+            values: [0, 10000],
             slide: function (event, ui) {
-                $("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
+                $("#amount").val( + ui.values[0] + " - " + ui.values[1]);
             }
         });
         $("#amount").val("$" + $("#slider-range").slider("values", 0) +
-            " - $" + $("#slider-range").slider("values", 1));
+            " - $" + $("#slider-range").slider("values", 10000));
     }
 
     /*------ Hero slider 1 ----*/
@@ -347,15 +347,15 @@
     $(function() {
         sliderrange.slider({
             range: true,
-            min: 16,
-            max: 400,
-            values: [0, 300],
+            min: 0,
+            max: 10000,
+            values: [0, 10000],
             slide: function(event, ui) {
-                amountprice.val("$" + ui.values[0] + " - $" + ui.values[1]);
+                amountprice.val( + ui.values[0] + " - " + ui.values[1]);
             }
         });
-        amountprice.val("$" + sliderrange.slider("values", 0) +
-            " - $" + sliderrange.slider("values", 1));
+        amountprice.val( + sliderrange.slider("values", 0) +
+            " - " + sliderrange.slider("values", 1));
     });
 
     /*-------------------------------

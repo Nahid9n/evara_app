@@ -17,8 +17,6 @@ return new class extends Migration
             $table->foreignId('customer_id');
             $table->string('name');
             $table->string('qty');
-            $table->decimal('price', 8,2);
-            $table->decimal('row_total', 8,2);
             $table->string('size')->nullable();
             $table->string('color')->nullable();
             $table->string('image')->nullable();

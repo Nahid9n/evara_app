@@ -60,6 +60,9 @@ class Product extends Model
         self::$product->regular_price = $request->regular_price;
         self::$product->selling_price = $request->selling_price;
         self::$product->stock_amount = $request->stock_amount;
+        self::$product->tags = $request->tags;
+        self::$product->refund = $request->refund;
+        self::$product->featured_status = $request->featured_status;
         if ($request->status)
         {
             self::$product->status = $request->status;
@@ -68,6 +71,7 @@ class Product extends Model
         {
             self::$product->status = 0;
         }
+
         self::$product->vendor_id = $vendorId;
         self::$product->save();
         return self::$product;
@@ -112,6 +116,9 @@ class Product extends Model
         $product->regular_price = $request->regular_price;
         $product->selling_price = $request->selling_price;
         $product->stock_amount = $request->stock_amount;
+        $product->tags = $request->tags;
+        $product->refund = $request->refund;
+        $product->featured_status = $request->featured_status;
         if ($request->status)
         {
             $product->status = $request->status;

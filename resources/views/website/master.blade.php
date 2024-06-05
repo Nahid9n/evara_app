@@ -26,8 +26,6 @@
 
 @include('website.includes.footer')
 @include('website.includes.script')
-
-
 </body>
 
 </html>

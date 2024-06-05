@@ -25,6 +25,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        View::composer(['*'],function ($view){
+            $view->with([
+                'data' => null,
+            ]);
+        });
         View::composer(['website.master'],function ($view){
             $view->with('categories',Category::all());
             $view->with('wishlists',WishList::where('customer_id',Session::get('customer_id'))

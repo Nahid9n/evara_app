@@ -5,16 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\Ad;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Feature;
 use App\Models\Product;
+use App\Models\ProductColor;
 use App\Models\ProductOffer;
+use App\Models\ProductSize;
+use App\Models\Size;
+use App\Models\SubCategory;
+use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Exception;
 
 class EvaraController extends Controller
 {
     private $product, $productOffer, $discount;
-
+    private $per_page = 12;
 
     public function index()
     {
@@ -28,7 +34,7 @@ class EvaraController extends Controller
 //          'product_offers' => ProductOffer::all(),
           'product_offers'  => ProductOffer::where('status',1)->orderBy('id','desc')->take(4)->get(),
           'vendor_products' => Product::whereNot('vendor_id', 0)->where('status', 1)->orderBy('id','desc')->take(16)->get(),
-          'brands'    =>Brand::all(),
+          'brands'    => Brand::where('status',1)->orderBy('id','desc')->get(),
           'categories' => Category::where('status',1) ->orderBy('id','desc')->get(),
           'features' => Feature::where('status',1) ->orderBy('id','desc')->get(),
           'ad12s' => Ad::where('position',12) ->orderBy('id','desc')->take(1)->get(),
@@ -41,31 +47,60 @@ class EvaraController extends Controller
     public function category($slug)
     {
         $category = Category::where('slug',$slug)->first();
-        $products = Product::where('category_id',$category->id)->orderBy('id','desc')->get(['id','name','slug','category_id','image','back_image','regular_price','selling_price']);
+        $products = Product::where('category_id',$category->id)->orderBy('id','desc')->paginate(18);
         return view('website.category.index',[
             'products' => $products,
+            'categorySlug' => $slug,
+            'subCategorySlug' => null,
             'categories' => Category::where('status',1)->latest()->get(),
+            'subcategories' => SubCategory::where('category_id',$category->id)->where('status',1)->latest()->get(),
+            'brands' => Brand::where('status',1)->latest()->get(),
+            'colors' => Color::where('status',1)->latest()->get(),
+            'sizes' => Size::where('status',1)->latest()->get(),
 
         ]);
     }
 
-
-    public function subCategory($id)
+    public function subCategory($slug)
     {
-        return view('website.category.index',[
-            'products' => Product::where('sub_category_id',$id)
-                ->orderBy('id','desc')
-                ->get(['id','name','slug','image','regular_price','selling_price']),
-
+        $subcategory = SubCategory::where('slug',$slug)->first();
+        $subcategories = SubCategory::whereIn('category_id',[$subcategory->category_id])->where('status',1)->get();
+        $products = Product::where('sub_category_id',$subcategory->id)->orderBy('id','desc')->paginate(18);
+        return view('website.subcategory.index',[
+            'products' => $products,
+            'subCategorySlug' => $slug,
+            'categorySlug' => $subcategory->category->slug,
             'categories' => Category::where('status',1)->latest()->get(),
+            'subcategories' => $subcategories,
+            'brands' => Brand::where('status',1)->latest()->get(),
+            'colors' => Color::where('status',1)->latest()->get(),
+            'sizes' => Size::where('status',1)->latest()->get(),
+        ]);
+    }
+    public function productByBrand($slug)
+    {
+        $brand = Brand::where('slug',$slug)->first();
+        $products = Product::where('brand_id',$brand->id)->orderBy('id','desc')->paginate(18);
+        return view('website.brand.index',[
+            'products' => $products,
+            'brandSlug' => $slug,
+            'categories' => Category::where('status',1)->latest()->get(),
+            'subcategories' => SubCategory::where('status',1)->latest()->get(),
+            'brands' => Brand::where('status',1)->latest()->get(),
+            'colors' => Color::where('status',1)->latest()->get(),
+            'sizes' => Size::where('status',1)->latest()->get(),
 
         ]);
     }
-
     public function allProduct()
     {
         return view('website.product.allproduct', [
-            'products' => Product::where('status',1)->latest()->paginate(12),
+            'products' => Product::where('status',1)->latest()->paginate(18),
+            'categories' => Category::where('status',1)->latest()->get(),
+            'subcategories' => SubCategory::where('status',1)->latest()->get(),
+            'brands' => Brand::where('status',1)->latest()->get(),
+            'colors' => Color::where('status',1)->latest()->get(),
+            'sizes' => Size::where('status',1)->latest()->get(),
         ]);
     }
     public function productDetails($slug)
@@ -97,5 +132,75 @@ class EvaraController extends Controller
         }
 
     }
+    public function filter(Request $request)
+    {
+        try {
+               $data = $request->jsonString;
+            $all_data = json_decode($request->jsonString);
+            $query = Product::query();
 
+            if (!empty($all_data->keyword)) {
+                $query->where('name', 'like', '%' . $all_data->keyword . '%');
+            }
+
+            if (!empty($all_data->category)) {
+                $query->whereIn('category_id', $all_data->category);
+            }
+            if (!empty($all_data->subCategory)) {
+                $query->whereIn('sub_category_id', $all_data->subCategory);
+            }
+
+            if (!empty($all_data->brand)) {
+                $query->whereIn('brand_id', $all_data->brand);
+            }
+
+            if (!empty($all_data->maxPriceRange)) {
+                $query->whereBetween('selling_price', [0, $all_data->maxPriceRange]);
+            }
+            if (!empty($all_data->color)) {
+                $productColors = ProductColor::whereIn('color_id',$all_data->color)->get('product_id');
+                $productIds = array();
+                foreach ($productColors as $color){
+                    array_push($productIds,$color->product_id);
+                }
+                $query->whereIn('id', $productIds);
+            }
+            if (!empty($all_data->size)) {
+                $productSizes = ProductSize::whereIn('size_id',$all_data->size)->get('product_id');
+                $productIds = array();
+                foreach ($productSizes as $size){
+                    array_push($productIds,$size->product_id);
+                }
+                $query->whereIn('id', $productIds);
+            }
+
+            $perPage = 12;
+            $offset = isset($all_data->page) ? $all_data->page : 0;
+            $products = $query->skip($offset)->where('status',1)->paginate($perPage);
+            if ($products->isEmpty()) {
+                return view('website.empty.empty');
+            }
+            return view('website.filter.ajaxFilter', compact('products','data'));
+        }
+        catch (Exception $e){
+            Toastr::error($e->getMessage());
+            return back();
+        }
+    }
+    public function paginate(Request $request)
+    {
+        $products = Product::where('status',1)->paginate(20);
+        return view('website.pagination.paginate', compact('products'))->render();
+    }
+    public function getSubCategoryByCategory(Request $request)
+    {
+        $categories = Category::whereIn('id',$request->id)->get('id');
+        $categoryIds = array();
+        foreach ($categories as $category){
+            array_push($categoryIds,$category->id);
+        }
+        $subCategories = SubCategory::whereIn('category_id',$categoryIds)->get();
+        $subCategorySlug = null;
+        return view('website.filter.ajaxsubcategory',compact('subCategories','subCategorySlug'));
+    }
 }

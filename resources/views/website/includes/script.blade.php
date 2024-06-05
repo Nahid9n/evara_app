@@ -69,7 +69,6 @@
                 // console.log(response);
                 //3rd
                 var option = '';
-                option += ' <option value="" disabled selected> -- Select Sub Category --</option>';
                 $.each(response, function (key,value) {
                     option += '<option value="'+value.id+'">' + value.name + '</option>';
                 });
@@ -217,4 +216,104 @@
 
 
     });
+</script>
+<script>
+    function filter(page = 1) {
+        var category = [];
+        var subCategory = [];
+        var brand = [];
+        var size = [];
+        var color = [];
+        var maxPriceRange = [];
+        var keyword = "<?= (isset($_GET['keyword']) ? $_GET['keyword'] : '') ?>";
+
+        $('.categoryCheckBox').each(function() {
+            if (this.checked) {
+                category.push($(this).attr('id'));
+            }
+        });
+        $('.subCategoryCheckBox').each(function() {
+            if (this.checked) {
+                subCategory.push($(this).attr('id'));
+            }
+        });
+
+
+        $('.brandCheckBox').each(function() {
+            if (this.checked) {
+                brand.push($(this).attr('id'));
+            }
+        });
+
+        $('.sizeCheckBox').each(function() {
+            if (this.checked) {
+                size.push($(this).val());
+            }
+        });
+
+        $('.colorCheckBox').each(function() {
+            if (this.checked) {
+                color.push($(this).val());
+            }
+        });
+
+        maxPriceRange.push($('#maxRange').val());
+        var jsonData = {
+            "category": category,
+            "subCategory": subCategory,
+            "brand": brand,
+            "size": size,
+            "color": color,
+            "maxPriceRange": maxPriceRange,
+            "keyword": keyword,
+        };
+
+        var jsonString = JSON.stringify(jsonData);
+
+        $.ajax({
+            url: "{{ route('product.filter') }}",
+            type: 'get',
+            data: {
+                'jsonString': jsonString,
+                'page': page,
+            },
+            dataType: 'html',
+            success: function(res) {
+                if (res == '0') {
+                    $('#filterProducts').text("Product not found");
+                } else {
+                    $('#filterProducts').html(res);
+                    // $("#seeMoreBtn").show();
+                    updatePaginationLinks();
+                }
+            }
+        });
+
+    }
+    function updatePaginationLinks() {
+        $('.pagination-links a').on('click', function(event) {
+            event.preventDefault();
+            var page = $(this).attr('href').split('page=')[1];
+            var jsonString = "{{ $data }}";
+            filter(page,jsonString);
+        });
+    }
+    function setSubCategory(id) {
+        var category = [];
+
+        $('.categoryCheckBox').each(function() {
+            if (this.checked) {
+                category.push($(this).attr('id'));
+            }
+        });
+        $.ajax({
+            type: "GET",
+            url: "{{ route('get-sub-category-by-category-filter') }}",
+            data: {id:category},
+            dataType: 'html',
+            success: function (response) {
+                $('#subCategoryId').html(response);
+            }
+        })
+    }
 </script>

@@ -1,7 +1,6 @@
 @extends('website.master')
 @section('title','Popular E-commerce Website in Bangladesh')
 @section('body')
-
     <section class="home-slider position-relative pt-50">
         <div class="hero-slider-1 dot-style-1 dot-style-1-position-1">
             @foreach ($product_offers as $product_offer)
@@ -31,7 +30,7 @@
         </div>
         <div class="slider-arrow hero-slider-1-arrow"></div>
     </section>
-    <section class="featured section-padding position-relative">
+    {{--<section class="featured section-padding position-relative">
         <div class="container">
             <div class="row">
                @foreach($features as $feature)
@@ -44,7 +43,7 @@
                 @endforeach
             </div>
         </div>
-    </section>
+    </section>--}}
     <section class="popular-categories section-padding mt-15 mb-25">
         <div class="container wow fadeIn animated">
             <h3 class="section-title mb-20"><span>Popular</span> Categories</h3>
@@ -57,6 +56,24 @@
                                 <a href="{{route('product-category',$category->slug)}}"><img src="{{ asset($category->image)}}" width="100" height="100" alt=""></a>
                             </figure>
                             <h5><a href="{{route('product-category',$category->slug)}}">{{($category->name)}}</a></h5>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section-padding">
+        <div class="container">
+            <h3 class="section-title mb-20 wow fadeIn animated"><span>Featured</span> Brands</h3>
+            <div class="carausel-6-columns-cover position-relative">
+                <div class="slider-arrow slider-arrow-2 carausel-6-columns-arrow" id="carausel-6-columns-3-arrows"></div>
+                <div class="carausel-6-columns text-center" id="carausel-6-columns-3">
+                    @foreach($brands as $brand)
+                        <div class="card-1 text-center" style="height: 200px">
+                            <figure class="img-hover-scale overflow-hidden justify-content-center">
+                                <a href="{{route('product-brand',$brand->slug)}}"><img src="{{ asset($brand->image) }}" width="100" height="100" alt="{{ $brand->name }}"></a>
+                            </figure>
+                            <h5><a href="{{route('product-brand',$brand->slug)}}">{{($brand->name)}}</a></h5>
                         </div>
                     @endforeach
                 </div>
@@ -78,7 +95,7 @@
                         <button class="nav-link" id="nav-tab-two" data-bs-toggle="tab" data-bs-target="#tab-two" type="button" role="tab" aria-controls="tab-two" aria-selected="false">Popular</button>
                     </li>--}}
                 </ul>
-                <a href="#" class="view-more d-none d-md-flex">View More<i class="fi-rs-angle-double-small-right"></i></a>
+                <a href="{{route('product-all')}}" class="view-more d-none d-md-flex">View More<i class="fi-rs-angle-double-small-right"></i></a>
             </div>
             <!--End nav-tabs-->
             <div class="tab-content wow fadeIn animated" id="myTabContent">
@@ -117,9 +134,9 @@
                                             <span>{{$product->selling_price}}</span>
                                             <span class="old-price">{{$product->regular_price}}</span>
                                         </div>
-                                        <div class="product-action-1 show">
-                                            <a aria-label="Add To Cart" class="action-btn hover-up" href="{{ route('product-detail',$product->slug) }}"><i class="fi-rs-shopping-bag-add"></i></a>
-                                        </div>
+{{--                                        <div class="product-action-1 show">--}}
+{{--                                            <a aria-label="Add To Cart" class="action-btn hover-up" href="{{ route('product-detail',$product->slug) }}"><i class="fi-rs-shopping-bag-add"></i></a>--}}
+{{--                                        </div>--}}
                                     </div>
                                 </div>
                             </div><!-- Quick view -->
@@ -174,6 +191,11 @@
                                                         <div class="product-detail-rating">
                                                             <div class="pro-details-brand">
                                                                 <span> Brands: <a href="shop-grid-right.html">{{ $product->brand->name }}</a></span>
+                                                                @if($product->stock_amount > 0)
+                                                                    <p><span class="in-stock bg-success text-dark p-1">{{ $product->stock_amount }} In Stock</span></p>
+                                                                @else
+                                                                    <p><span class="in-stock bg-danger text-success p-1">Stock Out</span></p>
+                                                                @endif
                                                             </div>
                                                             <div class="product-rate-cover text-end">
                                                                 <div class="product-rate d-inline-block">
@@ -239,8 +261,7 @@
 
                                                         <ul class="product-meta font-xs color-grey mt-50">
                                                             <li class="mb-5">SKU: <a href="#">{{$product->code}}</a></li>
-                                                            <li class="mb-5">Tags: <a href="#" rel="tag">Cloth</a>, <a href="#" rel="tag">Women</a>, <a href="#" rel="tag">Dress</a> </li>
-                                                            <li>Availability:<span class="in-stock text-success ml-5">{{$product->stock_amount}} Items In Stock</span></li>
+                                                            <li class="mb-5">Tags: {{$product->tags}}</li>
                                                         </ul>
                                                     </div>
                                                     <!-- Detail Info -->
@@ -346,6 +367,11 @@
                                                         <div class="product-detail-rating">
                                                             <div class="pro-details-brand">
                                                                 <span> Brands: <a href="shop-grid-right.html">{{ $product->brand->name }}</a></span>
+                                                                @if($product->stock_amount > 0)
+                                                                    <p><span class="in-stock bg-success text-dark p-1">{{ $product->stock_amount }} In Stock</span></p>
+                                                                @else
+                                                                    <p><span class="in-stock bg-danger text-success p-1">Stock Out</span></p>
+                                                                @endif
                                                             </div>
                                                             <div class="product-rate-cover text-end">
                                                                 <div class="product-rate d-inline-block">
@@ -411,8 +437,7 @@
 
                                                         <ul class="product-meta font-xs color-grey mt-50">
                                                             <li class="mb-5">SKU: <a href="#">{{$product->code}}</a></li>
-                                                            <li class="mb-5">Tags: <a href="#" rel="tag">Cloth</a>, <a href="#" rel="tag">Women</a>, <a href="#" rel="tag">Dress</a> </li>
-                                                            <li>Availability:<span class="in-stock text-success ml-5">{{$product->stock_amount}} Items In Stock</span></li>
+                                                            <li class="mb-5">Tags: {{$product->tags}} </li>
                                                         </ul>
                                                     </div>
                                                     <!-- Detail Info -->
@@ -595,21 +620,7 @@
             </div>
         </div>
     </section>--}}
-    <section class="section-padding">
-        <div class="container">
-            <h3 class="section-title mb-20 wow fadeIn animated"><span>Featured</span> Brands</h3>
-            <div class="carausel-6-columns-cover position-relative wow fadeIn animated">
-                <div class="slider-arrow slider-arrow-2 carausel-6-columns-arrow" id="carausel-6-columns-3-arrows"></div>
-                <div class="carausel-6-columns text-center" id="carausel-6-columns-3">
-                    @foreach($brands as $brand)
-                        <div class="brand-logo">
-                            <img class="img-grey-hover" src="{{ asset($brand->image) }}" height="200px" alt="{{ $brand->name }}">
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </section>
+
     {{--<section class="bg-grey-9 section-padding">
         <div class="container pt-25 pb-25">
             <div class="heading-tab d-flex">
