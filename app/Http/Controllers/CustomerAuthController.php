@@ -29,15 +29,15 @@ class CustomerAuthController extends Controller
                 Session::put('customer_id', $this->customer->id);
                 Session::put('customer_name', $this->customer->name);
 
-                return redirect('/my-dashboard');
+                return redirect()->route('customer.dashboard')->with('message','Login Success.');
             }
             else{
-                return back()->with('message','Your password is not valid ');
+                return back()->with('error','Your password is not valid ');
             }
         }
         else{
 
-            return back()->with('message','Your email or Mobile number is not valid ');
+            return back()->with('error','Your email or Mobile number is not valid ');
         }
 
     }

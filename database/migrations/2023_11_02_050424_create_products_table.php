@@ -30,6 +30,8 @@ return new class extends Migration
             $table->integer('stock_amount')->default(0);
             $table->integer('hit_count')->default(0);
             $table->integer('sales_count')->default(0);
+            $table->text('tags')->nullable();
+            $table->tinyInteger('refund')->default(0);
             $table->tinyInteger('featured_status')->default(1);
             $table->tinyInteger('status')->default(1);
             $table->timestamps();

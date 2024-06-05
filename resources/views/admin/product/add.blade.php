@@ -26,90 +26,98 @@
                 <div class="card-body">
                     <form class="form-horizontal" action="{{ route('product.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
-                        <div class="row mb-4">
-                            <label for="" class="col md-3 form-label">Category Name</label>
-                            <div class="col-md-9">
-                                <select name="category_id" onchange="setSubCategory(this.value)" id="" class="form-control" required>
-                                    <option value="" disabled selected> -- Select Category --</option>
-                                    @foreach($categories as $category)
-                                        <option value="{{$category->id}}"> {{$category->name}} </option>
-                                    @endforeach
-                                </select>
-                                <span
-                                    class="text-danger">{{$errors->has('category_id') ? $errors->first('category_id') : ''}}</span>
+                        <div class="row mb-4 d-flex form-group">
+                            <div class="col-md-6 ">
+                                <div class="row">
+                                    <label for="" class="col-md-3 form-label">Category Name</label>
+                                    <div class="col-md-9">
+                                        <select name="category_id" onchange="setSubCategory(this.value)" id="" class="form-control select2 select2-show-search form-select" required>
+                                            <option value="" disabled selected> -- Select Category --</option>
+                                            @foreach($categories as $category)
+                                                <option value="{{$category->id}}"> {{$category->name}} </option>
+                                            @endforeach
+                                        </select>
+                                        <span
+                                            class="text-danger">{{$errors->has('category_id') ? $errors->first('category_id') : ''}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row d-flex form-group">
+                                    <label for="name"  class="col-md-3 form-label">Sub Category Name</label>
+                                    <div class="col-md-9">
+                                        <select name="sub_category_id" id="subCategoryId" class="form-control select2 select2-show-search" required>
+                                            <option value="" disabled selected> -- Select Sub Category --</option>
+                                            @foreach($sub_categories as $sub_category)
+                                                <option value="{{$sub_category->id}}"> {{$sub_category->name}} </option>
+                                            @endforeach
+                                        </select>
+                                        <span
+                                            class="text-danger">{{$errors->has('sub_category_id') ? $errors->first('sub_category_id') : ''}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="col-md-6">
+                                <div class="row d-flex form-group">
+                                    <label for="name"  class="col-md-3 form-label">Brand Name</label>
+                                    <div class="col-md-9">
+                                        <select name="brand_id" id="" class="form-control select2 select2-show-search form-select" required>
+                                            <option value="" disabled selected> -- Select Brand --</option>
+                                            @foreach($brands as $brand)
+                                                <option value="{{$brand->id}}"> {{$brand->name}} </option>
+                                            @endforeach
+                                        </select>
+                                        <span
+                                            class="text-danger">{{$errors->has('brand_id') ? $errors->first('brand_id') : ''}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row d-flex form-group">
+                                    <label for="name"  class="col-md-3 form-label">Unit Name</label>
+                                    <div class="col-md-9">
+                                        <select name="unit_id" id="" class="form-control select2 select2-show-search form-select" required>
+                                            <option value="" disabled selected> -- Select Unit --</option>
+                                            @foreach($units as $unit)
+                                                <option value="{{$unit->id}}"> {{$unit->name}} </option>
+                                            @endforeach
+                                        </select>
+                                        <span
+                                            class="text-danger">{{$errors->has('unit_id') ? $errors->first('unit_id') : ''}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row d-flex form-group">
+                                    <label for="name"  class="col-md-3 form-label">Color Name</label>
+                                    <div class="col-md-9 form-group">
+                                        <select multiple name="colors[]"  class="form-control select2 select2-show-search form-select" data-placeholder="Select Product Color" required >
+                                            {{--                                    <option value="" disabled selected> -- Select Color --</option>--}}
+                                            @foreach($colors as $color)
+                                                <option value="{{$color->id}}"> {{$color->name}} </option>
+                                            @endforeach
+                                        </select>
+                                        <span
+                                            class="text-danger">{{$errors->has('color_id') ? $errors->first('color_id') : ''}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row d-flex form-group">
+                                    <label for="name"  class="col-md-3 form-label">Size Name</label>
+                                    <div class="col-md-9 form-group">
+                                        <select multiple name="sizes[]"  class="form-control select2 select2-show-search form-select" data-placeholder="Select Product Size" required >
+                                            {{--                                    <option value="" disabled selected> -- Select Color --</option>--}}
+                                            @foreach($sizes as $size)
+                                                <option value="{{$size->id}}"> {{$size->name}} </option>
+                                            @endforeach
+                                        </select>
+                                        <span
+                                            class="text-danger">{{$errors->has('size_id') ? $errors->first('size_id') : ''}}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="row mb-4">
-                            <label for="name"  class="col-md-3 form-label">Sub Category Name</label>
-                            <div class="col-md-9">
-                                <select name="sub_category_id" id="subCategoryId" class="form-control" required>
-                                    <option value="" disabled selected> -- Select Sub Category --</option>
-                                    @foreach($sub_categories as $sub_category)
-                                        <option value="{{$sub_category->id}}"> {{$sub_category->name}} </option>
-                                    @endforeach
-                                </select>
-                                <span
-                                    class="text-danger">{{$errors->has('sub_category_id') ? $errors->first('sub_category_id') : ''}}</span>
-                            </div>
-                        </div>
-
-                        <div class="row mb-4">
-                            <label for="name"  class="col-md-3 form-label">Brand Name</label>
-                            <div class="col-md-9">
-                                <select name="brand_id" id="" class="form-control" required>
-                                    <option value="" disabled selected> -- Select Brand --</option>
-                                    @foreach($brands as $brand)
-                                        <option value="{{$brand->id}}"> {{$brand->name}} </option>
-                                    @endforeach
-                                </select>
-                                <span
-                                    class="text-danger">{{$errors->has('brand_id') ? $errors->first('brand_id') : ''}}</span>
-                            </div>
-                        </div>
-
-                        <div class="row mb-4">
-                            <label for="name"  class="col-md-3 form-label">Unit Name</label>
-                            <div class="col-md-9">
-                                <select name="unit_id" id="" class="form-control" required>
-                                    <option value="" disabled selected> -- Select Unit --</option>
-                                    @foreach($units as $unit)
-                                        <option value="{{$unit->id}}"> {{$unit->name}} </option>
-                                    @endforeach
-                                </select>
-                                <span
-                                    class="text-danger">{{$errors->has('unit_id') ? $errors->first('unit_id') : ''}}</span>
-                            </div>
-                        </div>
-
-                        <div class="row mb-4">
-                            <label for="name"  class="col-md-3 form-label">Color Name</label>
-                            <div class="col-md-9 form-group">
-                                <select multiple name="colors[]"  class="form-control select2-show-search form-select" data-placeholder="Select Product Color" required >
-{{--                                    <option value="" disabled selected> -- Select Color --</option>--}}
-                                    @foreach($colors as $color)
-                                        <option value="{{$color->id}}"> {{$color->name}} </option>
-                                    @endforeach
-                                </select>
-                                <span
-                                    class="text-danger">{{$errors->has('color_id') ? $errors->first('color_id') : ''}}</span>
-                            </div>
-                        </div>
-
-                        <div class="row mb-4">
-                            <label for="name"  class="col-md-3 form-label">Size Name</label>
-                            <div class="col-md-9 form-group">
-                                <select multiple name="sizes[]"  class="form-control select2-show-search form-select" data-placeholder="Select Product Size" required >
-                                    {{--                                    <option value="" disabled selected> -- Select Color --</option>--}}
-                                    @foreach($sizes as $size)
-                                        <option value="{{$size->id}}"> {{$size->name}} </option>
-                                    @endforeach
-                                </select>
-                                <span
-                                    class="text-danger">{{$errors->has('size_id') ? $errors->first('size_id') : ''}}</span>
-                            </div>
-                        </div>
-
                         <div class="row mb-4">
                             <label for="name"  class="col-md-3 form-label">Product Name</label>
                             <div class="col-md-9">
@@ -177,7 +185,34 @@
                                 <input class="form-control" id="stockAmount"  name="stock_amount" placeholder="Stock Amount" type="number"/>
                             </div>
                         </div>
-
+                        <div class="row mb-4 d-flex form-group">
+                            <label for="stockAmount" class="col-md-3 form-label">Tags</label>
+                            <div class="example col-md-9">
+                                <input type="text" data-role="tagsinput" name="tags" class="form-control"
+                                       placeholder="type & press enter">
+                            </div>
+                        </div>
+                        <div class="row mb-4 d-flex form-group">
+                            <div class="col-md-3">
+                                <label class="form-label" for="type">Refund</label>
+                            </div>
+                            <div class="col-md-9">
+                                <select class="form-control select2 select2-show-search form-select"
+                                        data-placeholder="Select One" name="refund">
+                                    <option value="1">Refundable</option>
+                                    <option value="0" selected>Non-Refundable</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <label class="col-md-3 form-label">Featured Status</label>
+                            <div class="col-md-9 pt-3">
+                                <select class="form-control" name="featured_status" id="">
+                                    <option value="1" selected>Published</option>
+                                    <option value="0">Unpublished</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="row mb-4">
                             <label class="col-md-3 form-label">Publication Status</label>
                             <div class="col-md-9 pt-3">

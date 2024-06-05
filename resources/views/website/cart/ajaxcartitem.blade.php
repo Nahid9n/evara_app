@@ -13,22 +13,21 @@
                     <div class="shopping-cart-title">
                         <h4><a href="">{{ $cartItem->name }}</a></h4>
                         <h5>
-                            <span>{{ $cartItem->qty }} × {{ $cartItem->price }}</span>
-                            <span> = {{ $cartItem->qty * $cartItem->price }}</span>
-
+                            <span>{{ $cartItem->qty }} × {{ $cartItem->product->selling_price }}</span>
+                            <span> = {{$total = $cartItem->qty * $cartItem->product->selling_price }}</span>
                         </h5>
                     </div>
                 </div>
                 <div class="col-1">
                     <div class="shopping-cart-delete">
-                        <a href="#"><i class="fi-rs-cross-small"></i></a>
+                        <a href="{{route('cart.delete', $cartItem->id)}}" onclick="return confirm('Are you sure to remove this..');"><i class="fi-rs-cross-small"></i></a>
                     </div>
                 </div>
             </div>
         </li>
-        @php($sum = $sum + $cartItem->row_total)
+        @php($sum = $sum + $total)
     @endforeach
-    @if($seeALlCartItems > 4)
+    @if($seeALlCartItems > 5)
         <li class="justify-content-center">
             <a href="{{ route('cart.index') }}">See All</a></li>
     @endif

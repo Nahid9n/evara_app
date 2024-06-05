@@ -273,32 +273,31 @@
                                         @php($cartItems = \App\Models\Cart::where('customer_id',Session::get('customer_id'))->latest()->take(5)->get())
                                         @php($seeALlCartItems = \App\Models\Cart::where('customer_id',Session::get('customer_id'))->count())
                                         @foreach($cartItems as $cartItem)
-                                        <li>
-                                            <div class="row">
-                                                <div class="col-2">
-                                                    <a href="">
-                                                        <img alt="Evara" src="{{asset($cartItem->image)}}">
-                                                    </a>
-                                                </div>
-                                                <div class="col-9">
-                                                    <div class="shopping-cart-title">
-                                                        <h4><a href="">{{ $cartItem->name }}</a></h4>
-                                                        <h5>
-                                                            <span>{{ $cartItem->qty }} × {{ $cartItem->price }}</span>
-                                                            <span> = {{ $cartItem->qty * $cartItem->price }}</span>
+                                            <li>
+                                                <div class="row">
+                                                    <div class="col-2">
+                                                        <a href="">
+                                                            <img alt="Evara" src="{{asset($cartItem->image)}}">
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-9">
+                                                        <div class="shopping-cart-title">
+                                                            <h4><a href="">{{ $cartItem->name }}</a></h4>
+                                                            <h5>
+                                                                <span>{{ $cartItem->qty }} × {{ $cartItem->product->selling_price }}</span>
+                                                                <span> = {{$total = $cartItem->qty * $cartItem->product->selling_price }}</span>
 
-                                                        </h5>
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-1">
+                                                        <div class="shopping-cart-delete">
+                                                            <a href="{{route('cart.delete', $cartItem->id)}}" onclick="return confirm('Are you sure to remove this..')"><i class="fi-rs-cross-small"></i></a>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-1">
-                                                    <div class="shopping-cart-delete">
-                                                        <a href="#"><i class="fi-rs-cross-small"></i></a>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </li>
-                                            @php($sum = $sum + $cartItem->row_total)
+                                            </li>
+                                            @php($sum = $sum + $total)
                                         @endforeach
                                         @if($seeALlCartItems > 4)
                                         <li class="justify-content-center">
@@ -346,7 +345,7 @@
                                                             <li class="mega-menu-col col-lg-6">
                                                                 <ul>
                                                                     @foreach($category->subCategory as $subCategory)
-                                                                        <li><a class="dropdown-item nav-link nav_item" href="{{route('product-sub-category', ['id' => $subCategory->id])}}">{{$subCategory->name}}</a></li>
+                                                                        <li><a class="dropdown-item nav-link nav_item" href="{{route('product-sub-category', $subCategory->slug)}}">{{$subCategory->name}}</a></li>
                                                                     @endforeach
                                                                 </ul>
                                                             </li>

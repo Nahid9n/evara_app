@@ -118,7 +118,6 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-
         try {
             Product::updateProduct($request,$product);
             if ($request->colors){

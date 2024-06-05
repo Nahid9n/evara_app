@@ -50,7 +50,8 @@ use App\Http\Controllers\Vendor\VendorProductController;
 Route::get('/', [EvaraController::class,'index'])->name('home');
 //Route::get('/product-category', [EvaraController::class,'category'])->name('product-category');
 Route::get('/product-category/{slug}', [EvaraController::class,'category'])->name('product-category');
-Route::get('/product-sub-category/{id}', [EvaraController::class,'subCategory'])->name('product-sub-category');
+Route::get('/product-sub-category/{slug}', [EvaraController::class,'subCategory'])->name('product-sub-category');
+Route::get('/product-brand/{slug}', [EvaraController::class,'productByBrand'])->name('product-brand');
 Route::get('/product-all', [EvaraController::class,'allProduct'])->name('product-all');
 Route::get('/product-detail/{slug}', [EvaraController::class,'productDetails'])->name('product-detail');
 
@@ -65,7 +66,6 @@ Route::get('/contact-us', [PagesController::class,'contact'])->name('contact');
 
 Route::resources(['cart' => CartController::class]);
 
-Route::get('/cart/delete-product/{rowId}',[CartController::class,'delete'])->name('cart.delete');
 Route::post('/cart/update-product',[CartController::class,'updateProduct'])->name('cart.update-product');
 
 Route::get('/checkout',[CheckoutController::class,'index'])->name('checkout');
@@ -79,6 +79,8 @@ Route::post('/login-check',[CustomerAuthController::class,'loginCheck'])->name('
 Route::post('/new-customer',[CustomerAuthController::class,'newCustomer'])->name('new-customer');
 Route::get('/customer-logout',[CustomerAuthController::class,'logout'])->name('customer-logout');
 
+Route::get('/filter',[EvaraController::class,'filter'])->name('product.filter');
+Route::get('/get-sub-category-by-category-filter',[EvaraController::class,'getSubCategoryByCategory'])->name('get-sub-category-by-category-filter');
 
 
 // CustomerAuthController  Dashboard
@@ -91,6 +93,8 @@ Route::middleware(['customer'])->group(function () {
     Route::get('/customer/invoice-download/{id}', [CustomerAuthController::class,'showCustomerDownload'])->name('customer-invoice-download');
     Route::post('/editCustomer',[CustomerAuthController::class,'editCustomer'])->name('editCustomer');
 
+    Route::get('/cart/delete-product/{id}',[CartController::class,'delete'])->name('cart.delete');
+    Route::post('/cart/clear-product',[CartController::class,'clearCart'])->name('cart.clear');
 
 });
 
@@ -143,6 +147,7 @@ Route::middleware(['vendor'])->group(function () {
 });
 
 Route::get('/get-sub-category-by-category',[ProductController::class,'getSubCategoryByCategory'])->name('get-sub-category-by-category');
+
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
 

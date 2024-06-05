@@ -1,12 +1,6 @@
-
-
 @extends('website.master')
-@section('title', 'Product Category Page')
-
+@section('title', 'Product SubCategory Page')
 @section('body')
-
-
-
     <div class="page-header breadcrumb-wrap">
         <div class="container">
             <div class="breadcrumb">
@@ -258,7 +252,7 @@
                         <h5 class="section-title style-1 wow fadeIn animated">Select Your Choice</h5>
                         @foreach($subcategories as $subcategory)
                             <div class="form-check">
-                                <input type="checkbox" id="{{ $subcategory->id }}" onclick="filter()" class="form-check-input subCategoryCheckBox"  value="{{ $subcategory->id }}">
+                                <input type="checkbox" id="{{ $subcategory->id }}" onclick="filter()" class="form-check-input subCategoryCheckBox" {{$subCategorySlug == $subcategory->slug ? 'checked':''}}  value="{{ $subcategory->id }}">
                                 <label class="form-check-label">{{ $subcategory->name }}</label>
                             </div>
                         @endforeach

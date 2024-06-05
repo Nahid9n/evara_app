@@ -91,8 +91,6 @@ class CartController extends Controller
             $cart->customer_id = Session::get('customer_id');
             $cart->name = $product->name;
             $cart->qty = $request->qty;
-            $cart->price = $product->selling_price;
-            $cart->row_total = ($product->selling_price * $request->qty);
             $cart->size = $request->size;
             $cart->color = $request->color;
             $cart->image = $product->image;
@@ -108,8 +106,7 @@ class CartController extends Controller
     }
     public function getCartDetails(){
         $cartContents = Cart::where('customer_id', Session::get('customer_id'))->get();
-        $prices = Cart::where('customer_id', Session::get('customer_id'))->sum('row_total');
-        return view('website.cart.ajaxcartitem', compact('cartContents', 'prices'));
+        return view('website.cart.ajaxcartitem', compact('cartContents'));
     }
     /**
      * Display the specified resource.
@@ -145,11 +142,22 @@ class CartController extends Controller
     }
 
 
-    public function delete(string $rowId)
+    public function delete($id)
     {
-        Cart::remove ($rowId);
+        $cart = Cart::find($id);
+        $cart->delete();
         return back()->with('message','Cart product remove successfully.');
     }
+    public function clearCart(Request $request)
+    {
+        $ids = json_decode($request->ids);
+        $carts = Cart::whereIn('id',$ids)->get();
+        foreach ($carts as $cart){
+            $cart->delete();
+        }
+        return back()->with('message','Cart Clear successfully.');
+    }
+
 
     public function updateProduct(Request $request)
     {
