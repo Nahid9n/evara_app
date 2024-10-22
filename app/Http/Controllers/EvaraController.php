@@ -6,7 +6,10 @@ use App\Models\Ad;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
+use App\Models\Coupon;
+use App\Models\CouponCollect;
 use App\Models\Feature;
+use App\Models\Highlight;
 use App\Models\Product;
 use App\Models\ProductColor;
 use App\Models\ProductOffer;
@@ -16,24 +19,23 @@ use App\Models\SubCategory;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Exception;
+use Session;
 
 class EvaraController extends Controller
 {
     private $product, $productOffer, $discount;
     private $per_page = 12;
-
     public function index()
     {
       return view('website.home.index',[
           'products' => Product::where('featured_status',1)
-         // 'products' => Product::where('status',1)
               ->orderBy('id','desc')
               ->take(12)
               ->get(['id','name','image','category_id','brand_id','regular_price','selling_price','slug']),
             'latestProducts' => Product::where('status',1)->take(12)->latest()->get(),
-//          'product_offers' => ProductOffer::all(),
+            'highlights' => Highlight::where('status',1)->take(5)->orderBy('serial','asc')->get(),
           'product_offers'  => ProductOffer::where('status',1)->orderBy('id','desc')->take(4)->get(),
-          'vendor_products' => Product::whereNot('vendor_id', 0)->where('status', 1)->orderBy('id','desc')->take(16)->get(),
+          'vendor_products' => Product::where('status', 1)->orderBy('id','desc')->take(16)->get(),
           'brands'    => Brand::where('status',1)->orderBy('id','desc')->get(),
           'categories' => Category::where('status',1) ->orderBy('id','desc')->get(),
           'features' => Feature::where('status',1) ->orderBy('id','desc')->get(),
@@ -43,7 +45,6 @@ class EvaraController extends Controller
 
       ]);
     }
-
     public function category($slug)
     {
         $category = Category::where('slug',$slug)->first();
@@ -60,7 +61,6 @@ class EvaraController extends Controller
 
         ]);
     }
-
     public function subCategory($slug)
     {
         $subcategory = SubCategory::where('slug',$slug)->first();
@@ -95,7 +95,7 @@ class EvaraController extends Controller
     public function allProduct()
     {
         return view('website.product.allproduct', [
-            'products' => Product::where('status',1)->latest()->paginate(18),
+            'products' => Product::where('status',1)->latest()->paginate(100),
             'categories' => Category::where('status',1)->latest()->get(),
             'subcategories' => SubCategory::where('status',1)->latest()->get(),
             'brands' => Brand::where('status',1)->latest()->get(),
@@ -132,10 +132,29 @@ class EvaraController extends Controller
         }
 
     }
+    public function productByTag($tag)
+    {
+        try {
+            $products = Product::where('tags','LIKE','%'.$tag.'%')->paginate(100);
+
+            return view('website.product.allproduct', [
+                'products' => $products,
+                'categories' => Category::where('status',1)->latest()->get(),
+                'subcategories' => SubCategory::where('status',1)->latest()->get(),
+                'brands' => Brand::where('status',1)->latest()->get(),
+                'colors' => Color::where('status',1)->latest()->get(),
+                'sizes' => Size::where('status',1)->latest()->get(),
+            ]);
+        }
+        catch (Exception $exception){
+            return back()->with('error',$exception->getMessage());
+        }
+
+    }
     public function filter(Request $request)
     {
         try {
-               $data = $request->jsonString;
+            $data = $request->jsonString;
             $all_data = json_decode($request->jsonString);
             $query = Product::query();
 
@@ -174,9 +193,10 @@ class EvaraController extends Controller
                 $query->whereIn('id', $productIds);
             }
 
-            $perPage = 12;
+            $perPage = 100;
             $offset = isset($all_data->page) ? $all_data->page : 0;
-            $products = $query->skip($offset)->where('status',1)->paginate($perPage);
+            $products = $query->where('status',1)->paginate($perPage);
+            $countProducts = $query->where('status',1)->count();
             if ($products->isEmpty()) {
                 return view('website.empty.empty');
             }
@@ -203,4 +223,27 @@ class EvaraController extends Controller
         $subCategorySlug = null;
         return view('website.filter.ajaxsubcategory',compact('subCategories','subCategorySlug'));
     }
+    public function coupons(){
+//        try {
+        if (auth()->user()->id){
+            $userCoupons = CouponCollect::where('user_id',auth()->user()->id)->get();
+            $couponIds = array();
+            foreach ($userCoupons as $coupon){
+                array_push($couponIds,$coupon->coupon_id);
+            }
+            $coupons = Coupon::whereNotIn('id',$couponIds)->where('status',1)->latest()->paginate(12);
+            return view('website.coupon.coupons', compact('coupons'));
+        }
+        else{
+            $coupons = Coupon::where('status',1)->latest()->paginate(12);
+            return view('website.coupon.coupons', compact('coupons'));
+        }
+
+//        }catch (Exception $e){
+//            Toastr::error($e->getMessage());
+//            return back();
+//        }
+
+    }
+
 }

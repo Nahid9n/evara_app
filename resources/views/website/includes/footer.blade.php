@@ -1,6 +1,4 @@
-
-
-<footer class="main">
+<footer class="">
     <section class="newsletter p-30 text-white wow fadeIn animated">
         <div class="container">
             <div class="row align-items-center">
@@ -9,9 +7,6 @@
                         <div class="col flex-horizontal-center">
                             <img class="icon-email" src="{{asset($setting->logo_png)}}" alt="{{$setting->company_name}}">
                             <h4 class="font-size-20 mb-0 ml-3">Sign up to Newsletter</h4>
-                        </div>
-                        <div class="col my-4 my-md-0 des">
-                            <h5 class="font-size-15 ml-4 mb-0">...and receive <strong>$25 coupon for first shopping.</strong></h5>
                         </div>
                     </div>
                 </div>
@@ -32,7 +27,7 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="widget-about font-md mb-md-5 mb-lg-0">
                         <div class="logo logo-width-1 wow fadeIn animated">
-                            <a href="index-2.html"><img src="{{asset($setting->logo_png)}}" alt="{{$setting->company_name}}"></a>
+                            <a href="{{route('home')}}"><img src="{{asset($setting->logo_png)}}" alt="{{$setting->company_name}}"></a>
                         </div>
                         <h5 class="mt-20 mb-10 fw-600 text-grey-4 wow fadeIn animated">Contact</h5>
                         <p class="wow fadeIn animated">

@@ -34,7 +34,7 @@
                                 <select name="product_id" id="" class="form-control" required>
                                     <option value="" disabled selected> -- Select Product --</option>
                                     @foreach($products as $product)
-                                        <option value="{{$product->id}}" @selected($product->id == $ad->product_id) > {{$product->name}} </option>
+                                        <option value="{{$product->id}}" @selected($product->id == $ad->product_id) > {{ truncateWords($product->name, 14) }} </option>
                                     @endforeach
                                 </select>
                                 <span

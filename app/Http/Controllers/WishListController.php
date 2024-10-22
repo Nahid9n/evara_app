@@ -15,12 +15,11 @@ class WishListController extends Controller
     public function wishListAdd()
     {
 
-        $this->customer = Session::get('customer_id');
-        if ($this->customer) {
-            $this->wishListCheck = WishList::where('customer_id', $this->customer)->where('product_id', $_GET['product_id'])->first();
+        if (auth()->user()->id) {
+            $this->wishListCheck = WishList::where('customer_id', auth()->user()->id)->where('product_id', $_GET['product_id'])->first();
             if (!$this->wishListCheck) {
                 $this->wishList = new WishList();
-                $this->wishList->customer_id = $this->customer;
+                $this->wishList->customer_id = auth()->user()->id;
                 $this->wishList->product_id = $_GET['product_id'];
                 $this->wishList->date = date('Y-m-d');
                 $this->wishList->timestamp = strtotime(date('Y-m-d'));
@@ -28,7 +27,7 @@ class WishListController extends Controller
 
                 return response()->json([
                     'message' => "Product added to wishlist.",
-                    'count' => count(WishList::where('customer_id', Session::get('customer_id'))->get()),
+                    'count' => count(WishList::where('customer_id', auth()->user()->id)->get()),
                 ]);
             } else {
                 Toastr::error("Product already in wishlist.");
@@ -54,7 +53,7 @@ class WishListController extends Controller
 
     public function index()
     {
-        $this->wishlist = Wishlist::where('customer_id', Session::get('customer_id'))->where('status', 1)->get();
+        $this->wishlist = Wishlist::where('customer_id', auth()->user()->id)->where('status', 1)->get();
 
         return view('website.customer.wishlist', [
             'wishlists' => $this->wishlist,

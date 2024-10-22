@@ -34,7 +34,7 @@
                                         @csrf
                                         <div class="form-group">
 {{--                                            This line is very Important And DANGER--}}
-                                            <input type="text" required="" name="user_name" placeholder="Your Email Or Phone ">
+                                            <input type="text" required="" name="email" placeholder="Your Email Address">
                                         </div>
                                         <div class="form-group">
                                             <input required="" type="password" name="password" placeholder="Password">
@@ -80,7 +80,7 @@
                                         <div class="form-group">
                                             <input required="" type="password" name="password" placeholder="Password">
                                         </div>
-
+                                        <input type="hidden" name="role" value="customer" readonly>
                                         <div class="login_footer form-group">
                                             <div class="chek-form">
                                                 <div class="custome-checkbox">

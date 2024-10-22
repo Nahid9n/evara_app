@@ -28,19 +28,20 @@
                         @csrf
 
                         <div class="row mb-4">
-                            <label for="name"  class="col-md-3 form-label">Product Name</label>
-                            <div class="col-md-9">
-                                <select name="product_id" id="" class="form-control" required>
+                            <div class="col-md-3">
+                                <label for="name"  class="form-label">Product Name</label>
+                            </div>
+                            <div class="col-md-9 form-group">
+                                <select name="product_id" id="" class="form-control select2-show-search form-select" required>
                                     <option value="" disabled selected> -- Select Product --</option>
                                     @foreach($products as $product)
-                                        <option value="{{$product->id}}"> {{$product->name}} </option>
+                                        <option value="{{$product->id}}"> {{ truncateWords($product->name, 14) }} </option>
                                     @endforeach
                                 </select>
                                 <span
                                     class="text-danger">{{$errors->has('product_id') ? $errors->first('product_id') : ''}}</span>
                             </div>
                         </div>
-
                         <div class="row mb-4">
                             <label for="name"  class="col-md-3 form-label">Ad Tilte</label>
                             <div class="col-md-9">

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
-use Illuminate\Http\Request;
 use App\Models\Cart;
+use App\Models\Product;
+use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Http\Request;
 use Session;
 
 
@@ -19,7 +20,7 @@ class CartController extends Controller
     {
 //        return Cart::content();
         return view('website.cart.index',[
-            'products' => Cart::where('customer_id', Session::get('customer_id'))->get(),
+            'products' => Cart::where('customer_id', auth()->user()->id)->get(),
         ]);
 
     }
@@ -62,7 +63,7 @@ class CartController extends Controller
 
     }
     public function cartAdd(Request $request){
-        if(!Session::get('customer_id')){
+        if(!auth()->user()){
             return response()->json([
                 'status' => false,
                 'error' => "Please login first"
@@ -75,10 +76,7 @@ class CartController extends Controller
                 'error' => "Product not found"
             ]);
         }
-        $checkProductInCart = Cart::where('product_id',$request->product_id)
-            ->where('color',$request->color)
-            ->where('size',$request->size)
-            ->first();
+        $checkProductInCart = Cart::where('product_id',$request->product_id)->where('color',$request->color)->where('size',$request->size)->where('customer_id',auth()->user()->id)->first();
         if ($checkProductInCart){
             return response()->json([
                 'status' => false,
@@ -88,7 +86,7 @@ class CartController extends Controller
         else{
             $cart = new Cart();
             $cart->product_id = $request->product_id;
-            $cart->customer_id = Session::get('customer_id');
+            $cart->customer_id = auth()->user()->id;
             $cart->name = $product->name;
             $cart->qty = $request->qty;
             $cart->size = $request->size;
@@ -99,13 +97,13 @@ class CartController extends Controller
             $cart->save();
             return response()->json([
                 'message' => "Product added",
-                'count' => count(Cart::where('customer_id', Session::get('customer_id'))->get())
+                'count' => count(Cart::where('customer_id', auth()->user()->id)->get())
             ]);
         }
 
     }
     public function getCartDetails(){
-        $cartContents = Cart::where('customer_id', Session::get('customer_id'))->get();
+        $cartContents = Cart::where('customer_id', auth()->user()->id)->get();
         return view('website.cart.ajaxcartitem', compact('cartContents'));
     }
     /**
@@ -159,16 +157,27 @@ class CartController extends Controller
     }
 
 
-    public function updateProduct(Request $request)
+    public function ajaxUpdateProduct(Request $request)
     {
-//        return $request->data;
-        foreach ($request->data  as $item) {
+        $cart = Cart::where('customer_id', auth()->user()->id)->where('product_id', $request->product_id)->where('color',$request->color)->where('size',$request->size)->first();
+        $updateQty = $request->qty;
 
-            Cart::update($item['rowId'], $item['qty']);
+        $product = Product::find($cart->product_id);
+        if($product->stock_amount < $updateQty){
+            Toastr::error("Product stock is not available");
+            return response()->json(['error' => 'Product stock is not available']);
+        }
+        $cart->qty = $request->qty;
+        $cart->save();
 
+        if(!$cart){
+            return response()->json(['error' => 'Unable to update data']);
         }
 
-        return redirect('/cart')->with('message','Cart product update successfully');
+        return response()->json([
+            'success' => 'Cart product has been successfully updated.',
+            'qty'=>$request->qty,
+        ]);
     }
 
 

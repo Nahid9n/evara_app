@@ -5,6 +5,11 @@
 <script src="{{asset('/')}}admin/assets/plugins/bootstrap/js/popper.min.js"></script>
 <script src="{{asset('/')}}admin/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
 
+{{-- date piker --}}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+
 <!-- SIDE-MENU JS -->
 <script src="{{asset('/')}}admin/assets/plugins/sidemenu/sidemenu.js"></script>
 
@@ -67,6 +72,8 @@
 <!-- FORM ELEMENTS JS -->
 <script src="{{asset('/')}}admin/assets/js/formelementadvnced.js"></script>
 
+<!-- Bootstrap-Date Range Picker js-->
+<script src="{{ asset('/') }}admin/assets/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
 
 <!-- CUSTOM JS -->
 <script src="{{asset('/')}}admin/assets/js/custom.js"></script>
@@ -176,10 +183,8 @@
 
 <!-- Internal Input tags js-->
 <script src="{{ asset('/') }}admin/assets/plugins/inputtags/inputtags.js"></script>
-
-
-
-
+@stack('js')
+<script src="{{ asset('/') }}admin/assets/plugins/bootstrap-datepicker/js/datepicker.js"></script>
 
 
 

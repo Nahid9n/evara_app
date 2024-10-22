@@ -1,6 +1,6 @@
 <ul>
     @php( $sum = 0 )
-    @php($seeALlCartItems = \App\Models\Cart::where('customer_id',Session::get('customer_id'))->count())
+    @php($seeALlCartItems = \App\Models\Cart::where('customer_id',auth()->user()->id)->count())
     @foreach($cartContents as $cartItem)
         <li>
             <div class="row">

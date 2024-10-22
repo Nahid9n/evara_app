@@ -1,7 +1,6 @@
 
 
 @if(\Request::route()->getname() == "home")
-{{--
 
 <!-- Modal -->
 <div class="modal fade custom-modal" id="onloadModal" tabindex="-1" aria-labelledby="onloadModalLabel" aria-hidden="true">
@@ -28,7 +27,6 @@
         </div>
     </div>
 </div>
---}}
 
 @endif
 <!-- Quick view -->
@@ -146,7 +144,7 @@
                                 <div class="product-extra-link2">
                                     <button type="submit" class="button button-add-to-cart">Add to cart</button>
                                     <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                                    <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+
                                 </div>
                             </div>
                             <ul class="product-meta font-xs color-grey mt-50">
@@ -164,15 +162,15 @@
 </div>
 
 
-<header class="header-area header-style-1 header-height-2">
-    <div class="header-top header-top-ptb-1 d-none d-lg-block">
+<header class="header-area header-style-1 header-height-2 " style="background-color: #fcfcfc">
+    <div class="header-top header-top-ptb-1 d-none d-lg-block" style="background-color: #000000">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-xl-3 col-lg-4">
                     <div class="header-info">
                         <ul>
-                            <li><i class="fi-rs-smartphone"></i> <a href="#">{{$setting->contact_phone}}</a></li>
-                            <li><i class="fi-rs-marker"></i><a  href="">Our location</a></li>
+                            <li><i class="fi-rs-smartphone text-white"></i> <a href="#" class="text-white">{{$setting->contact_phone}}</a></li>
+                            <li><i class="fi-rs-marker text-white"></i><a  href="" class="text-white">Our location</a></li>
                         </ul>
                     </div>
                 </div>
@@ -181,9 +179,9 @@
                     <div class="text-center">
                         <div id="news-flash" class="d-inline-block">
                             <ul>
-                                <li>Get great devices up to 50% off <a href="shop-grid-right.html">View details</a></li>
-                                <li>Supper Value Deals - Save more with coupons</li>
-                                <li>Trendy 25silver jewelry, save up 35% off today <a href="shop-grid-right.html">Shop now</a></li>
+                                <li class="text-white">Get great devices up to 50% off <a href="shop-grid-right.html">View details</a></li>
+                                <li class="text-white">Supper Value Deals - Save more with coupons</li>
+                                <li class="text-white">Trendy 25silver jewelry, save up 35% off today <a href="shop-grid-right.html">Shop now</a></li>
                             </ul>
                         </div>
                     </div>
@@ -192,7 +190,7 @@
                     <div class="header-info header-info-right">
                         <ul>
                             <li>
-                                <a class="language-dropdown-active" href="#"> <i class="fi-rs-world"></i> English <i
+                                <a class="language-dropdown-active text-white" href="#"> <i class="fi-rs-world"></i> English <i
                                         class="fi-rs-angle-small-down"></i></a>
                                 <ul class="language-dropdown">
                                     <li><a href="#"><img src="{{asset('/')}}website/assets/imgs/theme/flag-fr.png"
@@ -205,20 +203,20 @@
                             </li>
                             @if(Session::get('vendor_id'))
                                 <li>
-                                    <a class="language-dropdown-active" href="#"> <i
+                                    <a class="language-dropdown-active text-white" href="#"> <i
                                             class="fi-rs-user"></i> {{Session::get('vendor_name')}} <i
                                             class="fi-rs-angle-small-down"></i></a>
                                     <ul class="language-dropdown">
-                                        <li><a href="{{ route('vendor.dashboard') }}"><i class="fi-rs-home"></i>Dashboard</a></li>
-                                        <li><a href="{{route('vendor.logout')}}"><i class="fi-rs-lock"></i>Logout</a>
+                                        <li><a href="{{ route('vendor.dashboard') }}" class=" text-white"><i class="fi-rs-home"></i>Dashboard</a></li>
+                                        <li><a href="{{route('vendor.logout')}}" class="text-white"><i class="fi-rs-lock"></i>Logout</a>
                                         </li>
                                     </ul>
                                 </li>
                             @else
-                                @if(Session::get('customer_id'))
+                                @if(auth()->check())
                                     <li>
-                                        <a class="language-dropdown-active" href="#"> <i
-                                                class="fi-rs-user"></i> {{Session::get('customer_name')}} <i
+                                        <a class="language-dropdown-active text-white" href="#"> <i
+                                                class="fi-rs-user"></i> {{auth()->user()->name}} <i
                                                 class="fi-rs-angle-small-down"></i></a>
                                         <ul class="language-dropdown">
                                             <li><a href="{{ route('customer.dashboard') }}"><i class="fi-rs-home"></i>Dashboard</a></li>
@@ -227,7 +225,7 @@
                                         </ul>
                                     </li>
                                 @else
-                                    <li><i class="fi-rs-user"></i><a href="{{route('login-register')}}">Log In / Sign Up</a>
+                                    <li class="text-white"><i class="fi-rs-user"></i><a class="text-white" href="{{route('login-register')}}">Log In / Sign Up</a>
                                     </li>
                                 @endif
                             @endif
@@ -250,7 +248,7 @@
 
                     <div class="search-style-2">
                         <form action="#">
-                            <input type="text" id="searchText" placeholder="Search for items..."/>
+                            <input class="searchText" type="text" placeholder="Search for items..."/>
                         </form>
                     </div>
                     <div class="header-action-right">
@@ -258,20 +256,31 @@
                             <div class="header-action-icon-2">
                                 <a href="{{ route('wishlist.index') }}">
                                     <img class="svgInject" alt="Evara" src="{{asset('/')}}website/assets/imgs/theme/icons/icon-heart.svg">
-                                    <span class="pro-count blue" id="wishlistCartCount"><small>{{ count($wishlists) }}</small></span>
+                                    @if($wishlists != '')
+                                        <span class="pro-count blue" id="wishlistCartCount"><small>{{ count($wishlists) }}</small></span>
+                                    @else
+                                        <span class="pro-count blue" id="wishlistCartCount"><small>0</small></span>
+                                    @endif
                                 </a>
                             </div>
                             <div class="header-action-icon-2">
                                 <a class="mini-cart-icon" href="{{ route('cart.index') }}">
                                     <img alt="Evara" src="{{asset('/')}}website/assets/imgs/theme/icons/icon-cart.svg">
-                                    <span class="pro-count blue" id="CartItemCount"><small>{{ \App\Models\Cart::where('customer_id',Session::get('customer_id'))->count() }}</small></span>
+                                    <span class="pro-count blue" id="CartItemCount">
+                                        @if(auth()->check())
+                                        <small>{{ \App\Models\Cart::where('customer_id',auth()->user()->id)->count() }}</small>
+                                        @else
+                                            <small>0</small>
+                                        @endif
+                                    </span>
                                 </a>
                                 <div class="cart-dropdown-wrap cart-dropdown-hm2" id="cartItems">
                                     {{-- div append here ajaxcartitem blade --}}
                                     <ul>
+                                        @if(auth()->check())
                                         @php( $sum = 0 )
-                                        @php($cartItems = \App\Models\Cart::where('customer_id',Session::get('customer_id'))->latest()->take(5)->get())
-                                        @php($seeALlCartItems = \App\Models\Cart::where('customer_id',Session::get('customer_id'))->count())
+                                        @php($cartItems = \App\Models\Cart::where('customer_id',auth()->user()->id)->latest()->take(5)->get())
+                                        @php($seeALlCartItems = \App\Models\Cart::where('customer_id',auth()->user()->id)->count())
                                         @foreach($cartItems as $cartItem)
                                             <li>
                                                 <div class="row">
@@ -299,10 +308,12 @@
                                             </li>
                                             @php($sum = $sum + $total)
                                         @endforeach
+
                                         @if($seeALlCartItems > 4)
                                         <li class="justify-content-center">
                                             <a href="{{ route('cart.index') }}">See All</a></li>
                                         @endif
+
                                     </ul>
                                     <div class="shopping-cart-footer">
                                         <div class="shopping-cart-total">
@@ -313,6 +324,7 @@
                                             <a href="{{ route('checkout') }}">Checkout</a>
                                         </div>
                                     </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -371,18 +383,19 @@
                                 <li>
                                     <a class="active" href="{{route('product-all')}}">Products</a>
                                 </li>
-                                <li>
-                                    <a href="{{route('purchase-guide')}}">Purchase Guide</a>
+                                <li><a href="#">policies<i class="fi-rs-angle-down"></i></a>
+                                    <ul class="sub-menu">
+                                        @foreach($pages as $page)
+                                        <li>
+                                            <a href="{{route('page.details',$page->slug)}}">{{$page->name}}</a>
+                                        </li>
+                                        @endforeach
+                                    </ul>
                                 </li>
                                 <li>
-                                    <a href="{{route('shipping-policy')}}"> Shipping Policy </a>
+                                    <a class="active" href="{{route('coupons')}}">Coupons</a>
                                 </li>
-                                <li>
-                                    <a href="{{route('return-policy')}}"> Return Policy</a>
-                                </li>
-                                <li>
-                                    <a href="{{route('terms-condition')}}"> Terms & Condition</a>
-                                </li>
+
                             </ul>
                         </nav>
                     </div>
@@ -394,59 +407,85 @@
                 <div class="header-action-right d-block d-lg-none">
                     <div class="header-action-2">
                         <div class="header-action-icon-2">
-                            <a href="shop-wishlist.html">
-                                <img alt="Evara" src="{{asset('/')}}website/assets/imgs/theme/icons/icon-heart.svg">
-                                <span class="pro-count white">4</span>
+                            <a href="{{ route('wishlist.index') }}">
+                                <img class="svgInject" alt="Evara" src="{{asset('/')}}website/assets/imgs/theme/icons/icon-heart.svg">
+                                <span class="pro-count blue" id="wishlistCartCount">
+                                    @if($wishlists != '')
+                                        <small>{{ count($wishlists) }}</small>
+                                    @else
+                                        <small>0</small>
+                                    @endif
+
+                                </span>
                             </a>
                         </div>
                         <div class="header-action-icon-2">
-                            <a class="mini-cart-icon" href="shop-cart.html">
+                            <a class="mini-cart-icon" href="{{ route('cart.index') }}">
                                 <img alt="Evara" src="{{asset('/')}}website/assets/imgs/theme/icons/icon-cart.svg">
-                                <span class="pro-count white">2</span>
+                                <span class="pro-count blue" id="CartItemCount">
+                                    @if(auth()->check())
+                                        <small>{{ \App\Models\Cart::where('customer_id',auth()->user()->id)->count() }}</small>
+                                    @else
+                                        <small>0</small>
+                                    @endif
+                                </span>
                             </a>
-                            <div class="cart-dropdown-wrap cart-dropdown-hm2">
+                            <div class="cart-dropdown-wrap cart-dropdown-hm2" id="cartItems">
+                                {{-- div append here ajaxcartitem blade --}}
                                 <ul>
-                                    <li>
-                                        <div class="shopping-cart-img">
-                                            <a href="shop-product-right.html"><img alt="Evara" src="{{asset('/')}}website/assets/imgs/shop/thumbnail-3.jpg"></a>
-                                        </div>
-                                        <div class="shopping-cart-title">
-                                            <h4><a href="shop-product-right.html">Plain Striola Shirts</a></h4>
-                                            <h3><span>1 × </span>$800.00</h3>
-                                        </div>
-                                        <div class="shopping-cart-delete">
-                                            <a href="#"><i class="fi-rs-cross-small"></i></a>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="shopping-cart-img">
-                                            <a href="shop-product-right.html"><img alt="Evara" src="{{asset('/')}}website/assets/imgs/shop/thumbnail-4.jpg"></a>
-                                        </div>
-                                        <div class="shopping-cart-title">
-                                            <h4><a href="shop-product-right.html">Macbook Pro 2022</a></h4>
-                                            <h3><span>1 × </span>$3500.00</h3>
-                                        </div>
-                                        <div class="shopping-cart-delete">
-                                            <a href="#"><i class="fi-rs-cross-small"></i></a>
-                                        </div>
-                                    </li>
+                                    @if(auth()->check())
+                                    @php( $sum = 0 )
+                                    @php($cartItems = \App\Models\Cart::where('customer_id',auth()->user()->id)->latest()->take(5)->get())
+                                    @php($seeALlCartItems = \App\Models\Cart::where('customer_id',auth()->user()->id)->count())
+                                    @foreach($cartItems as $cartItem)
+                                        <li>
+                                            <div class="row">
+                                                <div class="col-2">
+                                                    <a href="">
+                                                        <img alt="Evara" src="{{asset($cartItem->image)}}">
+                                                    </a>
+                                                </div>
+                                                <div class="col-9">
+                                                    <div class="shopping-cart-title">
+                                                        <h4><a href="">{{ $cartItem->name }}</a></h4>
+                                                        <h5>
+                                                            <span>{{ $cartItem->qty }} × {{ $cartItem->product->selling_price }}</span>
+                                                            <span> = {{$total = $cartItem->qty * $cartItem->product->selling_price }}</span>
+
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                                <div class="col-1">
+                                                    <div class="shopping-cart-delete">
+                                                        <a href="{{route('cart.delete', $cartItem->id)}}" onclick="return confirm('Are you sure to remove this..')"><i class="fi-rs-cross-small"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        @php($sum = $sum + $total)
+                                    @endforeach
+                                    @if($seeALlCartItems > 4)
+                                        <li class="justify-content-center">
+                                            <a href="{{ route('cart.index') }}">See All</a></li>
+                                    @endif
                                 </ul>
                                 <div class="shopping-cart-footer">
                                     <div class="shopping-cart-total">
-                                        <h4>Total <span>$383.00</span></h4>
+                                        <h4>Total <span>TK. {{ $sum }}</span></h4>
                                     </div>
                                     <div class="shopping-cart-button">
-                                        <a href="shop-cart.html">View cart</a>
-                                        <a href="shop-checkout.html">Checkout</a>
+                                        <a href="{{ route('cart.index') }}" class="outline">View cart</a>
+                                        <a href="{{ route('checkout') }}">Checkout</a>
                                     </div>
                                 </div>
+                                @endif
                             </div>
-                        </div>
-                        <div class="header-action-icon-2 d-block d-lg-none">
-                            <div class="burger-icon burger-icon-white">
-                                <span class="burger-icon-top"></span>
-                                <span class="burger-icon-mid"></span>
-                                <span class="burger-icon-bottom"></span>
+                            <div class="header-action-icon-2 d-block d-lg-none">
+                                <div class="burger-icon burger-icon-white">
+                                    <span class="burger-icon-top"></span>
+                                    <span class="burger-icon-mid"></span>
+                                    <span class="burger-icon-bottom"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -460,7 +499,7 @@
     <div class="mobile-header-wrapper-inner">
         <div class="mobile-header-top">
             <div class="mobile-header-logo">
-                <a href="index-2.html"><img src="{{asset('/')}}website/assets/imgs/theme/logo.svg" alt="logo"></a>
+                <a href="index-2.html"><img src="assets/imgs/theme/logo.svg" alt="logo"></a>
             </div>
             <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
                 <button class="close-style search-close">
@@ -472,7 +511,7 @@
         <div class="mobile-header-content-area">
             <div class="mobile-search search-style-3 mobile-header-border">
                 <form action="#">
-                    <input type="text" placeholder="Search for items…">
+                    <input class="searchText" type="text" placeholder="Search for items…">
                     <button type="submit"><i class="fi-rs-search"></i></button>
                 </form>
             </div>
@@ -483,135 +522,45 @@
                     </a>
                     <div class="categori-dropdown-wrap categori-dropdown-active-small">
                         <ul>
-                            <li><a href="shop-grid-right.html"><i class="evara-font-dress"></i>Women's Clothing</a></li>
-                            <li><a href="shop-grid-right.html"><i class="evara-font-tshirt"></i>Men's Clothing</a></li>
-                            <li> <a href="shop-grid-right.html"><i class="evara-font-smartphone"></i> Cellphones</a></li>
-                            <li><a href="shop-grid-right.html"><i class="evara-font-desktop"></i>Computer & Office</a></li>
-                            <li><a href="shop-grid-right.html"><i class="evara-font-cpu"></i>Consumer Electronics</a></li>
-                            <li><a href="shop-grid-right.html"><i class="evara-font-home"></i>Home & Garden</a></li>
-                            <li><a href="shop-grid-right.html"><i class="evara-font-high-heels"></i>Shoes</a></li>
-                            <li><a href="shop-grid-right.html"><i class="evara-font-teddy-bear"></i>Mother & Kids</a></li>
-                            <li><a href="shop-grid-right.html"><i class="evara-font-kite"></i>Outdoor fun</a></li>
+                            @foreach($categories as $category)
+                            <li><a href="{{route('product-category',$category->slug)}}"><i class="evara-font-dress"></i>{{$category->name}}</a></li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>
                 <!-- mobile menu start -->
                 <nav>
                     <ul class="mobile-menu">
-                        <li class="menu-item-has-children"><span class="menu-expand"></span><a href="index-2.html">Home</a>
+                        <li class=""><a href="{{route('home')}}">Home</a></li>
+                        <li class=""><a href="{{route('product-all')}}">Products</a></li>
+                        <li class="menu-item-has-children"><span class="menu-expand"></span><a class="active" href="#">Policies</a>
                             <ul class="dropdown">
-                                <li><a href="index-2.html">Home 1</a></li>
-                                <li><a href="index-3.html">Home 2</a></li>
-                                <li><a href="index-4.html">Home 3</a></li>
-                                <li><a href="index-5.html">Home 4</a></li>
+                                @foreach($pages as $page)
+                                    <li>
+                                        <a href="{{route('page.details',$page->slug)}}">{{$page->name}}</a>
+                                    </li>
+                                @endforeach
                             </ul>
                         </li>
-                        <li class="menu-item-has-children"><span class="menu-expand"></span><a href="shop-grid-right.html">shop</a>
-                            <ul class="dropdown">
-                                <li><a href="shop-grid-right.html">Shop Grid – Right Sidebar</a></li>
-                                <li><a href="shop-grid-left.html">Shop Grid – Left Sidebar</a></li>
-                                <li><a href="shop-list-right.html">Shop List – Right Sidebar</a></li>
-                                <li><a href="shop-list-left.html">Shop List – Left Sidebar</a></li>
-                                <li><a href="shop-fullwidth.html">Shop - Wide</a></li>
-                                <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Single Product</a>
-                                    <ul class="dropdown">
-                                        <li><a href="shop-product-right.html">Product – Right Sidebar</a></li>
-                                        <li><a href="shop-product-left.html">Product – Left Sidebar</a></li>
-                                        <li><a href="shop-product-full.html">Product – No sidebar</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="shop-filter.html">Shop – Filter</a></li>
-                                <li><a href="shop-wishlist.html">Shop – Wishlist</a></li>
-                                <li><a href="shop-cart.html">Shop – Cart</a></li>
-                                <li><a href="shop-checkout.html">Shop – Checkout</a></li>
-                                <li><a href="shop-compare.html">Shop – Compare</a></li>
-                            </ul>
-                        </li>
-                        <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Mega menu</a>
-                            <ul class="dropdown">
-                                <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Women's Fashion</a>
-                                    <ul class="dropdown">
-                                        <li><a href="shop-product-right.html">Dresses</a></li>
-                                        <li><a href="shop-product-right.html">Blouses & Shirts</a></li>
-                                        <li><a href="shop-product-right.html">Hoodies & Sweatshirts</a></li>
-                                        <li><a href="shop-product-right.html">Women's Sets</a></li>
-                                    </ul>
-                                </li>
-                                <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Men's Fashion</a>
-                                    <ul class="dropdown">
-                                        <li><a href="shop-product-right.html">Jackets</a></li>
-                                        <li><a href="shop-product-right.html">Casual Faux Leather</a></li>
-                                        <li><a href="shop-product-right.html">Genuine Leather</a></li>
-                                    </ul>
-                                </li>
-                                <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Technology</a>
-                                    <ul class="dropdown">
-                                        <li><a href="shop-product-right.html">Gaming Laptops</a></li>
-                                        <li><a href="shop-product-right.html">Ultraslim Laptops</a></li>
-                                        <li><a href="shop-product-right.html">Tablets</a></li>
-                                        <li><a href="shop-product-right.html">Laptop Accessories</a></li>
-                                        <li><a href="shop-product-right.html">Tablet Accessories</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="menu-item-has-children"><span class="menu-expand"></span><a href="blog-category-fullwidth.html">Blog</a>
-                            <ul class="dropdown">
-                                <li><a href="blog-category-grid.html">Blog Category Grid</a></li>
-                                <li><a href="blog-category-list.html">Blog Category List</a></li>
-                                <li><a href="blog-category-big.html">Blog Category Big</a></li>
-                                <li><a href="blog-category-fullwidth.html">Blog Category Wide</a></li>
-                                <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Single Product Layout</a>
-                                    <ul class="dropdown">
-                                        <li><a href="blog-post-left.html">Left Sidebar</a></li>
-                                        <li><a href="blog-post-right.html">Right Sidebar</a></li>
-                                        <li><a href="blog-post-fullwidth.html">No Sidebar</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Pages</a>
-                            <ul class="dropdown">
-                                <li><a href="page-about.html">About Us</a></li>
-                                <li><a href="page-contact.html">Contact</a></li>
-                                <li><a href="page-account.html">My Account</a></li>
-                                <li><a href="page-login-register.html">login/register</a></li>
-                                <li><a href="page-purchase-guide.html">Purchase Guide</a></li>
-                                <li><a href="page-privacy-policy.html">Privacy Policy</a></li>
-                                <li><a href="page-terms.html">Terms of Service</a></li>
-                                <li><a href="page-404.html">404 Page</a></li>
-                            </ul>
-                        </li>
-                        <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Language</a>
-                            <ul class="dropdown">
-                                <li><a href="#">English</a></li>
-                                <li><a href="#">French</a></li>
-                                <li><a href="#">German</a></li>
-                                <li><a href="#">Spanish</a></li>
-                            </ul>
-                        </li>
+                        <li class=""><a href="{{route('coupons')}}">Coupon</a></li>
                     </ul>
                 </nav>
                 <!-- mobile menu end -->
             </div>
             <div class="mobile-header-info-wrap mobile-header-border">
-                <div class="single-mobile-header-info mt-30">
-                    <a  href="page-contact.html"> Our location </a>
-                </div>
                 <div class="single-mobile-header-info">
-                    <a href="page-login-register.html">Log In / Sign Up </a>
+                    @if(auth()->check())
+                        <a class="language-dropdown-active" href="#"> <i
+                                class="fi-rs-user"></i> {{auth()->user()->name}} </a>
+                        <ul class="language-dropdown">
+                            <li><a href="{{ route('customer.dashboard') }}"><i class="fi-rs-home"></i> Dashboard</a></li>
+                            <li><a href="{{route('customer-logout')}}"><i class="fi-rs-lock"></i> Logout</a>
+                            </li>
+                        </ul>
+                    @else
+                        <a href="{{route('login-register')}}">Log In / Sign Up </a>
+                    @endif
                 </div>
-                <div class="single-mobile-header-info">
-                    <a href="#">(+01) - 2345 - 6789 </a>
-                </div>
-            </div>
-            <div class="mobile-social-icon">
-                <h5 class="mb-15 text-grey-4">Follow Us</h5>
-                <a href="#"><img src="{{asset('/')}}website/assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
-                <a href="#"><img src="{{asset('/')}}website/assets/imgs/theme/icons/icon-twitter.svg" alt=""></a>
-                <a href="#"><img src="{{asset('/')}}website/assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
-                <a href="#"><img src="{{asset('/')}}website/assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
-                <a href="#"><img src="{{asset('/')}}website/assets/imgs/theme/icons/icon-youtube.svg" alt=""></a>
             </div>
         </div>
     </div>

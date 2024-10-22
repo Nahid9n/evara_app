@@ -20,17 +20,6 @@ class UnitController extends Controller
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('admin.unit.add');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         try {
@@ -46,38 +35,7 @@ class UnitController extends Controller
         catch (Exception $exception){
             return back()->with('error', $exception->getMessage());
         }
-
-
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Unit $unit)
-    {
-        try {
-            Unit::checkStatus($unit);
-            return back()->with('message','Unit is updated');
-        }
-        catch (Exception $exception){
-            return back()->with('error', $exception->getMessage());
-        }
-
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Unit $unit)
-    {
-        return view('admin.unit.edit', [
-            'unit' => $unit
-        ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Unit $unit)
     {
         try {
@@ -88,17 +46,12 @@ class UnitController extends Controller
             ]);
 
             Unit::updateUnit($request, $unit);
-            return redirect()->route('unit.index')->with('message','Unit info update successfully.');
+            return back()->with('message','Unit info update successfully.');
         }
         catch (Exception $e){
             return back()->with('error', $e->getMessage());
         }
-
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Unit $unit)
     {
         try {

@@ -27,6 +27,36 @@
                     <form class="form-horizontal" action="{{ route('product.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row mb-4 d-flex form-group">
+                            <div class="col-md-6">
+                                <div class="row d-flex form-group">
+                                    <label for="name" class="col-md-3 form-label">Product Name <sup class="text-danger">*</sup></label>
+                                    <div class="col-md-9">
+                                        <textarea class="form-control" name="name" id="name1" required placeholder="Product Name">{{ old('name') }}</textarea>
+                                        <span class="text-danger">{{$errors->has('name') ? $errors->first('name') : ''}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row d-flex form-group">
+                                    <label for="name"  class="col-md-3 form-label">Product Code</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" value="{{ old('code') }}" name="code" id="code" placeholder="Product Code" type="text"/>
+                                        <span class="text-danger">{{$errors->has('code') ? $errors->first('code') : ''}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row d-flex form-group">
+                                    <label for="highlights"  class="col-md-3 form-label">Highlights</label>
+                                    <div class="col-md-9 form-group">
+                                        <select multiple name="highlights[]"  class="form-control select2 select2-show-search form-select" data-placeholder="Select Highlights" required >
+                                            @foreach($highlights as $highlight)
+                                                <option value="{{$highlight->id}}"> {{$highlight->name}} </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-md-6 ">
                                 <div class="row">
                                     <label for="" class="col-md-3 form-label">Category Name</label>
@@ -117,109 +147,112 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mb-4">
-                            <label for="name"  class="col-md-3 form-label">Product Name</label>
-                            <div class="col-md-9">
-                                <input class="form-control" value="{{ old('name') }}" name="name" id="name1" placeholder="Product Name" type="text"/>
-                                <span class="text-danger">{{$errors->has('name') ? $errors->first('name') : ''}}</span>
+                            <div class="col-md-6">
+                                <div class="row d-flex form-group">
+                                    <label  class="col-md-3 form-label">Product Price</label>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <input class="form-control"  name="regular_price" placeholder="Regular Price" type="number" />
+                                            <input class="form-control"  name="selling_price" placeholder="Selling Price" type="number" />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="row mb-4">
-                            <label for="name"  class="col-md-3 form-label">Product Code</label>
-                            <div class="col-md-9">
-                                <input class="form-control" value="{{ old('code') }}" name="code" id="code" placeholder="Product Code" type="text"/>
-                                <span class="text-danger">{{$errors->has('code') ? $errors->first('code') : ''}}</span>
+                            <div class="col-md-12">
+                                <div class="row d-flex form-group">
+                                    <label for="description" class="col-md-2 form-label">Short Description</label>
+                                    <div class="col-md-10">
+                                        <textarea class="form-control" name="short_description" id="short_description" placeholder="Short Description" ></textarea>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="row mb-4">
-                            <label for="description" class="col-md-3 form-label">Short Description</label>
-                            <div class="col-md-9">
-                                <textarea class="form-control" name="short_description" id="short_description" placeholder="Short Description" ></textarea>
-                            </div>
-                        </div>
-
-                        <div class="row mb-4">
-                            <label for="summernote" class="col-md-3 form-label">Long Description</label>
-                            <div class="col-md-9">
-                                <textarea class="form-control" id="summernote"  name="long_description"  placeholder="Long Description"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="row mb-4">
-                            <label for="imgInp" class="col-md-3 form-label">Product Image</label>
-                            <div class="col-md-9">
-                                <input type="file" name="image" class="dropify" data-height="200" />
-                            </div>
-                        </div>
-
-                        <div class="row mb-4">
-                            <label for="imgInp" class="col-md-3 form-label">Product Back Image</label>
-                            <div class="col-md-9">
-                                <input type="file" name="back_image" class="dropify" data-height="200" />
-                            </div>
-                        </div>
-
-                        <div class="row mb-4">
-                            <label  class="col-md-3 form-label">Product Other Image</label>
-                            <div class="col-md-9">
-                               <input type="file" name="other_images[]" class="form-control" multiple>
-
-                            </div>
-                        </div>
-                        <div class="row mb-4">
-                            <label  class="col-md-3 form-label">Product Price</label>
-                            <div class="col-md-9">
-                                <div class="input-group">
-                                    <input class="form-control"  name="regular_price" placeholder="Regular Price" type="number" />
-                                    <input class="form-control"  name="selling_price" placeholder="Selling Price" type="number" />
+                            <div class="col-md-12">
+                                <div class="row d-flex form-group">
+                                    <label for="summernote" class="col-md-2 form-label">Long Description</label>
+                                    <div class="col-md-10">
+                                        <textarea class="form-control" id="summernote"  name="long_description"  placeholder="Long Description"></textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="row d-flex form-group">
+                                    <label for="imgInp" class="col-md-3 form-label">Product Image</label>
+                                    <div class="col-md-9">
+                                        <input type="file" name="image" class="dropify" data-height="200" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row d-flex form-group">
+                                    <label for="imgInp" class="col-md-3 form-label">Product Back Image</label>
+                                    <div class="col-md-9">
+                                        <input type="file" name="back_image" class="dropify" data-height="200" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row d-flex form-group">
+                                    <label  class="col-md-3 form-label">Product Other Image</label>
+                                    <div class="col-md-9">
+                                        <input type="file" name="other_images[]" class="form-control" multiple>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <div class="row mb-4">
-                            <label for="stockAmount" class="col-md-3 form-label">Stock Amount</label>
-                            <div class="col-md-9">
-                                <input class="form-control" id="stockAmount"  name="stock_amount" placeholder="Stock Amount" type="number"/>
+                            <div class="col-md-6">
+                                <div class="row d-flex form-group">
+                                    <label for="stockAmount" class="col-md-3 form-label">Stock Amount</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="stockAmount"  name="stock_amount" placeholder="Stock Amount" type="number"/>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-4 d-flex form-group">
-                            <label for="stockAmount" class="col-md-3 form-label">Tags</label>
-                            <div class="example col-md-9">
-                                <input type="text" data-role="tagsinput" name="tags" class="form-control"
-                                       placeholder="type & press enter">
+                            <div class="col-md-6">
+                                <div class="row d-flex form-group">
+                                    <label for="stockAmount" class="col-md-3 form-label">Tags</label>
+                                    <div class="example col-md-9">
+                                        <input type="text" data-role="tagsinput" name="tags" class="form-control"
+                                               placeholder="type & press enter">
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-4 d-flex form-group">
-                            <div class="col-md-3">
-                                <label class="form-label" for="type">Refund</label>
+                            <div class="col-md-6">
+                                <div class="row d-flex form-group">
+                                    <div class="col-md-3">
+                                        <label class="form-label" for="type">Refund</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <select class="form-control select2 select2-show-search form-select"
+                                                data-placeholder="Select One" name="refund">
+                                            <option value="1">Refundable</option>
+                                            <option value="0" selected>Non-Refundable</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-9">
-                                <select class="form-control select2 select2-show-search form-select"
-                                        data-placeholder="Select One" name="refund">
-                                    <option value="1">Refundable</option>
-                                    <option value="0" selected>Non-Refundable</option>
-                                </select>
+                            <div class="col-md-6">
+                                <div class="row d-flex form-group">
+                                    <label class="col-md-3 form-label">Featured Status</label>
+                                    <div class="col-md-9 pt-3">
+                                        <select class="form-control" name="featured_status" id="">
+                                            <option value="1" selected>Published</option>
+                                            <option value="0">Unpublished</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-4">
-                            <label class="col-md-3 form-label">Featured Status</label>
-                            <div class="col-md-9 pt-3">
-                                <select class="form-control" name="featured_status" id="">
-                                    <option value="1" selected>Published</option>
-                                    <option value="0">Unpublished</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row mb-4">
-                            <label class="col-md-3 form-label">Publication Status</label>
-                            <div class="col-md-9 pt-3">
-                                <select class="form-control" name="status" id="">
-                                    <option value="1" selected>Published</option>
-                                    <option value="0">Unpublished</option>
-                                </select>
+                            <div class="col-md-6">
+                                <div class="row d-flex form-group">
+                                    <label class="col-md-3 form-label">Publication Status</label>
+                                    <div class="col-md-9 pt-3">
+                                        <select class="form-control" name="status" id="">
+                                            <option value="1" selected>Published</option>
+                                            <option value="0">Unpublished</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

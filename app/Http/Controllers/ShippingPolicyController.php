@@ -12,58 +12,18 @@ class ShippingPolicyController extends Controller
      */
     public function index()
     {
-        return view('admin.pages.shipping-policy', ['shippingPolicy' => ShippingPolicy::latest()->first()]);
+        return view('admin.pages.shipping-policy', ['shippingPolicy' => ShippingPolicy::first()]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function update(Request $request, $id)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        ShippingPolicy::newShippingPolicy($request);
-        return back()->with('message', 'New Policy Save Successfully');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(ShippingPolicy $shippingPolicy)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ShippingPolicy $shippingPolicy)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, ShippingPolicy $shippingPolicy)
-    {
-        ShippingPolicy::updateShippingPolicy($request, $shippingPolicy);
+        $Policy = ShippingPolicy::find($id);
+        $Policy->description    = $request->description;
+        $Policy->status         = $request->status;
+        $Policy->save();
         return back()->with('message', 'Policy updated successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(ShippingPolicy $shippingPolicy)
-    {
-        //
-    }
 
 
 }

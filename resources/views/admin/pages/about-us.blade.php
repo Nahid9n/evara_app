@@ -20,7 +20,7 @@
             <div class="card mt-5">
                 <div class="card-body">
                     <p class="text-success text-center">{{session('message')}}</p>
-                    <div class="border p-3 rounded">
+                    <div class="">
                         <h6 class="mb-0 text-uppercase">About Us Form</h6>
                         <hr/>
 

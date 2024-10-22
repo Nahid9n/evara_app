@@ -15,6 +15,7 @@ class AdController extends Controller
     {
         return view('admin.ad.index',[
             'ads' => Ad::all(),
+            'products' => Product::where('status',1)->get(),
         ]);
     }
 

@@ -29,6 +29,39 @@
                         @csrf
                         @method('PUT')
                         <div class="row mb-4 d-flex form-group">
+                            <div class="col-md-6">
+                                <div class="row d-flex form-group">
+                                    <label for="name" class="col-md-3 form-label">Product Name <sup class="text-danger">*</sup></label>
+                                    <div class="col-md-9">
+                                        <textarea class="form-control" name="name" id="name1" required placeholder="Product Name">{{ $product->name }}</textarea>
+                                        <span class="text-danger">{{$errors->has('name') ? $errors->first('name') : ''}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row d-flex form-group">
+                                    <label for="name"  class="col-md-3 form-label">Product Code</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" value="{{ $product->code }}" name="code" id="code" placeholder="Product Code" type="text"/>
+                                        <span class="text-danger">{{$errors->has('code') ? $errors->first('code') : ''}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            @php($productHighlights = \App\Models\ProductHighlight::where('product_id',$product->id)->pluck('highlight_id')->toArray())
+                            <div class="col-md-6">
+                                <div class="row d-flex form-group">
+                                    <label for="name"  class="col-md-3 form-label">Highlights</label>
+                                    <div class="col-md-9 form-group">
+                                        <select multiple name="highlights[]"  class="form-control select2 select2-show-search form-select" data-placeholder="Select Highlights " >
+                                            @foreach($highlights as $highlight)
+                                                <option value="{{$highlight->id}}"  {{ in_array($highlight->id, $productHighlights) ? 'selected' : '' }} > {{$highlight->name}} </option>
+                                            @endforeach
+                                        </select>
+                                        <span
+                                            class="text-danger">{{$errors->has('highlight_id') ? $errors->first('highlight_id') : ''}}</span>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-md-6 ">
                                 <div class="row">
                                     <label for="" class="col md-3 form-label">Category Name</label>
@@ -118,22 +151,6 @@
                                             class="text-danger">{{$errors->has('size_id') ? $errors->first('size_id') : ''}}</span>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="row mb-4">
-                            <label for="name"  class="col-md-3 form-label">Product Name</label>
-                            <div class="col-md-9">
-                                <input class="form-control" value="{{ $product->name }}" name="name" id="name1" placeholder="Product Name" type="text"/>
-                                <span class="text-danger">{{$errors->has('name') ? $errors->first('name') : ''}}</span>
-                            </div>
-                        </div>
-
-                        <div class="row mb-4">
-                            <label for="name"  class="col-md-3 form-label">Product Code</label>
-                            <div class="col-md-9">
-                                <input class="form-control" value="{{ $product->code }}" name="code" id="code" placeholder="Product Code" type="text"/>
-                                <span class="text-danger">{{$errors->has('code') ? $errors->first('code') : ''}}</span>
                             </div>
                         </div>
 

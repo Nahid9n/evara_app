@@ -24,7 +24,15 @@ function imageUpload( $image, $directory ){
     return $directory.$imageName;
 
 }
-
+if (!function_exists('truncateWords')) {
+    function truncateWords($text, $limit = 100) {
+        $words = explode(' ', $text);
+        if (count($words) > $limit) {
+            return implode(' ', array_slice($words, 0, $limit)) . '...';
+        }
+        return $text;
+    }
+}
 
 ?>
 
