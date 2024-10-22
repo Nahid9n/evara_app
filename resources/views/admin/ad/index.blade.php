@@ -1,28 +1,14 @@
 @extends('admin.master')
 @section('title','Manage Ad Page')
 @section('body')
-
-
-
-    <!-- PAGE-HEADER -->
-    <div class="page-header">
-        <div>
-            <h1 class="page-title">Ad Module</h1>
-        </div>
-        <div class="ms-auto pageheader-btn">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="javascript:void(0);">Ad</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Manage Ad</li>
-            </ol>
-        </div>
-    </div>
-    <!-- PAGE-HEADER END -->
-
-    <div class="row">
+    <div class="row mt-2">
         <div class="col">
             <div class="card">
-                <div class="card-header border-bottom">
-                    <h3 class="card-title">All Ad Info</h3>
+                <div class="card-header border-bottom justify-content-between">
+                    <h3 class="card-title"><i class="fa fa-money-bill"></i>  All Ad Info</h3>
+                    <a class="btn btn-primary px-5" href="{{route('ad.create')}}">
+                        ADD <i class="fa fa-plus"></i>
+                    </a>
                 </div>
                 <div class="card-body">
 
@@ -83,5 +69,4 @@
             </div>
         </div>
     </div>
-
 @endsection

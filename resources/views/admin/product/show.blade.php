@@ -57,7 +57,7 @@
                         </tr>
                         <tr>
                             <th>Product Name</th>
-                            <td>{{$product->name}}</td>
+                            <td>{{ truncateWords($product->name, 14) }}</td>
                         </tr>
                         <tr>
                             <th>Product Code</th>

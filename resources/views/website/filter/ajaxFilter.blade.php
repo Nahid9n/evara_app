@@ -1,25 +1,23 @@
+<div class="totall-product text-center">
+    <p> We found <strong class="text-brand" id="countProduct">{{ count($products) }}</strong> items for you!</p>
+</div>
+<hr>
 @foreach($products as $key => $product)
-    <div class="col-lg-4 col-md-4 col-12 col-sm-6 shadow mb-2">
-        <div class="product-cart-wrap mb-30 h-100">
+    <div class="col-lg-4 col-md-4 col-12 mb-2 g-4" style="border-radius: 10px">
+        <div class="product-cart-wrap mb-30 h-100" style="height: 500px; border: 1px solid black">
             <div class="product-img-action-wrap">
                 <div class="product-img product-img-zoom">
                     <a href="{{ route('product-detail',$product->slug) }}">
                         <img class="default-img" src="{{asset($product->image)}}" height="300" alt="">
-                        <img class="hover-img" src="{{asset($product->back_image)}}" alt="">
+                        <img class="hover-img" src="{{asset($product->back_image)}}" height="300" alt="">
                     </a>
                 </div>
-                {{--<div class="product-action-1">
-                    <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#featuredViewModal{{$key}}"><i class="fi-rs-eye"></i></a>
-
-                    <a aria-label="Add To Wishlist" class="action-btn hover-up wishlist wishlist-button" id="wishlist{{$key}}" href="#--}}{{--{{ route('wishlist.ad',$product->id) }}--}}{{--" data-value="{{$product->id}}"><i class="fi-rs-heart"></i></a>
-
-                </div>--}}
                 <div class="product-badges product-badges-position product-badges-mrg">
-                    <span class="hot">Hot</span>
+                    <span class="hot">25%</span>
                 </div>
             </div>
             <div class="product-content-wrap">
-                <h2><a href="{{ route('product-detail',$product->slug) }}">{{$product->name}}</a></h2>
+                <h2><a href="{{ route('product-detail',$product->slug) }}">{{ truncateWords($product->name, 14) }}</a></h2>
                 <div class="rating-result" title="90%">
                                             <span>
                                                 <span>90%</span>
@@ -87,7 +85,7 @@
                         </div>
                         <div class="col-md-6 col-sm-12 col-xs-12">
                             <div class="detail-info">
-                                <h3 class="title-detail mt-30">{{$product->name}}</h3>
+                                <h3 class="title-detail mt-30">{{ truncateWords($product->name, 14) }}</h3>
                                 <div class="product-detail-rating">
                                     <div class="pro-details-brand">
                                         <span> Brands: <a href="shop-grid-right.html">{{ $product->brand->name }}</a></span>
@@ -154,7 +152,7 @@
                                         <div class="product-extra-link2">
                                             <button type="submit" class="button button-add-to-cart btn-sm mx-2">Add to cart</button>
                                             <a aria-label="Add To Wishlist" class="action-btn hover-up wishlist" href="#--}}{{--{{ route('wishlist.ad',$product->id) }}--}}{{--" data-value="{{$product->id}}"><i class="fi-rs-heart"></i></a>
-                                            <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+
                                         </div>
                                     </div>
                                 </form>

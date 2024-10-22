@@ -35,7 +35,8 @@ class ColorController extends Controller
     {
         try {
             $this->validate($request,[
-                'name' => 'required'
+                'name' => 'required',
+                'code' => ['required',Rule::unique('colors')]
             ],[
                 'name.required'         => 'Color name field is required',
             ]);
@@ -76,7 +77,8 @@ class ColorController extends Controller
         try {
             $this->validate($request,[
                 'name' => ['required', Rule::unique('colors')->ignore($color->id)],
-                'slug' => Rule::unique('colors')->ignore($color->id)
+                'slug' => Rule::unique('colors')->ignore($color->id),
+                'code' => ['required',Rule::unique('colors')->ignore($color->id)]
             ]);
 
             Color::updateColor($request, $color);

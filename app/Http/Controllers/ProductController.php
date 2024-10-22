@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
+use App\Models\Highlight;
 use App\Models\Product;
 use App\Models\ProductColor;
+use App\Models\ProductHighlight;
 use App\Models\ProductImage;
 use App\Models\ProductSize;
 use App\Models\Size;
@@ -42,8 +44,8 @@ class ProductController extends Controller
             'brands'=>Brand::all(),
             'units' => Unit::all(),
             'colors' => Color::all(),
-            'sizes' => Size::all()
-
+            'sizes' => Size::all(),
+            'highlights' => Highlight::all(),
         ]);
     }
 
@@ -64,12 +66,14 @@ class ProductController extends Controller
     {
 
         try {
-//            $this->validate($request,[
-//                'name' => ['required', Rule::unique('colors')->ignore($color->id)],
-//                'slug' => Rule::unique('colors')->ignore($color->id)
-//            ]);
+            $this->validate($request,[
+                'name' => 'required',
+            ]);
 
             $this->product = Product::newProduct($request);
+            if ($request->highlights){
+                ProductHighlight::newProductHighlight($request->highlights , $this->product->id);
+            }
             if ($request->colors){
                 ProductColor::newProductColor($request->colors , $this->product->id);
             }
@@ -109,7 +113,8 @@ class ProductController extends Controller
             'brands' => Brand::all(),
             'units' => Unit::all(),
             'colors' => Color::all(),
-            'sizes' => Size::all()
+            'sizes' => Size::all(),
+            'highlights' => Highlight::all(),
         ]);
     }
 
@@ -120,6 +125,10 @@ class ProductController extends Controller
     {
         try {
             Product::updateProduct($request,$product);
+
+            if ($request->highlights){
+                ProductHighlight::updateProductHighlight($request->highlights,$product->id);
+            }
             if ($request->colors){
                 ProductColor::updateProductColor($request->colors,$product->id);
             }
@@ -129,6 +138,7 @@ class ProductController extends Controller
             if ($request->other_images){
                 ProductImage::updateProductImage($request->other_images,$product->id);
             }
+
             return redirect()->route('product.index')->with('message','Product info update successfully.');
         }
         catch (Exception $e){

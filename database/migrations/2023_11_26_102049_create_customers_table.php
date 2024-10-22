@@ -13,16 +13,30 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
             $table->string('name');
+            $table->string('image')->nullable();
             $table->string('email')->unique();
             $table->string('mobile')->unique();
-            $table->string('password');
             $table->text('address')->nullable();
             $table->text('date_of_birth')->nullable();
             $table->string('blood_group')->nullable();
-            $table->string('district')->nullable();
-            $table->text('image')->nullable();
-            $table->tinyInteger('status')->default(1);
+            $table->string('gender')->nullable();
+            $table->string('street_address')->nullable();
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
+            $table->string('post')->nullable();
+            $table->string('country')->nullable();
+            $table->string('ssn')->nullable();
+            $table->string('company')->nullable();
+            $table->string('website')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('linkedIn')->nullable();
+            $table->string('twitter')->nullable();
+            $table->string('youtube')->nullable();
+            $table->string('instagram')->nullable();
+            $table->boolean('marital_status')->nullable();
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
     }

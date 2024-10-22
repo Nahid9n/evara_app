@@ -18,20 +18,18 @@ class APIController extends Controller
     public function getProductBySearchText()
     {
         $this->searchText   = $_GET['search_text'];
-        $this->products     = Product::where('status', 1)->where('name', 'LIKE', "%{$this->searchText}%")->get(['id','slug','category_id','brand_id', 'name', 'image', 'selling_price', 'regular_price']);
-        foreach ($this->products as $product)
+        $products     = Product::where('status', 1)->where('name', 'LIKE', "%{$this->searchText}%")->get();
+        foreach ($products as $product)
         {
-            //   $product->image = admin/img/product-img/1699934833.jpg
             $product->image = asset($product->image);
-            //   $product->image = http://localhost/evara/public/admin/img/product-img/1699934833.jpg
         }
-        return response()->json($this->products);
+        return view('website.product.searchProduct',compact('products'));
     }
-
 
     public function getLatestProduct()
     {
         $this->products = Product::where('status', 1)->orderBy('id', 'desc')->take(8)->get();
+
         foreach ($this->products as $product)
         {
             $product->image = asset($product->image);

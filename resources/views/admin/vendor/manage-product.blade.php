@@ -42,7 +42,7 @@
                             @foreach($products as $product)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{$product->name}}</td>
+                                    <td>{{ truncateWords($product->name, 14) }}</td>
                                     <td>{{$product->code}}</td>
                                     <td>{{$product->category->name}}</td>
                                     <td><img src="{{asset($product->image)}}" alt="" height="40" width="60"/></td>

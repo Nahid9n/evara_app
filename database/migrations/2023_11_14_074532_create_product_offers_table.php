@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->integer('product_id');
             $table->string('title_one');
-            $table->string('title_two');
-            $table->string('title_three');
-            $table->string('description');
+            $table->string('title_two')->nullable();
+            $table->string('title_three')->nullable();
+            $table->string('description')->nullable();
+            $table->integer('discount_amount')->default(0);
             $table->text('image');
             $table->tinyInteger('status')->default(0);
             $table->timestamps();

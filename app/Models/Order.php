@@ -15,7 +15,7 @@ class Order extends Model
     {
         self::$order = new Order();
         self::$order->customer_id            = $customer->id;
-//        self::$order->customer_id            = $customer->id;
+        self::$order->order_code            = rand(0,999999999999);
         self::$order->order_total            = $request->order_total;
         self::$order->tax_total              = $request->tax_total;
         self::$order->shipping_total         = $request->shipping_total;

@@ -72,6 +72,7 @@ class SslCommerzPaymentController extends Controller
             ->updateOrInsert([
                 'customer_id' => $customer->id,
                 'order_total' => $post_data['total_amount'],
+                'order_code'  => rand(0,999999999999),
                 'tax_total' => $request->tax_total,
                 'shipping_total' =>  $request->shipping_total,
                 'order_date' => date('Y-m-d'),
@@ -82,7 +83,7 @@ class SslCommerzPaymentController extends Controller
                 'currency' => $post_data['currency']
             ]);
 
-        OrderDetail::newOrderDetail(Order::orderBy('id','desc')->first());
+        OrderDetail::newOrderDetail(Order::orderBy('id','desc')->first(),$customer);
 
         $sslc = new SslCommerzNotification();
         # initiate(Transaction Data , false: Redirect to SSLCOMMERZ gateway/ true: Show all the Payement gateway here )
@@ -171,7 +172,6 @@ class SslCommerzPaymentController extends Controller
             print_r($payment_options);
             $payment_options = array();
         }
-
     }
 
     public function success(Request $request)

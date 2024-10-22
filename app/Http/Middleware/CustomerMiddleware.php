@@ -17,7 +17,7 @@ class CustomerMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Session::get('customer_id')){
+        if(auth()->user()){
             return $next($request);
         }
         else{

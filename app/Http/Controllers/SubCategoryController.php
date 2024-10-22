@@ -10,46 +10,12 @@ use Illuminate\Validation\Rule;
 
 class SubCategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return view('admin.sub-category.index', [
-            'sub_categories' => SubCategory::latest()->get(),
+            'sub_categories' => SubCategory::latest()->simplePaginate(100),
         ]);
     }
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('admin.sub-category.add', [
-            'categories' => Category::all()
-        ]);
-    }
-    /**
-     * Store a newly created resource in storage.
-     */
-//    public function store(Request $request)
-//    {
-//        $this->validate($request,[
-//            'category_id' => 'required',
-//            'name' => 'required|unique:sub_categories,name',
-//            'email' => 'email',
-//        ],[
-//            'category_id.required' => 'Category Name field is required',
-//            'name.required' => 'Sub Category Name field is required',
-//            'name.unique' => 'Vai , ei nam ta already ase, r diyen na',
-//            'email.email' => 'vua email diyen na',
-//        ]);
-////        return $request;
-//        SubCategory::newSubCategory($request);
-//        return back()->with('message','Sub Category info create successfully.');
-//    }
-
-
-// 2nd =========================================
     public function store(Request $request)
     {
         try {
@@ -66,30 +32,7 @@ class SubCategoryController extends Controller
         catch (Exception $e){
             return back()->with('error',$e->getMessage());
         }
-
-
     }
-    /**
-     * Display the specified resource.
-     */
-    public function show(SubCategory $subCategory)
-    {
-        SubCategory::checkStatus($subCategory);
-        return back()->with('message','Status is updated');
-    }
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(SubCategory $subCategory)
-    {
-        return view('admin.sub-category.edit', [
-            'categories' => Category::all(),
-            'sub_category' => $subCategory
-        ]);
-    }
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, SubCategory $subCategory)
     {
         try {
@@ -102,16 +45,12 @@ class SubCategoryController extends Controller
                 'name.required' => 'Sub Category Name field is required',
             ]);
             SubCategory::updateSubCategory($request, $subCategory);
-            return redirect()->route('sub-category.index')->with('message', 'Sub category info update successfully.');
+            return back()->with('message', 'Sub category info update successfully.');
         }
         catch (Exception $e){
             return back()->with('error',$e->getMessage());
         }
-
     }
-    /**
-     * Remove the specified resource from storage.
-     */
     private static $subCategory;
     public function destroy(SubCategory $subCategory)
     {
@@ -128,17 +67,5 @@ class SubCategoryController extends Controller
         catch (Exception $e){
             return back()->with('error',$e->getMessage());
         }
-
     }
-
-    /*
-
-    public function destroy(SubCategory $subCategory)
-    {
-        SubCategory::deleteSubCategory($subCategory);
-        return back()->with('message', 'Delete Sub category Successfully');
-    }
-
-    */
-
 }

@@ -16,7 +16,7 @@ class BrandController extends Controller
     {
         try {
             return view('admin.brand.index',[
-                'brands' => Brand::latest()->get(),
+                'brands' => Brand::latest()->simplePaginate(100),
             ]);
         }
         catch (Exception $e){
@@ -25,23 +25,6 @@ class BrandController extends Controller
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        try {
-            return view('admin.brand.add');
-        }
-        catch (Exception $e){
-            return back()->with('error', $e->getMessage());
-        }
-
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         try {
@@ -57,10 +40,6 @@ class BrandController extends Controller
             return back()->with('error', $e->getMessage());
         }
     }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Brand $brand)
     {
         try {
@@ -70,30 +49,8 @@ class BrandController extends Controller
         catch (Exception $e){
             return back()->with('error', $e->getMessage());
         }
-
-
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-
-    public function edit(Brand $brand)
-    {
-        try {
-            return view('admin.brand.edit', [
-                'brand' => $brand
-            ]);
-        }
-        catch (Exception $e){
-            return back()->with('error', $e->getMessage());
-        }
-
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Brand $brand)
     {
         try {
@@ -104,16 +61,12 @@ class BrandController extends Controller
                 'name.required'         => 'Brand name field is required',
             ]);
             Brand::updateBrand($request, $brand);
-            return redirect()->route('brand.index')->with('message','brand info update successfully.');
+            return back()->with('message','brand info update successfully.');
         }
         catch (Exception $e){
             return back()->with('error', $e->getMessage());
         }
-
     }
-    /**
-     * Remove the specified resource from storage.
-     */
     private static $brand;
     public function destroy(Brand $brand)
     {

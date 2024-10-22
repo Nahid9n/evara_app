@@ -97,51 +97,16 @@
 </script>
 
 <script>
-    $('#searchText').keyup(function () {
+    $('.searchText').keyup(function () {
         var searchText = $(this).val();
         $.ajax({
             type: "GET",
             url: "{{ route('get-product-by-search-text') }}",
             data: {search_text: searchText},
-            dataType: "JSON",
+            dataType: "html",
             success: function (response) {
-                var div = " ";
-                div += '<section class="section-padding">';
-                    div += '<div class="container wow fadeIn animated">';
-                        div += '<h3 class="section-title mb-20"><span>Search</span> Result</h3>';
-                        div += '<div class="carausel-6-columns-cover position-relative">';
-                            div += '<div class="slider-arrow slider-arrow-2 carausel-6-columns-arrow" id="carausel-6-columns-2-arrows"></div>';
-                            div += '<div class="carausel-6-columns carausel-arrow-center row">';
-                                $.each(response, function (key, value) {
-                                    var slug = value.slug;
-                                div += '<div class="product-cart-wrap small hover-up col-md-4">';
-                                    div += '<div class="product-img-action-wrap">';
-                                        div += '<div class="product-img product-img-zoom">';
-                                            div += '<a href="/product-detail/'+value.slug+'">';
-                                                div += '<img class="default-img" src="'+value.image+'"  height="200" alt=""/>';
-                                                div += '<img class="hover-img" src="'+value.image+'" height="200" alt=""/>';
-                                            div += '</a>';
-                                        div += '</div>';
-                                    div += '</div>';
-                                    div += '<div class="product-content-wrap">';
-                                        div += '<h2><a href="/product-detail/'+value.slug+'"> '+value.name+' </a></h2>';
-                                        div += '<div class="rating-result" title="90%">';
-                                            div += '<span></span>';
-                                        div += '</div>';
-                                        div += '<div class="product-price">';
-                                            div += '<span> TK. '+value.selling_price+'</span>';
-                                            div += '<span class="old-price"> TK. '+value.regular_price+'</span>';
-                                        div += '</div>';
-                                    div += '</div>';
-                                div += '</div>';
-                                });
-                            div += '</div>';
-                        div += '</div>';
-                    div += '</div>';
-                div += "</section>";
-
                 $('#mainContainer').empty();
-                $('#mainContainer').append(div);
+                $('#mainContainer').append(response);
             }
         });
     });
@@ -283,7 +248,6 @@
                     $('#filterProducts').text("Product not found");
                 } else {
                     $('#filterProducts').html(res);
-                    // $("#seeMoreBtn").show();
                     updatePaginationLinks();
                 }
             }
@@ -315,5 +279,60 @@
                 $('#subCategoryId').html(response);
             }
         })
+    }
+    function increaseCount(a, b, c) {
+        var input = b.previousElementSibling;
+        var color = b.nextElementSibling;
+        var size = color.nextElementSibling;
+        var value = parseInt(input.value, 10);
+        value = isNaN(value) ? 0 : value;
+        value++;
+        input.value = value;
+        color = color.value;
+        size = size.value;
+
+        if(c != 2){
+            QtyChange(a, value,color,size);
+        }
+
+    }
+    function decreaseCount(a, b) {
+        var input = b.nextElementSibling;
+        var color = input.nextElementSibling.nextElementSibling;
+        var size = color.nextElementSibling;
+        var value = parseInt(input.value, 10);
+        if (value > 1) {
+            value = isNaN(value) ? 0 : value;
+            value--;
+            input.value = value;
+            color = color.value;
+            size = size.value;
+            QtyChange(a, value,color,size);
+        }
+    }
+    function QtyChange(id, qty,color,size){
+        $.ajax({
+            url: "{{ route('ajax-update-Product') }}",
+            type: 'post',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                "product_id": id,
+                "qty": qty,
+                "color": color,
+                "size": size,
+            },
+            dataType: 'json',
+            success: function(res) {
+                if (res.success) {
+                    toastr.success(res.success);
+                    $(".counterQty.id").val(res.qty);
+                    location.reload();
+                }
+                if (res.error) {
+                    toastr.error(res.error);
+                    $(".counterQty").val(qty-1);
+                }
+            }
+        });
     }
 </script>
