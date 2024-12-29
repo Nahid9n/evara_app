@@ -55,6 +55,22 @@ class Ad extends Model
         $ad->title                        = $request->title;
         $ad->sub_title                     = $request->sub_title;
         $ad->position                     = $request->position;
+        if ($request->position){
+            $concernCount = Concern::count();
+            $concernPosition = Concern::where('position',$request->position)->first();
+            if ($concernposition){
+                $concernposition->position = $concernCount + 1;
+                $concernposition->save();
+                $concern->position = $request->position;
+            }
+            else{
+                $concern->position = $concernCount + 1;
+            }
+        }
+        else{
+            $concernCount = Concern::count();
+            $concern->position = $concernCount + 1;
+        }
         if($request->offer_price){
             $ad->offer_price                  = $request->offer_price;
         }

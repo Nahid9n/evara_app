@@ -1,17 +1,113 @@
 @extends('website.customer.layout.app')
 @section('title','Customer Dashboard')
 @section('body')
+    <div class="row">
+        <div class="col-3">
+            <a href="{{ route('customer.orders') }}">
+                <div class="card border-primary mb-3" style="max-width: 18rem; height: 130px">
+                    <div class="card-header">Total Order</div>
+                    <div class="card-body text-primary">
+                        <h5 class="card-title">{{count($totalOrder)}}</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-3">
+            <a href="{{ route('customer.orders') }}">
+                <div class="card border-secondary mb-3" style="max-width: 18rem; height: 130px">
+                    <div class="card-header">Pending Order</div>
+                    <div class="card-body text-primary">
+                        <h5 class="card-title">{{$pendingOrder}}</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-3">
+            <a href="{{ route('customer.orders') }}">
+                <div class="card border-success mb-3" style="max-width: 18rem; height: 130px">
+                    <div class="card-header">On Shipment</div>
+                    <div class="card-body text-primary">
+                        <h5 class="card-title">{{$onShipmentOrder}}</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-3">
+            <a href="{{ route('customer.orders') }}">
+                <div class="card border-dark mb-3" style="max-width: 18rem;height: 130px">
+                    <div class="card-header">Delivered</div>
+                    <div class="card-body text-primary">
+                        <h5 class="card-title">{{$completeOrder}}</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-3">
+            <a href="{{ route('customer.orders') }}">
+                <div class="card border-danger mb-3" style="max-width: 18rem;height: 130px">
+                    <div class="card-header">Canceled</div>
+                    <div class="card-body text-primary">
+                        <h5 class="card-title">{{$cancelOrder}}</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-3">
+            <a href="{{ route('customer.orders') }}">
+                <div class="card border-primary mb-3" style="max-width: 18rem;height: 130px">
+                    <div class="card-header">Order Amount</div>
+                    <div class="card-body text-primary">
+                        <h5 class="card-title">৳ {{$orderAmount}}</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-3">
+            <a href="">
+                <div class="card border-success mb-3" style="max-width: 18rem;height: 130px">
+                    <div class="card-header">Refund Amount</div>
+                    <div class="card-body text-primary">
+                        <h5 class="card-title">৳ 0 Static</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-3">
+            <a href="">
+                <div class="card border-dark mb-3" style="max-width: 18rem;height: 130px">
+                    <div class="card-header">Wishlist</div>
+                    <div class="card-body text-primary">
+                        <h5 class="card-title">{{$wishlist}}</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-3">
+            <a href="">
+                <div class="card border-warning mb-3" style="max-width: 18rem;height: 130px">
+                    <div class="card-header">Review</div>
+                    <div class="card-body text-primary">
+                        <h5 class="card-title">0 Static</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-3">
+            <a href="">
+                <div class="card border-primary mb-3" style="max-width: 18rem;height: 130px">
+                    <div class="card-header">Product Request</div>
+                    <div class="card-body text-primary">
+                        <h5 class="card-title">0 Static</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+    </div>
     <div class="">
                 <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Hello {{ auth()->user()->name}}! </h5>
-                    </div>
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-lg-12 pb-5">
-                                <p>Wallet Money : {{ (isset($wallet->balance))? $wallet->balance : 0 }}</p>
-                            </div>
-                        </div>
                         <div class="row my-5">
                             <div class="col-lg-6 border-5 ">
                                 <h4>Billing Address: </h4>

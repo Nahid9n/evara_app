@@ -17,8 +17,8 @@
     </div>
     <section class="mt-2 mb-50">
         <div class="container">
-            <div class="row flex-row-reverse">
-                <div class="col-lg-12">
+            <div class="row">
+                <div class="col-lg-3 position-sticky" style="position: sticky; position: -webkit-sticky;top: 0;">
                     <a class="shop-filter-toogle" href="#">
                         <span class="fi-rs-filter mr-5"></span>
                         Filters
@@ -27,8 +27,8 @@
                     </a>
                     <div class="shop-product-fillter-header">
                         <div class="row">
-                            <div class="col-lg-2 col-md-4 mb-lg-0 mb-md-5 mb-sm-5">
-                                <h5 class="section-title style-1 wow fadeIn animated">Category</h5>
+                            <button class="accordion">Category</button>
+                            <div class="panel" style="display: {{$categorySlug ? 'block':''}};">
                                 @foreach($categories as $category)
                                     <div class="form-check">
                                         <input type="checkbox" id="{{ $category->id }}" onclick="filter(); setSubCategory({{ $category->id }})" {{$categorySlug == $category->slug ? 'checked':''}} class="form-check-input categoryCheckBox"  value="{{ $category->id }}">
@@ -36,12 +36,14 @@
                                     </div>
                                 @endforeach
                             </div>
-                            <div class="col-lg-2 col-md-4 mb-lg-0 mb-md-5 mb-sm-5" id="subCategoryId">
-                                <h5 class="section-title style-1 wow fadeIn animated">Select Your Choice</h5>
-                                <p>please select a category</p>
+
+                            <button class="accordion">Sub Category</button>
+                            <div class="panel" id="subCategoryId">
+                                <p>please again select a category</p>
                             </div>
-                            <div class="col-lg-2 col-md-4 mb-lg-0 mb-md-5 mb-sm-5">
-                                <h5 class="section-title style-1 wow fadeIn animated">Brand</h5>
+
+                            <button class="accordion">Brand</button>
+                            <div class="panel">
                                 @foreach($brands as $brand)
                                     <div class="form-check">
                                         <input type="checkbox" id="{{ $brand->id }}" onclick="filter()" class="form-check-input brandCheckBox" value="{{ $brand->id }}">
@@ -49,17 +51,17 @@
                                     </div>
                                 @endforeach
                             </div>
-                            <div class="col-lg-2 col-md-4 mb-lg-0 mb-md-5 mb-sm-5">
-                                <h5 class="section-title style-1 wow fadeIn animated">Color</h5>
+                            <button class="accordion">Color</button>
+                            <div class="panel">
                                 @foreach($colors as $color)
                                     <div class="form-check">
                                         <input type="checkbox" id="{{ $color->id }}" onclick="filter()" class="form-check-input colorCheckBox" value="{{ $color->id }}">
-                                        <label class="form-check-label">{{ $color->name }}</label>
+                                        <label class="form-check-label" style="">{{ $color->name }}</label>
                                     </div>
                                 @endforeach
                             </div>
-                            <div class="col-lg-2 col-md-4 mb-lg-0 mb-md-5 mb-sm-5">
-                                <h5 class="section-title style-1 wow fadeIn animated">sizes</h5>
+                            <button class="accordion">Sizes</button>
+                            <div class="panel">
                                 @foreach($sizes as $size)
                                     <div class="form-check">
                                         <input type="checkbox" id="{{ $size->id }}" onclick="filter()" class="form-check-input sizeCheckBox" value="{{ $size->id }}">
@@ -67,7 +69,7 @@
                                     </div>
                                 @endforeach
                             </div>
-                            <div class="col-lg-2 col-md-4 mb-lg-0 mb-md-5 mb-sm-5">
+                            <div class="col-lg-12 col-md-4 col-3 mb-lg-0 my-2 mb-md-5 mb-sm-5">
                                 <h5 class="widget-title mb-10">Fill by price</h5>
                                 <div class="form-group col-md-12">
                                     <div class="range-group">
@@ -76,49 +78,10 @@
                                     </div>
                                 </div>
                             </div>
-                            {{--<div class="col-lg-2 col-md-4 mb-lg-0 mb-md-5 mb-sm-5">
-                               <h5 class="mb-20">By Review</h5>
-                               <div class="product-rate-cover">
-                                   <div class="product-rate d-inline-block">
-                                       <div class="product-rating" style="width:100%">
-                                       </div>
-                                   </div>
-                                   <span class="font-small ml-5 text-muted"> (25)</span>
-                               </div>
-                               <div class="product-rate-cover">
-                                   <div class="product-rate d-inline-block">
-                                       <div class="product-rating" style="width:80%">
-                                       </div>
-                                   </div>
-                                   <span class="font-small ml-5 text-muted"> (25)</span>
-                               </div>
-                               <div class="product-rate-cover">
-                                   <div class="product-rate d-inline-block">
-                                       <div class="product-rating" style="width:60%">
-                                       </div>
-                                   </div>
-                                   <span class="font-small ml-5 text-muted"> (25)</span>
-                               </div>
-                               <div class="product-rate-cover">
-                                   <div class="product-rate d-inline-block">
-                                       <div class="product-rating" style="width:40%">
-                                       </div>
-                                   </div>
-                                   <span class="font-small ml-5 text-muted"> (25)</span>
-                               </div>
-                               <div class="product-rate-cover">
-                                   <div class="product-rate d-inline-block">
-                                       <div class="product-rating" style="width:20%">
-                                       </div>
-                                   </div>
-                                   <span class="font-small ml-5 text-muted"> (25)</span>
-                               </div>
-                           </div>--}}
-
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-12">
+                <div class="col-lg-9">
                     <div class="shop-product-fillter">
                         <div class="sort-by-product-area">
                             <div class="sort-by-cover mr-10">

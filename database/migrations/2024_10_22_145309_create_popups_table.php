@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('popups', function (Blueprint $table) {
             $table->id();
-            $table->text('popup_image')->nullable();
             $table->string('popup_type');
+            $table->text('popup_image')->nullable();
             $table->text('short_popup_image')->nullable();
             $table->string('title')->nullable();
             $table->text('description')->nullable();

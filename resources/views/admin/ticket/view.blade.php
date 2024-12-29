@@ -20,26 +20,22 @@
             <div class="card p-4">
                 <div class="">
                     <h4 class="my-2 d-block"><span class="fw-bold">{{ $ticket->subject }}</span> # {{ $ticket->ticket_id }}</h4>
-                    <p ><span>{{ $ticket->user->name }}</span> {{ $ticket->created_at }}</p>
+                    <p ><span>{{ $ticket->user->name }}</span> {{date_format($ticket->created_at,'d M, Y h:m a')}}</p>
                 </div>
                 <div class="card-body">
                     <div class="row my-2">
                         <div class="col">
-                            <div class="card">
-                                <div class="card-body overflow-hidden">
-                                    <div class="example">
+                            <div class="example">
                                         @foreach($ticketReplys as $reply)
                                             <div class="media my-2 {{$reply->user_id == auth()->user()->id ? 'text-end':''}}">
                                                 <div class="media-body overflow-hidden text-muted">
-                                                    <pw class="text-primary">{{ $reply->user->name ?? ''}}</pw>
-                                                    <p class="mb-0">{{$reply->reply}}</p>
+                                                    <p class="text-primary">{{ $reply->user->name ?? ''}}</p>
+                                                    <p class="mb-0 my-0">{{$reply->reply}}</p>
                                                     <small class="text-muted">{{date_format($reply->created_at,'d M, Y h:m a')}}</small>
                                                 </div>
                                             </div>
                                         @endforeach
                                     </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <form method="post" action="{{route('admin.ticket.reply')}}">

@@ -19,7 +19,7 @@
 
             <div class="table-responsive">
                 @if(count($orders) > 0)
-                    <table class="table table-striped table-bordered">
+                    <table id="basic-datatable" class="table table-striped table-bordered">
                         <thead>
                         <tr>
                             <th>Order</th>
@@ -41,7 +41,7 @@
                                 </td>
                                 <td>{{$order->total_price}} {{$currency->symbol ?? ''}}</td>
                                 <td class="d-flex justify-content-center">
-                                    <a class="btn btn-sm mx-1 d-block" href="{{--{{ route('customer-order-details', $order->id) }}--}}">View</a>
+                                    <a class="btn btn-sm mx-1 d-block" href="{{ route('customer-order-details', $order->order_code) }}">View</a>
 
                                     @if($order->order_status == 'Pending')
                                         <form method="post" action="{{--{{ route('customer-order-cancel', $order->id) }}--}}">

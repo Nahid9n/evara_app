@@ -11,7 +11,7 @@
 
         @include('admin.includes.meta')
     <!-- TITLE -->
-        <title>Evara Admin - @yield('title')</title>
+        <title>{{ $setting->company_name ?? 'N/A'}} | @yield('title')</title>
         @include('admin.includes.style')
     </head>
     <body class="ltr app sidebar-mini">

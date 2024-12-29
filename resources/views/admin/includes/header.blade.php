@@ -8,16 +8,16 @@
             @if(Session::get('vendor_id'))
                 <!-- sidebar-toggle-->
                     <a class="logo-horizontal " href="{{ route('vendor.dashboard') }}">
-                        <img src="{{asset('/')}}admin/assets/images/brand/logo.png" class="header-brand-img desktop-logo" alt="logo">
-                        <img src="{{asset('/')}}admin/assets/images/brand/logo-3.png" class="header-brand-img light-logo1"
+                        <img src="{{asset($setting->logo_jpg)}}" class="header-brand-img desktop-logo" alt="logo">
+                        <img src="{{asset($setting->logo_jpg)}}" class="header-brand-img light-logo1"
                              alt="logo">
                     </a>
                     <!-- LOGO -->
             @else
                 <!-- sidebar-toggle-->
                     <a class="logo-horizontal " href="{{ route('dashboard') }}">
-                        <img src="{{asset('/')}}admin/assets/images/brand/logo.png" class="header-brand-img desktop-logo" alt="logo">
-                        <img src="{{asset('/')}}admin/assets/images/brand/logo-3.png" class="header-brand-img light-logo1"
+                        <img src="{{asset($setting->logo_jpg)}}" class="header-brand-img desktop-logo" alt="logo">
+                        <img src="{{asset($setting->logo_jpg)}}" class="header-brand-img light-logo1"
                              alt="logo">
                     </a>
                     <!-- LOGO -->

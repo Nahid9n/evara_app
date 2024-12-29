@@ -16,22 +16,19 @@
     <!-- PAGE-HEADER END -->
     <div class="row">
         <div class="col-xl-12 mx-auto">
-
             <div class="card mt-5">
                 <div class="card-body">
                     <p class="text-success text-center">{{session('message')}}</p>
                     <div class="">
                         <h6 class="mb-0 text-uppercase">About Us Form</h6>
                         <hr/>
-
-{{--                        <form action="{{ route('about-us-form.store') }}" method="post" enctype="multipart/form-data">--}}
                         <form action="{{ route('about-us-form.update',$aboutUs->id) }}" method="post" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
 
                             <div class="col-12">
                                 <label for="summernote" class="form-label">About Us</label>
-                                <textarea class="form-control" id="summernote"  name="description"  placeholder="Write here">{{ $aboutUs->description }}</textarea>
+                                <textarea class="form-control summernote" id="summernote"  name="description"  placeholder="Write here">{{ $aboutUs->description }}</textarea>
 {{--                                <textarea class="form-control" id="summernote"  name="description"  placeholder="Write here"></textarea>--}}
 
                             </div>

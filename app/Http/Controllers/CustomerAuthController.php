@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 use App\Models\Billing;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Shipping;
 use App\Models\User;
+use App\Models\WishList;
 use Brian2694\Toastr\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -74,7 +76,6 @@ class CustomerAuthController extends Controller
                     toastr()->error('You Are Not A Customer');
                     return redirect()->back();
                 }
-
             }
             else{
                 toastr()->error('You Are Banned Contact With Admin For More Update.');
@@ -139,6 +140,11 @@ class CustomerAuthController extends Controller
             'customer'=>$this->customer,
         ]);
     }
+    public function orderDetails($code){
+        $order = Order::where('order_code',$code)->first();
+        $orderDetails = OrderDetail::where('order_id',$order->id)->get();
+        return view('website.customer.order.order-details', compact('order','orderDetails'));
+    }
     public function customerCancelOrder()
     {
         $this->orders = Order::where('customer_id', auth()->user()->id)->where('order_status','Cancel')
@@ -152,17 +158,9 @@ class CustomerAuthController extends Controller
 
     public function showCustomerOrder($id)
     {
-        $this->orders = Order::where('customer_id', auth()->user()->id)
-            ->orderBy('id','desc')
-            ->get();
-        $this->customer = Customer::where('id', auth()->user()->id)
-            ->first();
-        return view('website.customer.order',[
-            'orders' => $this->orders,
-            'order' => Order::find($id),
-            'customer'=>$this->customer,
-
-        ]);
+        $order = Order::where('order_code',$id)->first();
+        $orderDetails = OrdersDetails::where('order_id',$order->id)->get();
+        return view('customer.order.order-details', compact('order','orderDetails'));
     }
 
 
@@ -348,6 +346,14 @@ class CustomerAuthController extends Controller
     {
         $billings = Billing::where('user_id',auth()->user()->id)->first();
         $shippings = Shipping::where('user_id',auth()->user()->id)->first();
-        return view('website.customer.home.index',compact('billings','shippings'));
+        $totalOrder = Order::where('customer_id',auth()->user()->id)->get();
+        $pendingOrder = $totalOrder->where('delivery_status','Pending')->count();
+        $onShipmentOrder = $totalOrder->where('delivery_status','Processing')->count();
+        $completeOrder = $totalOrder->where('delivery_status','Complete')->count();
+        $cancelOrder = $totalOrder->where('delivery_status','Cancel')->count();
+        $orderAmount = $totalOrder->sum('order_total');
+        $wishlist = WishList::where('customer_id',auth()->user()->id)->count();
+        return view('website.customer.home.index',compact('billings','shippings','totalOrder','pendingOrder','onShipmentOrder',
+            'completeOrder','cancelOrder','orderAmount','wishlist'));
     }
 }

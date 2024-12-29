@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('ads', function (Blueprint $table) {
             $table->id();
             $table->integer('product_id');
-            $table->text('title');
-            $table->text('sub_title');
-            $table->string('position');
+            $table->text('title')->nullable();
+            $table->text('sub_title')->nullable();
+            $table->string('position')->nullable();
             $table->float('offer_price')->default(0);
             $table->integer('discount')->default(0);
             $table->text('image')->nullable();

@@ -159,7 +159,12 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="dashboard-menu">
-                            @include('website.customer.layout.sidebar')
+                            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                                <span  data-bs-toggle="collapse" data-bs-target="#navbarNav" class="navbar-toggler navbar-toggler-icon"></span>
+                                <div class="collapse dashboard-menu navbar-collapse" id="navbarNav">
+                                    @include('website.customer.layout.sidebar')
+                                </div>
+                            </nav>
                         </div>
                     </div>
                     <div class="col-md-9">

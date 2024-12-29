@@ -48,8 +48,8 @@
                                         <td class="price" data-title="Price">
                                             @if($product->product_id == (Session::get('productProduct_id')))
                                                 @if(Session::has('discount'))
-                                                    <p hidden>{{$discount = ( Session::get('discount') ) * $product->qty }}</p>
-                                                    <span>{{$currency->symbol ?? '' }} {{$price =(($product->product->selling_price - (Session::get('discount') ?? 0)))}}</span>
+                                                    <p hidden>{{ $discount = ( Session::get('discount') ) * $product->qty }}</p>
+                                                    <span>{{ $currency->symbol ?? '' }} {{$price =(($product->product->selling_price - (Session::get('discount') ?? 0)))}}</span>
                                                 @else
                                                     <span>{{$currency->symbol ?? '' }}  {{$price = $product->product->selling_price}}</span>
                                                 @endif

@@ -30,7 +30,7 @@
 
                             <div class="col-12">
                                 <label for="summernote" class="form-label">Contact Us</label>
-                                <textarea class="form-control" id="summernote"  name="description"  placeholder="Write here">{{ $contactUs->description }}</textarea>
+                                <textarea class="form-control summernote" id="summernote"  name="description"  placeholder="Write here">{{ $contactUs->description }}</textarea>
                             </div>
                             <div class="col-12">
                                 <label class="form-label">Publication Status</label>

@@ -1,5 +1,5 @@
 @extends('website.master')
-@section('title', 'Product Detail Page')
+@section('title', ucwords($product->name))
 @section('body')
     <div class="page-header breadcrumb-wrap">
         <div class="container">
@@ -30,28 +30,25 @@
                                         @foreach($product->productImages as $productImage)
                                             <figure class="border-radius-10">
                                                 <img src="{{asset($productImage->image)}}"
-                                                     alt="product image" class="img-fluid" style="width:100%; height:600px;"/>
+                                                     alt="{{$productImage->alt_text}}" class="img-fluid" style="width:100%; height:auto;"/>
                                             </figure>
                                         @endforeach
                                         <figure class="border-radius-10">
-                                            <img src="{{asset($product->image)}}" alt="product image" class="img-fluid" style="width:100%; height:600px;"/>
+                                            <img src="{{asset($product->image)}}" alt="{{$product->name}}" class="img-fluid" style="width:100%; height:auto;"/>
                                         </figure>
                                         <figure class="border-radius-10">
-                                            <img src="{{asset($product->back_image)}}" alt="product image" class="img-fluid" style="width:100%; height:600px;"/>
+                                            <img src="{{asset($product->back_image)}}" alt="{{$product->name}}" class="img-fluid" style="width:100%; height:auto;"/>
                                         </figure>
-
-
                                     </div>
                                     <!-- THUMBNAILS -->
                                     <div class="slider-nav-thumbnails pl-15 pr-15">
                                         @foreach($product->productImages as $productImage)
-                                            <div><img src="{{asset($productImage->image)}}" alt="product image" width="100" height="100"/></div>
+                                            <div><img src="{{asset($productImage->image)}}" alt="{{$productImage->alt_text}}" width="100" height="100"/></div>
                                         @endforeach
-                                        <div><img src="{{asset($product->image)}}" alt="product image" width="100" height="100"/></div>
-                                        <div><img src="{{asset($product->back_image)}}" alt="product image" width="100" height="100"/></div>
+                                        <div><img src="{{asset($product->image)}}" alt="{{$product->name}}" width="100" height="100"/></div>
+                                        <div><img src="{{asset($product->back_image)}}" alt="{{$product->name}}" width="100" height="100"/></div>
                                     </div>
                                 </div>
-                                <!-- End Gallery -->
                             </div>
                             <div class="col-md-6 col-sm-12 col-xs-12">
                                 <input type="hidden" name="id" value="{{ $product->id }}">
@@ -71,14 +68,14 @@
                                     </div>
                                     <div class="clearfix product-price-cover">
                                         <div class="product-price primary-color float-left">
-                                            @if(isset($discount->discount_amount))
+                                            @if(isset($product->discount_value))
                                                 <ins>
-                                                    <span class="text-brand">Tk.{{ $product->selling_price - (($product->selling_price*$discount->discount_amount)/100) }} </span>
+                                                    <span class="text-brand">Tk.{{ $product->regular_price - (($product->regular_price * $product->discount_value)/100) }} </span>
                                                 </ins>
                                                 <ins>
-                                                    <span class="old-price font-md ml-15">Tk.{{ $product->selling_price }} </span>
+                                                    <span class="old-price font-md ml-15">Tk.{{ $product->regular_price }} </span>
                                                 </ins>
-                                                <span class="save-price  font-md ml-15 text-success">{{$discount->discount_amount}} % Off</span>
+                                                <span class="save-price p-1 bg-success rounded-3 font-md ml-15">{{ $product->discount_value }} @if(!empty($product->discount_type)) {{ $product->discount_type == 1 ? '%': '৳‎' }} Off @endif</span>
                                             @else
                                                 <ins>
                                                     <span class="text-brand">Tk.{{ $product->selling_price }} </span>
@@ -87,6 +84,7 @@
                                                     <span class="old-price font-md ml-15">Tk.{{ $product->regular_price }}</span>
                                                 </ins>
                                             @endif
+{{--                                            @dd($product)--}}
                                         </div>
                                     </div>
                                     <div class="bt-1 border-color-1 mt-15 mb-15"></div>
@@ -139,7 +137,6 @@
                                             </div>
                                         </div>
                                     </form>
-
                                     <ul class="product-meta font-xs color-grey mt-50">
                                         <li class="mb-5">SKU: <a href="#">FWM15VKT</a></li>
                                         @php($tags = explode(",",$product->tags))
@@ -153,9 +150,7 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <!-- Detail Info -->
                             </div>
-
                         </div>
                         <div class="row">
                             <div class="col-lg-12 m-auto entry-main-content">
@@ -409,16 +404,13 @@
                             </div>
                         </div>
                         <div class="banner-img banner-big wow fadeIn f-none animated mt-50">
-                            <img class="border-radius-10" src="{{asset('/')}}website/assets/imgs/banner/banner-4.png"
-                                 alt="">
+                            <img class="border-radius-10" src="{{asset('/')}}website/assets/imgs/banner/banner-4.png" alt="">
                             <div class="banner-text">
                                 <h4 class="mb-15 mt-40">Repair Services</h4>
                                 <h2 class="fw-600 mb-20">We're an Apple <br>Authorised Service Provider</h2>
                             </div>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </div>
