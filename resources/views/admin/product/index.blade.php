@@ -9,9 +9,8 @@
                     <a href="{{route('product.create')}}" class="btn btn-success my-1 float-end mx-2 text-center">+add</a>
                 </div>
                 <div class="card-body">
-
                     <div class="table-responsive">
-                        <table id="example3" class="table table-bordered text-nowrap border-bottom">
+                        <table id="basic-datatable" class="table table-bordered text-nowrap border-bottom">
                             <thead>
                             <tr>
                                 <th class="border-bottom-0">SL NO</th>
@@ -37,16 +36,16 @@
                                     <td>{{$product->stock_amount}}</td>
                                     <td>{{$product->status == 1 ? 'Published' : 'Unpublished'}}</td>
                                     <td>
-                                        <a href="{{route('product.show', $product->id)}}" data-bs-toggle="modal" data-bs-target="#showProduct{{$key}}"  class="btn btn-info btn-sm float-start m-1">
+                                        <a href="{{route('product.show', $product->id)}}" class="btn btn-info btn-sm float-start m-1">
                                             <i class="fa fa-eye"></i>
                                         </a>
                                         <a href="{{route('product.edit', $product->id)}}" class="btn btn-success btn-sm float-start m-1">
                                             <i class="fa fa-edit"></i>
                                         </a>
                                         @if($product->status ==1 )
-                                            <a href="{{ route('product.show',$product->id ) }}" class="btn btn-warning btn-sm float-start m-1" > <i class="fa fa-lock"></i></a>
+                                            <a href="{{--{{ route('product.show',$product->id ) }}--}}" class="btn btn-warning btn-sm float-start m-1" > <i class="fa fa-lock"></i></a>
                                         @else
-                                            <a href="{{ route('product.show',$product->id ) }}" class="btn btn-blue btn-sm float-start m-1" > <i class="fa fa-unlock"></i></a>
+                                            <a href="{{--{{ route('product.show',$product->id ) }}--}}" class="btn btn-blue btn-sm float-start m-1" > <i class="fa fa-unlock"></i></a>
                                         @endif
                                         <form action="{{ route('product.destroy',$product->id) }}" method="post">
                                             @csrf

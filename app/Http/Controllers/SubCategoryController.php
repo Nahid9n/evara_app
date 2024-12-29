@@ -14,6 +14,7 @@ class SubCategoryController extends Controller
     {
         return view('admin.sub-category.index', [
             'sub_categories' => SubCategory::latest()->simplePaginate(100),
+            'categories' => Category::latest()->get(),
         ]);
     }
     public function store(Request $request)

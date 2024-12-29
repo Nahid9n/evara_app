@@ -3579,6 +3579,13 @@ table .product-thumbnail img {
   top: 19px;
   z-index: 9;
 }
+.product-cart-wrap .product-badges.product-badges-position-right {
+  position: absolute;
+  right: 20px;
+  top: 19px;
+  z-index: 9;
+}
+
 
 .product-cart-wrap .product-badges span {
   display: inline-block;
@@ -5165,9 +5172,9 @@ h6.post-title {
 }
 
 .header-top-ptb-1 #news-flash {
-  min-width: 400px;
+  min-width: 800px;
   font-size: 14px;
-  line-height: 10px;
+  line-height: 20px;
   font-weight: 600;
 }
 

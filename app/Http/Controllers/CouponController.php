@@ -18,7 +18,7 @@ class CouponController extends Controller
     }
     public function adminCreate()
     {
-        $products = Product::select('name','id')->get();
+        $products = Product::select('name','id','code')->get();
         return view('admin.marketing.coupon.add',compact('products'));
     }
     public function ProductStore(Request $request)
@@ -87,7 +87,7 @@ class CouponController extends Controller
     public function adminEdit($id)
     {
         $coupon = Coupon::find($id);
-        $products = Product::select('name','id')->get();
+        $products = Product::select('name','id','code')->get();
         return view('admin.marketing.coupon.edit',compact('products',"coupon"));
     }
     public function adminProductUpdate(Request $request,$id)

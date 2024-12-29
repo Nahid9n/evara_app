@@ -15,7 +15,7 @@
                             <input type="hidden" name="user_id" value="{{auth()->user()->id}}" readonly>
                             <input type="hidden" name="ticket_id" value="{{ $ticket->ticket_id }}" readonly>
                             <div class="form-group col-md-12">
-                                <textarea class="form-control" name="reply" id="" cols="30" rows="5" {{$ticket->status == 0 ? 'readonly':''}}{{$ticket->status == 2 ? 'readonly':''}}></textarea>
+                                <textarea class="form-control border-dark" style="border: 1px solid black" name="reply" id="" cols="30" rows="5" {{$ticket->status == 0 ? 'readonly':''}}{{$ticket->status == 2 ? 'readonly':''}}></textarea>
                             </div>
                             <div class="col-md-12 d-grid justify-content-end">
                                 <button type="submit" class="btn btn-sm btn-success " {{$ticket->status == 0 ? 'disabled':''}}{{$ticket->status == 2 ? 'disabled':''}}>send reply</button>
@@ -69,11 +69,11 @@
                             <input type="hidden" name="sender_id" value="{{auth()->user()->id}}">
                             <div class="form-group col-md-12">
                                 <label for="#sub">Subject <span class="text-danger">*</span></label>
-                                <input class="form-control" id="sub" name="subject" type="text" required>
+                                <input class="form-control border-dark" id="sub" name="subject" type="text" required>
                             </div>
                             <div class="form-group col-md-12">
                                 <label for="#des">Provide a detailed description</label>
-                                <textarea class="form-control" name="description" id="des" cols="30" rows="2"></textarea>
+                                <textarea class="form-control border-dark" name="description" id="des" cols="30" rows="2"></textarea>
                             </div>
                             <div class="col-md-12">
                                 <button type="submit" class="btn btn-sm btn-success">create ticket</button>
@@ -99,7 +99,7 @@
                                         <tr>
                                             <td>#{{$ticket->ticket_id}}</td>
                                             <td>{{$ticket->subject}}</td>
-                                            <td>{{$ticket->created_at}}</td>
+                                            <td>{{date_format($ticket->created_at,'d M, Y h:m a')}}</td>
                                             <td class="text-white {{$ticket->status == 0 ? 'bg-warning':''}}{{$ticket->status == 1 ? 'bg-success':''}}{{$ticket->status == 2 ? 'bg-danger':''}}">
                                                 {{$ticket->status == 0 ? 'pending':''}}
                                                 {{$ticket->status == 1 ? 'open':''}}

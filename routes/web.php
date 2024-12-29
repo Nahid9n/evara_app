@@ -31,7 +31,6 @@ use App\Http\Controllers\PrivacyPolicyController;
 use App\Http\Controllers\TermsConditionController;
 use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\ContactUsController;
-
 use App\Http\Controllers\Vendor\VendorAuthController;
 use App\Http\Controllers\Vendor\VendorProfileController;
 use App\Http\Controllers\Vendor\VendorProductController;
@@ -40,6 +39,10 @@ use App\Http\Controllers\CouponManageController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\Admin\HighlightController;
 use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\PopupController;
+use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\NewsHeaderController;
+use App\Http\Controllers\Admin\ConfigureController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -92,6 +95,7 @@ Route::middleware(['customer'])->group(function () {
     Route::get('/my-dashboard',[CustomerAuthController::class,'dashboard'])->name('customer.dashboard');
     // CustomerAuthController New Route
     Route::get('/customer-orders',[CustomerAuthController::class,'customerOrder'])->name('customer.orders');
+    Route::get('/customer-orders-details/{id}',[CustomerAuthController::class,'orderDetails'])->name('customer-order-details');
     Route::get('/customer-cancel-orders',[CustomerAuthController::class,'customerCancelOrder'])->name('customer.cancel.orders');
     Route::get('/show-customer-order/{id}',[CustomerAuthController::class,'showCustomerOrder'])->name('show-customer-order');
     Route::get('/customer/invoice-show/{id}', [CustomerAuthController::class,'showCustomerInvoice'])->name('customer-invoice-show');
@@ -191,12 +195,23 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::resource('color', ColorController::class);
     Route::resource('size', SizeController::class);
     Route::resource('product', ProductController::class);
+    Route::controller(ProductController::class)->group(function () {
+        Route::post('/other-images-store', 'otherImagesStore')->name('admin.other.images.store');
+        Route::put('/other-images-update/{id}', 'otherImagesUpdate')->name('admin.other.images.update');
+        Route::delete('/other-images-destroy/{id}', 'otherImagesDestroy')->name('admin.other.images.destroy');
+    });
     Route::resource('product_offer', ProductOfferController::class);
     Route::controller(HighlightController::class)->group(function () {
         Route::get('/highlight-manage', 'index')->name('admin.highlight.manage');
         Route::post('/highlight-store', 'store')->name('admin.highlight.store');
         Route::put('/highlight-update/{id}', 'update')->name('admin.highlight.update');
         Route::delete('/highlight-destroy/{id}', 'destroy')->name('admin.highlight.destroy');
+    });
+    Route::controller(TagController::class)->group(function () {
+        Route::get('/tag-manage', 'index')->name('admin.tag.manage');
+        Route::post('/tag-store', 'store')->name('admin.tag.store');
+        Route::put('/tag-update/{id}', 'update')->name('admin.tag.update');
+        Route::delete('/tag-destroy/{id}', 'destroy')->name('admin.tag.destroy');
     });
 
     //Order Module
@@ -247,12 +262,36 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::put('/page-update/{id}', 'update')->name('admin.page.update');
         Route::delete('/page-destroy/{id}', 'destroy')->name('admin.page.destroy');
     });
-
-
-
-
-
-
+    Route::controller(NewsHeaderController::class)->group(function () {
+        Route::get('/news-header', 'index')->name('admin.news.index');
+        Route::post('/news-header-store', 'store')->name('admin.news.store');
+        Route::get('/news-header-show/{id}', 'show')->name('admin.news.show');
+        Route::get('/news-header-edit/{id}', 'edit')->name('admin.news.edit');
+        Route::put('/news-header-update/{id}', 'update')->name('admin.news.update');
+        Route::delete('/news-header-destroy/{id}', 'destroy')->name('admin.news.destroy');
+    });
+    Route::controller(PopupController::class)->group(function () {
+        Route::get('/popup', 'index')->name('admin.popup.index');
+        Route::post('/popup-store', 'store')->name('admin.popup.store');
+        Route::get('/popup-show/{id}', 'show')->name('admin.popup.show');
+        Route::get('/popup-edit/{id}', 'edit')->name('admin.popup.edit');
+        Route::put('/popup-update/{id}', 'update')->name('admin.popup.update');
+        Route::delete('/popup-destroy/{id}', 'destroy')->name('admin.popup.destroy');
+    });
+    Route::controller(ConfigureController::class)->group(function () {
+        Route::get('/configure', 'index')->name('admin.configure.index');
+        Route::post('/configure-store', 'store')->name('admin.configure.store');
+        Route::get('/configure-show/{id}', 'show')->name('admin.configure.show');
+        Route::get('/configure-edit/{id}', 'edit')->name('admin.configure.edit');
+        Route::put('/configure-update/{id}', 'update')->name('admin.configure.update');
+        Route::delete('/configure-destroy/{id}', 'destroy')->name('admin.configure.destroy');
+    });
+    Route::controller(\App\Http\Controllers\BannerController::class)->group(function () {
+        Route::get('/banners', 'index')->name('admin.banner.index');
+        Route::post('/banners-store', 'store')->name('admin.banner.store');
+        Route::put('/banners-update/{id}', 'update')->name('admin.banner.update');
+        Route::delete('/banners-destroy/{id}', 'destroy')->name('admin.banner.destroy');
+    });
 
 
 });

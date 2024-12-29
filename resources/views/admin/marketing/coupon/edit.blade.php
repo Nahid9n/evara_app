@@ -57,9 +57,9 @@
                                 </div>
                                 <div class="col-md-9">
                                     <select class="form-control select2 select2-show-search form-select" data-placeholder="Select Product" name="product_id" required>
-                                        <option class="form-control" label="Choose one" disabled selected>Select Prodcut</option>
+                                        <option class="form-control" label="Choose one">Select Prodcut</option>
                                         @forelse($products as $product)
-                                            <option value="{{ $product->id}}" {{$coupon->product_id == $product->id ? 'selected' : ''}}>{{ $product->name }}</option>
+                                            <option value="{{ $product->id}}" {{$coupon->product_id == $product->id ? 'selected' : ''}}>{{ $product->name }} (SKU : {{ $product->code }})</option>
                                         @empty
                                             <option class="text-center text-danger"> --No Product--</option>
                                         @endforelse

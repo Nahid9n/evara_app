@@ -31,7 +31,7 @@
                         <div class="row mb-4">
                             <label for="summernote" class="col-md-3 form-label">Content</label>
                             <div class="col-md-9">
-                                <textarea class="form-control" name="contents" id="summernote" placeholder="write content"></textarea>
+                                <textarea class="form-control summernote" name="contents" id="" placeholder="write content"></textarea>
                             </div>
                         </div>
                         <div class="row mb-4">

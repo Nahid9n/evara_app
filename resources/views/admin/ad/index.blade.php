@@ -20,6 +20,7 @@
                                 <th class="border-bottom-0">Product Info</th>
                                 <th class="border-bottom-0">Ad Title </th>
                                 <th class="border-bottom-0">Image</th>
+                                <th class="border-bottom-0">Position</th>
                                 <th class="border-bottom-0">Status</th>
 
                                 <th class="border-bottom-0">Action</th>
@@ -32,6 +33,7 @@
                                     <td>{{ isset($ad->product->name) ? $ad->product->name :''}}</td>
                                     <td>{{$ad->title}}</td>
                                     <td><img src="{{asset($ad->image)}}" alt="" height="40" width="60"/></td>
+                                    <td>{{$ad->position}}</td>
                                     <td>{{$ad->status == 1 ? 'Published' : 'Unpublished'}}</td>
 
 

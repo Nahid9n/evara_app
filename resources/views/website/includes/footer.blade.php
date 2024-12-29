@@ -96,11 +96,11 @@
                 <div class="footer-bottom"></div>
             </div>
             <div class="col-lg-6">
-                <p class="float-md-left font-sm text-muted mb-0">&copy; {{date('Y')}}, <strong class="text-brand"> {{$setting->company_name}} </strong> - HR Ecommerce </p>
+                <p class="float-md-left font-sm text-muted mb-0">&copy; {{date('Y')}}, <strong class="text-brand"> {{$setting->company_name}} </strong> </p>
             </div>
             <div class="col-lg-6">
                 <p class="text-lg-end text-start font-sm text-muted mb-0">
-                    Designed by <a href="#" target="_blank"> HR Ecommerce </a>. All rights reserved
+                    Designed by <a href="{{route('home')}}" target="_blank">  {{$setting->company_name}}  </a>. All rights reserved
                 </p>
             </div>
         </div>

@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>{{$setting->company_name}} - @yield('title')</title>
+    <title>{{$setting->company_name}} | @yield('title')</title>
 
     @include('website.includes.meta')
     @include('website.includes.style')
@@ -25,13 +25,12 @@
 
 </head>
 
-<body style="overflow-x: hidden">
+<body class="" style="overflow-x: hidden">
 
 
 @include('website.includes.header')
 
-<main class="" id="mainContainer"{{-- style="background-image: url('{{asset('/pexels-jessbaileydesign-1172849.jpg')}}');background-repeat: no-repeat;background-attachment: fixed;
-    background-size: cover;"--}}>
+<main class="" id="mainContainer">
    @yield('body')
 </main>
 

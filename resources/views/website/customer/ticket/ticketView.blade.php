@@ -4,7 +4,7 @@
     <div class="card">
         <div class="card-header">
             <h4 class="my-2"> <span class="fw-bold">{{ $ticket->subject }}</span> # {{ $ticket->ticket_id }}</h4>
-            <p><span>{{auth()->user()->name}}</span> {{ $ticket->created_at }} <span class="p-2 rounded-3 text-white {{$ticket->status == 1 ? 'bg-success':''}}{{$ticket->status == 2 ? 'bg-danger':''}}">{{$ticket->status == 1 ? 'Open':''}}{{$ticket->status == 2 ? 'Closed':''}}</span></p>
+            <p><span>{{auth()->user()->name}}</span> <span style="font-size: 12px">{{date_format($ticket->created_at,'d M, Y h:m a')}}</span> <span style="font-size: 10px" class="p-2 rounded-3 text-white {{$ticket->status == 1 ? 'bg-success':''}}{{$ticket->status == 2 ? 'bg-danger':''}}">{{$ticket->status == 1 ? 'Open':''}}{{$ticket->status == 2 ? 'Closed':''}}</span></p>
         </div>
         <div class="card-body">
 
@@ -19,7 +19,7 @@
                                     <div class="comment-header">
                                         <span class="fs-14 fw-700 text-dark">{{ $reply->user->name }}</span>
                                         <p>{{$reply->reply}}</p>
-                                        <small class="text-muted">{{date_format($reply->created_at,'d M, Y h:m a')}}</small>
+                                        <small class="text-muted" style="font-size: 10px">{{date_format($reply->created_at,'d M, Y h:m a')}}</small>
                                     </div>
                                 </div>
                             </div>
@@ -30,7 +30,7 @@
                                 <input type="hidden" name="user_id" value="{{ auth()->user()->id }}" readonly>
                                 <input type="hidden" name="ticket_id" value="{{ $ticket->ticket_id }}" readonly>
                                 <div class="form-group col-md-12">
-                                    <textarea class="form-control" name="reply" id="" cols="30" rows="5" {{$ticket->status == 0 ? 'readonly':''}}{{$ticket->status == 2 ? 'readonly':''}}></textarea>
+                                    <textarea class="form-control border-dark" name="reply" id="" cols="30" rows="5" {{$ticket->status == 0 ? 'readonly':''}}{{$ticket->status == 2 ? 'readonly':''}}></textarea>
                                 </div>
                                 <div class="col-md-12 d-grid justify-content-end">
                                     <button type="submit" class="btn btn-sm btn-success " {{$ticket->status == 0 ? 'disabled':''}}{{$ticket->status == 2 ? 'disabled':''}}>send reply</button>

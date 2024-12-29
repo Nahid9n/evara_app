@@ -80,7 +80,6 @@
             }
         })
     }
-
 </script>
 
 <script>
@@ -92,7 +91,7 @@
 
 <script>
     $(document).ready(function() {
-        $('#summernote').summernote();
+        $('.summernote').summernote();
     });
 </script>
 
@@ -183,77 +182,77 @@
     });
 </script>
 <script>
-    function filter(page = 1) {
-        var category = [];
-        var subCategory = [];
-        var brand = [];
-        var size = [];
-        var color = [];
-        var maxPriceRange = [];
-        var keyword = "<?= (isset($_GET['keyword']) ? $_GET['keyword'] : '') ?>";
+    /* product page all filter */
+    $(document).ready(function () {
+        function fetchFilteredProducts() {
+            let filters = {
+                category_id: $('#categoryFilter').val(),
+                subcategory_id: $('#subCategoryId').val(),
+                brand_id: $('#brandFilter').val(),
+                size: $('#sizeFilter').val(),
+                color: $('#colorFilter').val(),
+                min_price: $('#min_price').val(),
+                max_price: $('#max_price').val(),
+                // keyword: $('#globalSearch').val(),
+            };
 
-        $('.categoryCheckBox').each(function() {
-            if (this.checked) {
-                category.push($(this).attr('id'));
-            }
-        });
-        $('.subCategoryCheckBox').each(function() {
-            if (this.checked) {
-                subCategory.push($(this).attr('id'));
-            }
-        });
-
-
-        $('.brandCheckBox').each(function() {
-            if (this.checked) {
-                brand.push($(this).attr('id'));
-            }
-        });
-
-        $('.sizeCheckBox').each(function() {
-            if (this.checked) {
-                size.push($(this).val());
-            }
-        });
-
-        $('.colorCheckBox').each(function() {
-            if (this.checked) {
-                color.push($(this).val());
-            }
-        });
-
-        maxPriceRange.push($('#maxRange').val());
-        var jsonData = {
-            "category": category,
-            "subCategory": subCategory,
-            "brand": brand,
-            "size": size,
-            "color": color,
-            "maxPriceRange": maxPriceRange,
-            "keyword": keyword,
-        };
-
-        var jsonString = JSON.stringify(jsonData);
-
-        $.ajax({
-            url: "{{ route('product.filter') }}",
-            type: 'get',
-            data: {
-                'jsonString': jsonString,
-                'page': page,
-            },
-            dataType: 'html',
-            success: function(res) {
-                if (res == '0') {
-                    $('#filterProducts').text("Product not found");
-                } else {
-                    $('#filterProducts').html(res);
-                    updatePaginationLinks();
+            // Send AJAX request to fetch filtered products
+            $.ajax({
+                url: '{{ route('product.filter') }}',
+                type: 'GET',
+                data: filters,
+                dataType: 'html',
+                success: function(res) {
+                    if (res == '0') {
+                        $('#filterProducts').text("Product not found");
+                    } else {
+                        $('#filterProducts').html(res);
+                        /*updatePaginationLinks();*/
+                    }
                 }
-            }
-        });
+            });
+        }
 
-    }
+        // Trigger fetchFilteredProducts on change/input
+        $('#categoryFilter').on('change', function () {
+            var category = $(this).val();
+            $.ajax({
+                type: "GET",
+                url: "{{ route('get-sub-category-by-category-filter') }}",
+                data: { category_id: category },
+                success: function (response) {
+                    let options = '<option value="">Select Subcategory</option>';
+                    response.forEach(subcategory => {
+                        options += `<option value="${subcategory.id}">${subcategory.name}</option>`;
+                    });
+                    $('#subCategoryId').html(options);
+                }
+            })
+            fetchFilteredProducts();
+        });
+        $('#subCategoryId').on('change', function () {
+            fetchFilteredProducts();
+        });
+        $('#brandFilter').on('change', function () {
+            fetchFilteredProducts();
+        });
+        $('#sizeFilter').on('change', function () {
+            fetchFilteredProducts();
+        });
+        $('#colorFilter').on('change', function () {
+            fetchFilteredProducts();
+        });
+        $('#min_price').on('input', function () {
+            fetchFilteredProducts();
+        });
+        $('#max_price').on('input', function () {
+            fetchFilteredProducts();
+        });
+        // $('#globalSearch').on('input', function () {
+        //     fetchFilteredProducts();
+        // });
+    });
+
     function updatePaginationLinks() {
         $('.pagination-links a').on('click', function(event) {
             event.preventDefault();
@@ -262,24 +261,26 @@
             filter(page,jsonString);
         });
     }
-    function setSubCategory(id) {
+    /*function setSubCategory() {
         var category = [];
-
-        $('.categoryCheckBox').each(function() {
-            if (this.checked) {
-                category.push($(this).attr('id'));
-            }
+        $('#categoryFilter').on('change', function () {
+            let categoryId = $(this).val();
+            category.push(categoryId);
         });
         $.ajax({
             type: "GET",
             url: "{{ route('get-sub-category-by-category-filter') }}",
-            data: {id:category},
-            dataType: 'html',
+            // data: {id:category},
+            data: { category_id: category },
             success: function (response) {
-                $('#subCategoryId').html(response);
+                let options = '<option value="">Select Subcategory</option>';
+                response.forEach(subcategory => {
+                    options += `<option value="${subcategory.id}">${subcategory.name}</option>`;
+                });
+                $('#subcategory').html(options);
             }
         })
-    }
+    }*/
     function increaseCount(a, b, c) {
         var input = b.previousElementSibling;
         var color = b.nextElementSibling;
@@ -335,4 +336,62 @@
             }
         });
     }
+</script>
+<script src="{{asset('/')}}website/assets/owl-carousel/jquery.mousewheel.min.js"></script>
+@stack('js')
+<script>
+    $(document).ready(function() {
+        var owl = $('.owl-carousel');
+        owl.owlCarousel({
+            loop: true,
+            autoplay:true,
+            autoplayTimeout:3000,
+            nav: true,
+            margin: 10,
+            responsive: {
+                0: {
+                    items: 2
+                },
+                600: {
+                    items: 3
+                },
+                960: {
+                    items: 4
+                },
+                1200: {
+                    items: 5
+                }
+            }
+        });
+    })
+</script>
+<script src="{{asset('/')}}website/assets/owl-carousel/owl.carousel.js"></script>
+<script>
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+    for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.display === "block") {
+                panel.style.display = "none";
+            } else {
+                panel.style.display = "block";
+            }
+        });
+    }
+</script>
+<script>
+    $(document).ready(function() {
+
+        $('.product-card').each(function() {
+            const badgeElement = $(this).find('.badge');
+            const badges = JSON.parse($(this).attr('data-badges'));
+            let currentIndex = 0;
+            setInterval(function() {
+                badgeElement.text(badges[currentIndex]);
+                currentIndex = (currentIndex + 1) % badges.length;
+            }, 1500);
+        });
+    });
 </script>

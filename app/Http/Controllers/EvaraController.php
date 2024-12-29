@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ad;
+use App\Models\Banner;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
@@ -27,22 +28,17 @@ class EvaraController extends Controller
     private $per_page = 12;
     public function index()
     {
+      $banners = Banner::where('status',1)->orderBy('position','asc')->get()->take(2);
+      $ad12s = Ad::where('status',1)->orderBy('position','asc')->take(1)->get();
       return view('website.home.index',[
-          'products' => Product::where('featured_status',1)
-              ->orderBy('id','desc')
-              ->take(12)
-              ->get(['id','name','image','category_id','brand_id','regular_price','selling_price','slug']),
-            'latestProducts' => Product::where('status',1)->take(12)->latest()->get(),
-            'highlights' => Highlight::where('status',1)->take(5)->orderBy('serial','asc')->get(),
+          'products' => Product::orderBy('id','desc')->take(12)->get(),
+          'latestProducts' => Product::where('status',1)->take(50)->latest()->get(),
           'product_offers'  => ProductOffer::where('status',1)->orderBy('id','desc')->take(4)->get(),
-          'vendor_products' => Product::where('status', 1)->orderBy('id','desc')->take(16)->get(),
           'brands'    => Brand::where('status',1)->orderBy('id','desc')->get(),
           'categories' => Category::where('status',1) ->orderBy('id','desc')->get(),
           'features' => Feature::where('status',1) ->orderBy('id','desc')->get(),
-          'ad12s' => Ad::where('position',12) ->orderBy('id','desc')->take(1)->get(),
-          'ad04s' => Ad::where('position',4) ->orderBy('id','desc')->take(1)->get(),
-
-
+          'ad12s' => $ad12s,
+          'banners' => $banners,
       ]);
     }
     public function category($slug)
@@ -153,59 +149,55 @@ class EvaraController extends Controller
     }
     public function filter(Request $request)
     {
-        try {
-            $data = $request->jsonString;
-            $all_data = json_decode($request->jsonString);
-            $query = Product::query();
 
-            if (!empty($all_data->keyword)) {
-                $query->where('name', 'like', '%' . $all_data->keyword . '%');
-            }
+//        try {
+        $query = Product::query();
 
-            if (!empty($all_data->category)) {
-                $query->whereIn('category_id', $all_data->category);
-            }
-            if (!empty($all_data->subCategory)) {
-                $query->whereIn('sub_category_id', $all_data->subCategory);
-            }
+        /*$query->when($request->keyword, function ($q, $keyword) {
+            $q->where('name','%like%', $keyword);
+        });*/
+        $query->when($request->category_id, function ($q, $categoryId) {
+            $q->where('category_id', $categoryId);
+        });
+        $query->when($request->subcategory_id, function ($q, $subcategoryId) {
+            $q->where('sub_category_id', $subcategoryId);
+        });
 
-            if (!empty($all_data->brand)) {
-                $query->whereIn('brand_id', $all_data->brand);
-            }
+        $query->when($request->brand_id, function ($q, $brandId) {
+            $q->where('brand_id', $brandId);
+        });
 
-            if (!empty($all_data->maxPriceRange)) {
-                $query->whereBetween('selling_price', [0, $all_data->maxPriceRange]);
-            }
-            if (!empty($all_data->color)) {
-                $productColors = ProductColor::whereIn('color_id',$all_data->color)->get('product_id');
-                $productIds = array();
-                foreach ($productColors as $color){
-                    array_push($productIds,$color->product_id);
-                }
-                $query->whereIn('id', $productIds);
-            }
-            if (!empty($all_data->size)) {
-                $productSizes = ProductSize::whereIn('size_id',$all_data->size)->get('product_id');
-                $productIds = array();
-                foreach ($productSizes as $size){
-                    array_push($productIds,$size->product_id);
-                }
-                $query->whereIn('id', $productIds);
-            }
+        $query->when($request->color, function ($q, $colorId) {
+            $productIds = ProductColor::where('color_id', $colorId)
+                ->pluck('product_id'); // Collect only product IDs
+            $q->whereIn('id', $productIds);
+        });
 
-            $perPage = 100;
+        $query->when($request->size, function ($q, $sizeId) {
+            $productIds = ProductSize::where('size_id', $sizeId)
+                ->pluck('product_id'); // Collect only product IDs
+            $q->whereIn('id', $productIds);
+        });
+
+        $query->when($request->min_price && $request->max_price, function ($query) use ($request) {
+            $query->whereBetween('regular_price', [$request->min_price, $request->max_price]);
+        });
+
+        $products = $query->latest()->paginate(48);
+
+            /*$perPage = 100;
             $offset = isset($all_data->page) ? $all_data->page : 0;
-            $products = $query->where('status',1)->paginate($perPage);
-            $countProducts = $query->where('status',1)->count();
+            $products = $query->where('status',1)->latest()->paginate($perPage);
+            $countProducts = $products->where('status',1)->count();*/
             if ($products->isEmpty()) {
                 return view('website.empty.empty');
             }
-            return view('website.filter.ajaxFilter', compact('products','data'));
-        }
-        catch (Exception $e){
-            Toastr::error($e->getMessage());
-            return back();
-        }
+            return view('website.filter.ajaxFilter', compact('products'));
+//        }
+//        catch (Exception $e){
+//            Toastr::error($e->getMessage());
+//            return back();
+//        }
     }
     public function paginate(Request $request)
     {
@@ -214,14 +206,18 @@ class EvaraController extends Controller
     }
     public function getSubCategoryByCategory(Request $request)
     {
-        $categories = Category::whereIn('id',$request->id)->get('id');
+        $subcategories = Subcategory::where('category_id', $request->category_id)->get();
+//        $subCategories = SubCategory::whereIn('category_id',$categoryIds)->get();
+//        $subCategorySlug = null;
+        return response()->json($subcategories);
+        /*$categories = Category::whereIn('id',$request->id)->get('id');
         $categoryIds = array();
         foreach ($categories as $category){
             array_push($categoryIds,$category->id);
         }
         $subCategories = SubCategory::whereIn('category_id',$categoryIds)->get();
         $subCategorySlug = null;
-        return view('website.filter.ajaxsubcategory',compact('subCategories','subCategorySlug'));
+        return view('website.filter.ajaxsubcategory',compact('subCategories','subCategorySlug'));*/
     }
     public function coupons(){
 //        try {

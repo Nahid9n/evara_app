@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Ad;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Exception;
 
 class AdController extends Controller
 {
@@ -36,9 +37,61 @@ class AdController extends Controller
      */
     public function store(Request $request)
     {
-//        return $request;
-        Ad::newAd($request);
-        return back()->with('message', 'Ad info is created successfully.');
+        try {
+            $this->validate($request,[
+                'product_id' => 'required',
+            ],[
+                'product_id.required'         => 'Product is required',
+            ]);
+
+            $ad = new Ad();
+            $ad->product_id                   = $request->product_id;
+            $ad->title                        = $request->title;
+            $ad->sub_title                     = $request->sub_title;
+            if ($request->file('image')){
+                $image = $request->file('banner');
+                $imageName = $image->getClientOriginalName();
+                $directory = 'upload/concern/';
+                $image->move($directory,$imageName);
+                $imageUrl = $directory.$imageName;
+                $ad->image = $imageUrl;
+            }
+            if ($request->position){
+                $adCount = Ad::count();
+                $adPosition = Ad::where('position',$request->position)->first();
+                if ($adPosition){
+                    $adPosition->position = $adCount + 1;
+                    $adPosition->save();
+                    $ad->position = $request->position;
+                }
+                else{
+                    $ad->position = $adCount + 1;
+                }
+            }
+            else{
+                $adCount = Ad::count();
+                $ad->position = $adCount + 1;
+            }
+            if($request->offer_price){
+                $ad->offer_price                  = $request->offer_price;
+            }
+            else{
+                $ad->offer_price                  = 0;
+            }
+            if($request->discount){
+                $ad->discount                  = $request->discount;
+            }
+            else{
+                $ad->discount                     = 0;
+            }
+            $ad->status                       = $request->status;
+            $ad->save();
+            return back()->with('message', 'Ad info is created successfully.');
+        }
+        catch (Exception $exception){
+            return back()->with('error', $exception->getMessage());
+        }
+
 
     }
 
@@ -69,8 +122,61 @@ class AdController extends Controller
      */
     public function update(Request $request, Ad $ad)
     {
-        Ad::updateAd($request, $ad);
-        return redirect('/ad')->with('message','Ad info update successfully.');
+        try {
+            $this->validate($request,[
+                'product_id' => 'required',
+            ],[
+                'product_id.required'         => 'Product is required',
+            ]);
+
+            $ad->product_id                   = $request->product_id;
+            $ad->title                        = $request->title;
+            $ad->sub_title                     = $request->sub_title;
+            if ($request->file('image')){
+                if (isset($ad->image)){
+                    unlink($ad->image);
+                }
+                $image = $request->file('image');
+                $imageName = $image->getClientOriginalName();
+                $directory = 'admin/img/ad-images/';
+                $image->move($directory,$imageName);
+                $imageUrl = $directory.$imageName;
+                $ad->image = $imageUrl;
+            }
+            if ($request->position == $ad->position){
+                $ad->position = $request->position;
+            }
+            else{
+                $adCount = Ad::count();
+                $adSerial = Ad::where('position',$request->position)->first();
+                if ($adSerial){
+                    $adSerial->position = $ad->position;
+                    $adSerial->save();
+                    $ad->position = $request->position;
+                }
+                else{
+                    $ad->position = $request->position;
+                }
+            }
+            if($request->offer_price){
+                $ad->offer_price                  = $request->offer_price;
+            }
+            else{
+                $ad->offer_price                  = 0;
+            }
+            if($request->discount){
+                $ad->discount                  = $request->discount;
+            }
+            else{
+                $ad->discount                     = 0;
+            }
+            $ad->status                       = $request->status;
+            $ad->save();
+            return back()->with('message', 'Ad info is Updated successfully.');
+        }
+        catch (Exception $exception){
+            return back()->with('error', $exception->getMessage());
+        }
 
     }
 

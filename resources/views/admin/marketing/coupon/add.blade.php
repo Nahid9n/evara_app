@@ -63,11 +63,12 @@
                                     <label class="form-label" for="type">Product <span
                                             class="text-danger">*</span></label>
                                 </div>
+
                                 <div class="col-md-9">
-                                    <select class="form-control" name="product_id" required>
-                                        <option class="form-control" label="Choose one" disabled>Select Product</option>
+                                    <select class="form-control select2 select2-show-search form-select" name="product_id" required>
+                                        <option class="form-control" label="Choose one">-- Select Product --</option>
                                         @forelse($products as $product)
-                                            <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                            <option value="{{ $product->id }}">{{ $product->name }} (SKU : {{ $product->code }})</option>
                                         @empty
                                             <option class="text-center text-danger"> --No Product--</option>
                                         @endforelse

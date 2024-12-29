@@ -57,11 +57,30 @@ class Product extends Model
         if ($request->back_image) {
             self::$product->back_image = self::getBackImageUrl($request);
         }
+        self::$product->video_link = $request->video_link;
         self::$product->regular_price = $request->regular_price;
         self::$product->selling_price = $request->selling_price;
+        self::$product->app_selling_price = $request->app_selling_price;
         self::$product->stock_amount = $request->stock_amount;
-        self::$product->tags = $request->tags;
+        self::$product->alert_qty = $request->alert_qty;
+        self::$product->max_order_qty = $request->max_order_qty;
+        self::$product->weight = $request->weight;
+        self::$product->mrp = $request->mrp;
+        self::$product->vat = $request->vat;
+        self::$product->free_delivery = $request->free_delivery;
+        self::$product->vat_applicable = $request->vat_applicable;
+        self::$product->stock_visibility = $request->stock_visibility;
+        self::$product->discount_type = $request->discount_type;
+        self::$product->discount_value = $request->discount_value;
+        self::$product->discount_banner = $request->discount_banner;
+        self::$product->video_link = $request->video_link;
         self::$product->refund = $request->refund;
+        self::$product->meta_title = $request->meta_title;
+        self::$product->meta_description = $request->meta_description;
+        self::$product->meta_keyword = $request->meta_keyword;
+        self::$product->meta_author = $request->meta_author;
+        self::$product->alt_text = $request->alt_text;
+        self::$product->schema_text = $request->schema_text;
         self::$product->featured_status = $request->featured_status;
         if ($request->status)
         {
@@ -113,11 +132,31 @@ class Product extends Model
             }
             $product->back_image = self::getBackImageUrl($request);;
         }
+        $product->video_link = $request->video_link;
         $product->regular_price = $request->regular_price;
         $product->selling_price = $request->selling_price;
+        $product->app_selling_price = $request->app_selling_price;
         $product->stock_amount = $request->stock_amount;
+        $product->alert_qty = $request->alert_qty;
+        $product->max_order_qty = $request->max_order_qty;
+        $product->weight = $request->weight;
+        $product->mrp = $request->mrp;
+        $product->vat = $request->vat;
+        $product->free_delivery = $request->free_delivery;
+        $product->vat_applicable = $request->vat_applicable;
+        $product->stock_visibility = $request->stock_visibility;
+        $product->discount_type = $request->discount_type;
+        $product->discount_value = $request->discount_value;
+        $product->discount_banner = $request->discount_banner;
+        $product->video_link = $request->video_link;
         $product->tags = $request->tags;
         $product->refund = $request->refund;
+        $product->meta_title = $request->meta_title;
+        $product->meta_description = $request->meta_description;
+        $product->meta_keyword = $request->meta_keyword;
+        $product->meta_author = $request->meta_author;
+        $product->alt_text = $request->alt_text;
+        $product->schema_text = $request->schema_text;
         $product->featured_status = $request->featured_status;
         if ($request->status)
         {
@@ -161,6 +200,11 @@ class Product extends Model
     {
         return $this->hasMany(ProductSize::class);
     }
+    public function taggs()
+    {
+        return $this->hasMany(ProductTag::class);
+    }
+
     public function productImages()
     {
         return $this->hasMany(ProductImage::class);
