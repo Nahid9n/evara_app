@@ -13,14 +13,18 @@ use App\Models\Feature;
 use App\Models\Highlight;
 use App\Models\Product;
 use App\Models\ProductColor;
+use App\Models\ProductHighlight;
 use App\Models\ProductOffer;
 use App\Models\ProductSize;
+use App\Models\ProductTag;
 use App\Models\Size;
 use App\Models\SubCategory;
+use App\Models\Tag;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Exception;
 use Session;
+
 
 class EvaraController extends Controller
 {
@@ -57,6 +61,14 @@ class EvaraController extends Controller
 
         ]);
     }
+    public function allBrands()
+    {
+        $brands = Brand::where('status',1)->get();
+        return view('website.brand.all-brand',[
+            'brands' => $brands,
+        ]);
+    }
+
     public function subCategory($slug)
     {
         $subcategory = SubCategory::where('slug',$slug)->first();
@@ -91,12 +103,38 @@ class EvaraController extends Controller
     public function allProduct()
     {
         return view('website.product.allproduct', [
-            'products' => Product::where('status',1)->latest()->paginate(100),
+            'products' => Product::where('status',1)->latest()->take(100)->get(),
             'categories' => Category::where('status',1)->latest()->get(),
             'subcategories' => SubCategory::where('status',1)->latest()->get(),
             'brands' => Brand::where('status',1)->latest()->get(),
             'colors' => Color::where('status',1)->latest()->get(),
             'sizes' => Size::where('status',1)->latest()->get(),
+        ]);
+    }
+    public function allHighlightedProduct($highlight)
+    {
+        $highlightId = Highlight::where('name',$highlight)->first()->id;
+        $productIds = ProductHighlight::where('highlight_id',$highlightId)->get('product_id');
+        $products = Product::whereIn('id',$productIds)->where('status',1)->latest()->take(100)->get();
+        return view('website.product.allproduct', [
+            'products' => $products,
+            'categories' => Category::where('status',1)->latest()->get(),
+            'subcategories' => SubCategory::where('status',1)->latest()->get(),
+            'brands' => Brand::where('status',1)->latest()->get(),
+            'colors' => Color::where('status',1)->latest()->get(),
+            'sizes' => Size::where('status',1)->latest()->get(),
+        ]);
+    }
+    public function loadMoreProducts(Request $request){
+        $offset = $request->input('offset', 0);
+        $products = Product::skip($offset)
+            ->take(100)
+            ->get();
+         $number = $products->count();
+        $viewContent = view('website.product.loadmore', compact('products'))->render();
+        return response()->json([
+            'view' => $viewContent,  // Rendered HTML view
+            'number' => $number      // Number of products loaded
         ]);
     }
     public function productDetails($slug)
@@ -131,7 +169,9 @@ class EvaraController extends Controller
     public function productByTag($tag)
     {
         try {
-            $products = Product::where('tags','LIKE','%'.$tag.'%')->paginate(100);
+            $tagId = Tag::where('slug',$tag)->first()->id;
+            $productIds = ProductTag::where('tag_id',$tagId)->get('product_id');
+            $products = Product::whereIn('id',$productIds)->paginate(100);
 
             return view('website.product.allproduct', [
                 'products' => $products,
@@ -153,9 +193,9 @@ class EvaraController extends Controller
 //        try {
         $query = Product::query();
 
-        /*$query->when($request->keyword, function ($q, $keyword) {
-            $q->where('name','%like%', $keyword);
-        });*/
+        $query->when($request->keyword, function ($q, $keyword) {
+            $q->where('name', 'LIKE', "%{$keyword}%");
+        });
         $query->when($request->category_id, function ($q, $categoryId) {
             $q->where('category_id', $categoryId);
         });
@@ -178,12 +218,32 @@ class EvaraController extends Controller
                 ->pluck('product_id'); // Collect only product IDs
             $q->whereIn('id', $productIds);
         });
+        $query->when($request->sort, function ($q, $sort) {
+            switch($sort) {
+                case 'latest':
+                    $q->latest();
 
+                case 'oldest':
+                    $q->orderBy('id', 'asc');
+
+                case 'a-to-z':
+                    $q->orderBy('name', 'asc');
+                case 'z-to-a':
+                    $q->orderBy('name', 'desc');
+                case 'low-to-high':
+                    $q->orderBy('selling_price', 'asc');
+                case 'high-to-low':
+                    $q->orderBy('selling_price', 'desc');
+                default:
+                    $q->latest();
+            }
+
+        });
         $query->when($request->min_price && $request->max_price, function ($query) use ($request) {
             $query->whereBetween('regular_price', [$request->min_price, $request->max_price]);
         });
 
-        $products = $query->latest()->paginate(48);
+        $products = $query->paginate(100);
 
             /*$perPage = 100;
             $offset = isset($all_data->page) ? $all_data->page : 0;
@@ -207,17 +267,7 @@ class EvaraController extends Controller
     public function getSubCategoryByCategory(Request $request)
     {
         $subcategories = Subcategory::where('category_id', $request->category_id)->get();
-//        $subCategories = SubCategory::whereIn('category_id',$categoryIds)->get();
-//        $subCategorySlug = null;
         return response()->json($subcategories);
-        /*$categories = Category::whereIn('id',$request->id)->get('id');
-        $categoryIds = array();
-        foreach ($categories as $category){
-            array_push($categoryIds,$category->id);
-        }
-        $subCategories = SubCategory::whereIn('category_id',$categoryIds)->get();
-        $subCategorySlug = null;
-        return view('website.filter.ajaxsubcategory',compact('subCategories','subCategorySlug'));*/
     }
     public function coupons(){
 //        try {

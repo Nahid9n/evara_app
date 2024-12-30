@@ -200,7 +200,7 @@ class Product extends Model
     {
         return $this->hasMany(ProductSize::class);
     }
-    public function taggs()
+    public function tagss()
     {
         return $this->hasMany(ProductTag::class);
     }

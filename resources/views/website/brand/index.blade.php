@@ -1,198 +1,164 @@
 @extends('website.master')
 @section('title', 'Product Brand Page')
 @section('body')
-    <div class="page-header breadcrumb-wrap">
+    <section class="mt-2 mb-50">
         <div class="container">
-            <div class="breadcrumb">
-                <a href="{{route('home')}}" rel="nofollow">Home</a>
-                <span></span> Shop
-            </div>
-        </div>
-    </div>
-    <section class="mt-2 mb-2">
-        <div class="container">
-            <div class="row flex-row-reverse">
-                <div class="col-lg-12">
-                    <a class="shop-filter-toogle" href="#">
-                        <span class="fi-rs-filter mr-5"></span>
-                        Filters
-                        <i class="fi-rs-angle-small-down angle-down"></i>
-                        <i class="fi-rs-angle-small-up angle-up"></i>
-                    </a>
-                    <div class="shop-product-fillter-header">
-                        <div class="row">
-                            <div class="col-lg-2 col-md-4 mb-lg-0 mb-md-5 mb-sm-5">
-                                <h5 class="section-title style-1 wow fadeIn animated">Category</h5>
-                                @foreach($categories as $category)
-                                    <div class="form-check">
-                                        <input type="checkbox" id="{{ $category->id }}" onclick="filter(); setSubCategory({{ $category->id }})" class="form-check-input categoryCheckBox"  value="{{ $category->id }}">
-                                        <label class="form-check-label">{{ $category->name }}</label>
-                                    </div>
-                                @endforeach
-                            </div>
-                            <div class="col-lg-2 col-md-4 mb-lg-0 mb-md-5 mb-sm-5" id="subCategoryId">
-                                <h5 class="section-title style-1 wow fadeIn animated">Select Your Choice</h5>
-                                <p>please select a category</p>
-                            </div>
-                            <div class="col-lg-2 col-md-4 mb-lg-0 mb-md-5 mb-sm-5">
-                                <h5 class="section-title style-1 wow fadeIn animated">Brand</h5>
-                                @foreach($brands as $brand)
-                                    <div class="form-check">
-                                        <input type="checkbox" id="{{ $brand->id }}" onclick="filter()" {{$brandSlug == $brand->slug ? 'checked':''}} class="form-check-input brandCheckBox" value="{{ $brand->id }}">
-                                        <label class="form-check-label">{{ $brand->name }}</label>
-                                    </div>
-                                @endforeach
-                            </div>
-                            <div class="col-lg-2 col-md-4 mb-lg-0 mb-md-5 mb-sm-5">
-                                <h5 class="section-title style-1 wow fadeIn animated">Color</h5>
-                                @foreach($colors as $color)
-                                    <div class="form-check">
-                                        <input type="checkbox" id="{{ $color->id }}" onclick="filter()" class="form-check-input colorCheckBox" value="{{ $color->id }}">
-                                        <label class="form-check-label">{{ $color->name }}</label>
-                                    </div>
-                                @endforeach
-                            </div>
-                            <div class="col-lg-2 col-md-4 mb-lg-0 mb-md-5 mb-sm-5">
-                                <h5 class="section-title style-1 wow fadeIn animated">sizes</h5>
-                                @foreach($sizes as $size)
-                                    <div class="form-check">
-                                        <input type="checkbox" id="{{ $size->id }}" onclick="filter()" class="form-check-input sizeCheckBox" value="{{ $size->id }}">
-                                        <label class="form-check-label">{{ $size->code }}</label>
-                                    </div>
-                                @endforeach
-                            </div>
-                            <div class="col-lg-2 col-md-4 mb-lg-0 mb-md-5 mb-sm-5">
-                                <h5 class="widget-title mb-10">Fill by price</h5>
-                                <div class="form-group col-md-12">
-                                    <div class="range-group">
-                                        <input type="range" class="form-range-control bg-secondary" id="maxRange" min="0" max="10000" value="" onmousemove="inputRange1.value=value" onchange="filter()">
-                                        <output class="border range-group-text br-5 p-2 ms-4" id="inputRange1"></output>
-                                    </div>
-                                </div>
-                            </div>
-                            {{--<div class="col-lg-2 col-md-4 mb-lg-0 mb-md-5 mb-sm-5">
-                               <h5 class="mb-20">By Review</h5>
-                               <div class="product-rate-cover">
-                                   <div class="product-rate d-inline-block">
-                                       <div class="product-rating" style="width:100%">
-                                       </div>
-                                   </div>
-                                   <span class="font-small ml-5 text-muted"> (25)</span>
-                               </div>
-                               <div class="product-rate-cover">
-                                   <div class="product-rate d-inline-block">
-                                       <div class="product-rating" style="width:80%">
-                                       </div>
-                                   </div>
-                                   <span class="font-small ml-5 text-muted"> (25)</span>
-                               </div>
-                               <div class="product-rate-cover">
-                                   <div class="product-rate d-inline-block">
-                                       <div class="product-rating" style="width:60%">
-                                       </div>
-                                   </div>
-                                   <span class="font-small ml-5 text-muted"> (25)</span>
-                               </div>
-                               <div class="product-rate-cover">
-                                   <div class="product-rate d-inline-block">
-                                       <div class="product-rating" style="width:40%">
-                                       </div>
-                                   </div>
-                                   <span class="font-small ml-5 text-muted"> (25)</span>
-                               </div>
-                               <div class="product-rate-cover">
-                                   <div class="product-rate d-inline-block">
-                                       <div class="product-rating" style="width:20%">
-                                       </div>
-                                   </div>
-                                   <span class="font-small ml-5 text-muted"> (25)</span>
-                               </div>
-                           </div>--}}
-
-                        </div>
+            <div class="row">
+                <div class="col-md-2 col-6 my-2">
+                    <select name="category" class="p-2" id="categoryFilter">
+                        <option value="">All Categories</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2 col-6 my-2">
+                    <div class="" id="">
+                        <select name="" class="p-2" id="subCategoryId">
+                            <option value="">please select a category</option>
+                        </select>
                     </div>
                 </div>
+                <div class="col-md-2 col-6 my-2">
+                    <select name="" class="p-2" id="brandFilter">
+                        <option value="">All Brands</option>
+                        @foreach($brands as $brand)
+                            <option {{$brandSlug == $brand->slug ? 'selected':''}} value="{{ $brand->id }}">{{ $brand->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-1 col-6 my-2">
+                    <select name="" class="p-2" id="colorFilter">
+                        <option value="">All Colors</option>
+                        @foreach($colors as $color)
+                            <option value="{{ $color->id }}">{{ $color->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-1 col-6 my-2">
+                    <select name="" class="p-2" id="sizeFilter">
+                        <option value="">All Sizes</option>
+                        @foreach($sizes as $size)
+                            <option value="{{ $size->id }}">{{ $size->code }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-1 col-6 my-2">
+                    <select name="" class="p-2" id="sortByFilter">
+                        <option value="">Sort By</option>
+                        <option value="latest">Latest</option>
+                        <option value="oldest">Oldest</option>
+                        <option value="a-to-z">A to Z</option>
+                        <option value="z-to-a">Z to A</option>
+                        <option value="low-to-high">Low to High</option>
+                        <option value="high-to-low">High to Low</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-12 my-2 d-flex">
+                    <input type="number" id="min_price" placeholder="Min Price">
+                    <input type="number" id="max_price" placeholder="Max Price">
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-lg-12">
-                    <div class="shop-product-fillter">
-                        <div class="sort-by-product-area">
-                            <div class="sort-by-cover mr-10">
-                                <div class="sort-by-product-wrap">
-                                    <div class="sort-by">
-                                        <span><i class="fi-rs-apps"></i>Show:</span>
-                                    </div>
-                                    <div class="sort-by-dropdown-wrap">
-                                        <span> 50 <i class="fi-rs-angle-small-down"></i></span>
-                                    </div>
-                                </div>
-                                <div class="sort-by-dropdown">
-                                    <ul>
-                                        <li><a class="active" href="#">50</a></li>
-                                        <li><a href="#">100</a></li>
-                                        <li><a href="#">150</a></li>
-                                        <li><a href="#">200</a></li>
-                                        <li><a href="#">All</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="sort-by-cover">
-                                <div class="sort-by-product-wrap">
-                                    <div class="sort-by">
-                                        <span><i class="fi-rs-apps-sort"></i>Sort by:</span>
-                                    </div>
-                                    <div class="sort-by-dropdown-wrap">
-                                        <span> Featured <i class="fi-rs-angle-small-down"></i></span>
-                                    </div>
-                                </div>
-                                <div class="sort-by-dropdown">
-                                    <ul>
-                                        <li><a class="active" href="#">Featured</a></li>
-                                        <li><a href="#">Price: Low to High</a></li>
-                                        <li><a href="#">Price: High to Low</a></li>
-                                        <li><a href="#">Release Date</a></li>
-                                        <li><a href="#">Avg. Rating</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="row product-grid-3" id="filterProducts">
                         @foreach($products as $key => $product)
-                            <div class="col-lg-3 col-md-4 col-12 shadow mb-2">
-                                <div class="product-cart-wrap mb-30 h-100" style="height: 500px">
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-6">
+                                <div class="product-cart-wrap mb-30 productartheight"  style="height: auto;">
                                     <div class="product-img-action-wrap">
                                         <div class="product-img product-img-zoom">
                                             <a href="{{ route('product-detail',$product->slug) }}">
-                                                <img class="default-img" src="{{asset($product->image)}}" height="300" alt="">
-                                                <img class="hover-img" src="{{asset($product->back_image)}}" alt="">
+                                                @if($product->image != '')
+                                                    <img class="default-img imageHeight" src="{{asset($product->image)}}" width="100" alt="">
+                                                @else
+                                                    <img src="{{asset('/')}}no_image.jpg" class="p-0 default-img imageHeight" width="100" alt="" />
+                                                @endif
+                                                @if($product->back_image != '')
+                                                    <img class="hover-img imageHeight" src="{{asset($product->back_image)}}" width="100" alt="">
+                                                @else
+                                                    <img src="{{asset('/')}}no_image.jpg" class="hover-img imageHeight" width="100" alt="" />
+                                                @endif
                                             </a>
                                         </div>
-                                        <div class="product-action-1">
-                                            <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#featuredViewModal{{$key}}"><i class="fi-rs-eye"></i></a>
+                                        <div class="product-action-1 d-flex">
+                                            <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#latestViewModal{{ $rand = rand() }}"><i class="fi-rs-eye"></i></a>
+                                            <form action="{{route('cart.ad')}}" method="post" class="addTocart" id="addToCart{{$key}}">
+                                                @csrf
+                                                <input hidden type="text" name="product_id" value="{{ $product->id }}">
+                                                <div hidden class="attr-detail attr-color mb-15">
+                                                    <strong class="mr-10">Color</strong>
+                                                    <ul class="list-filter color-filter">
+                                                        <li>
+                                                            <select class="form-control" hidden name="color" id="">
+                                                                @foreach($product->colors as $key => $color)
+                                                                    <option {{$key == 0 ? 'selected':''}} value="{{$color->color->name}}" style="background-color: {{ $color->color->code }}">{{ $color->color->name ?? '' }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div hidden class="attr-detail attr-size">
+                                                    <strong class="mr-10">Size</strong>
+                                                    <ul class="list-filter size-filter font-small">
+                                                        <li>
+                                                            <select class="form-control" hidden name="size" id="">
+                                                                @foreach($product->sizes as $key1 => $size)
+                                                                    <option {{$key == 0 ? 'selected':''}} value="{{$size->size->name}}" >{{ $size->size->name ?? '' }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div hidden class="bt-1 border-color-1 mt-30 mb-30"></div>
+                                                <div class="">
+                                                    <div class="row">
+                                                        <input type="number" hidden name="qty" class="form-control w-100" value="1" min="1"  max="{{ $product->stock_amount }}"/>
+                                                    </div>
+                                                </div>
+                                                <button aria-label="Add To Cart" class="action-btn hover-up me-1"><i class="fi-rs-shopping-bag-add"></i></button>
+                                            </form>
                                             <a aria-label="Add To Wishlist" class="action-btn hover-up wishlist" id="wishlist{{$key}}"  href="#{{ route('wishlist.ad',$product->id) }}" data-value="{{$product->id}}"><i class="fi-rs-heart"></i></a>
                                         </div>
-                                        <div class="product-badges product-badges-position product-badges-mrg">
-                                            <span class="hot">25%</span>
+                                        @php
+                                            $badges = [];
+                                            if ($product->discount_banner != 2) {
+                                                if ($product->discount_banner == 'save-percentage'){
+                                                    $badges[] = 'Save('.$product->discount_value.'%)';
+                                                }
+                                                if ($product->discount_banner == 'save-tk'){
+                                                    $badges[] = 'Save('.$product->discount_value.'Tk)';
+                                                }
+                                                if ($product->discount_banner == 'discount-percentage'){
+                                                    $badges[] = 'Discount('.$product->discount_value.'%)';
+                                                }
+                                                if ($product->discount_banner == 'discount-tk'){
+                                                    $badges[] = 'Discount('.$product->discount_value.'Tk)';
+                                                }
+                                            }
+                                            if ($product->free_delivery == 1) {
+                                                $badges[] = 'Free Delivery';
+                                            }
+                                        @endphp
+                                        <div class="product-badges product-card product-badges-position  product-badges-mrg" data-product-id="{{ $product->id }}" data-badges="{{ json_encode($badges) }}">
+                                            <span class="hot bg-primary fw-bold badge" id="product-badge-{{ $product->id }}">new</span>
+                                        </div>
+                                        <div class="product-badges product-badges-position-right text-center product-badges-mrg">
+                                            <span class="hot p-1 rounded-3 {{ $product->stock_amount >= 11 ? 'bg-success text-dark':'bg-danger text-white' }}"> {{ $product->stock_visibility == 1 ? $product->stock_amount :''}} {{ $product->stock_amount >= 11 ? 'In Stock ':'Stock Out' }}</span>
                                         </div>
                                     </div>
                                     <div class="product-content-wrap">
-                                        <h2><a href="{{ route('product-detail',$product->slug) }}">{{ truncateWords($product->name, 14) }}</a></h2>
-                                        <div class="rating-result" title="90%">
-                                            <span>
-                                                <span>90%</span>
-                                            </span>
-                                        </div>
-                                        <div class="product-price">
-                                            <span>{{$product->selling_price}} </span>
-                                            <span class="old-price">{{$product->regular_price}}</span>
-                                        </div>
                                         <div class="product-category">
-                                            <a href="{{route('product-category',$product->category->slug)}}">category : {{$product->category->name}}</a><br>
-                                            <a href="{{route('product-brand',$product->brand->slug)}}">brand : {{$product->brand->name}}</a>
+                                            <a href="{{route('product-category',$product->category->slug)}}">{{$product->category->name}}</a>
+                                        </div>
+                                        <h2><a href="{{ route('product-detail',$product->slug) }}">{{ \Illuminate\Support\Str::limit($product->name, 85)}}</a></h2>
+                                        <div class="product-price">
+                                            <span>৳ {{$product->selling_price}}</span>
+                                            <span class="old-price">৳ {{$product->regular_price}}</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal fade custom-modal" id="featuredViewModal{{$key}}" tabindex="-1" aria-labelledby="latestViewModalLabel" aria-hidden="true">
+                            <div class="modal fade custom-modal" id="latestViewModal{{$rand}}" tabindex="-1" aria-labelledby="latestViewModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -277,7 +243,6 @@
                                                                 <ul class="list-filter color-filter">
                                                                     <li>
                                                                         <select class="form-control" name="color" id="">
-                                                                            <option label="" selected disabled>select color</option>
                                                                             @foreach($product->colors as $key => $color)
                                                                                 <option value="{{$color->color->name}}" style="background-color: {{ $color->color->code }}">{{ $color->color->name ?? '' }}</option>
                                                                             @endforeach
@@ -290,7 +255,6 @@
                                                                 <ul class="list-filter size-filter font-small">
                                                                     <li>
                                                                         <select class="form-control" name="size" id="">
-                                                                            <option label="" selected disabled>select size</option>
                                                                             @foreach($product->sizes as $key1 => $size)
                                                                                 <option value="{{$size->size->name}}" >{{ $size->size->name ?? '' }}</option>
                                                                             @endforeach
@@ -324,16 +288,39 @@
                                 </div>
                             </div>
                         @endforeach
-                        <div class="pagination-area text-center mt-15 mb-sm-5 mb-lg-0">
-                            {{ $products->links() }}
-                        </div>
+                    </div>
+                    <!-- Load More Button -->
+                    <div class="text-center mt-4">
+                        <button id="load-more" class="btn btn-primary">Load More</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
-
-
-
 @endsection
+@push('js')
+    <script>
+        $(document).ready(function() {
+            let offset = {{ $products->count() }}; // Start from the number of products already loaded.
+
+            $('#load-more').click(function() {
+                $.ajax({
+                    url: '{{route('product.loadMore')}}',
+                    method: 'GET',
+                    data: { offset: offset },
+                    success: function(response) {
+                        if(response.number > 0) {
+                            $('#filterProducts').append(response.view);
+                            offset = offset + response.number;
+                        } else {
+                            $('#load-more').hide(); // Hide button if no more products are available
+                        }
+                    },
+                    error: function() {
+                        alert('Error loading products.');
+                    }
+                });
+            });
+        });
+    </script>
+@endpush

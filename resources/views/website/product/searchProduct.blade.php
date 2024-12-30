@@ -369,4 +369,75 @@
             // });
         });
     </script>
+    <script>
+        $(document).ready(function() {
+            $('.wishlist').on('click', function(e) {
+                e.preventDefault();
+                var id = $(this).data('value');
+                $.ajax({
+                    url: "{{ route('wishlist.ad') }}",
+                    type: "GET",
+                    dataType: 'json',
+                    data: {
+                        product_id: id,
+                    },
+                    success: function(res) {
+                        if (res.status !== false) {
+                            toastr.success(res.message);
+                            $('#wishlistCartCount').empty('');
+                            $('#wishlistCartCount').append('<span class="old-price"> '+res.count+'</span>');
+                        } else {
+                            toastr.error(res.error);
+                        }
+                    },
+
+                    error: function(xhr, status, error) {
+                        console.error(xhr);
+                    }
+                });
+            });
+
+            $(document).on('submit', '.addTocart', function(e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                var url = $(this).attr('action');
+                $.ajax({
+                    url: url,
+                    type: "post",
+                    dataType: 'json',
+                    data: formData,
+                    success: function(res) {
+                        if (res.status !== false) {
+                            toastr.success(res.message);
+                            $('#CartItemCount').empty('');
+                            $('#CartItemCount').append('<span class="old-price"> '+res.count+'</span>');
+                            getCartDetails();
+
+                        } else {
+                            toastr.error(res.error);
+                        }
+                    },
+
+                    error: function(xhr, status, error) {
+                        console.error(xhr);
+                    }
+                });
+            });
+            function getCartDetails() {
+                $.ajax({
+                    url: "{{ route('get-cart-details') }}",
+                    type: "GET",
+                    dataType: 'html',
+                    success: function(res) {
+                        $('#cartItems').empty('');
+                        $('#cartItems').append(res);
+                    }
+                });
+            }
+
+
+
+
+        });
+    </script>
 @endpush

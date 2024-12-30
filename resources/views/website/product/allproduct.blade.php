@@ -47,14 +47,14 @@
                     <select name="" class="p-2" id="sortByFilter">
                         <option value="">Sort By</option>
                         <option value="latest">Latest</option>
-                        <option value="latest">Oldest</option>
+                        <option value="oldest">Oldest</option>
                         <option value="a-to-z">A to Z</option>
                         <option value="z-to-a">Z to A</option>
                         <option value="low-to-high">Low to High</option>
                         <option value="high-to-low">High to Low</option>
                     </select>
                 </div>
-                <div class="col-md-3 col-6 my-2 d-flex">
+                <div class="col-md-3 col-12 my-2 d-flex">
                     <input type="number" id="min_price" placeholder="Min Price">
                     <input type="number" id="max_price" placeholder="Max Price">
                 </div>
@@ -288,12 +288,39 @@
                                 </div>
                             </div>
                         @endforeach
-                        <div class="pagination-area text-center mt-15 mb-sm-5 mb-lg-0">
-                            {{ $products->links() }}
-                        </div>
+                    </div>
+                    <!-- Load More Button -->
+                    <div class="text-center mt-4">
+                        <button id="load-more" class="btn btn-primary">Load More</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 @endsection
+@push('js')
+    <script>
+        $(document).ready(function() {
+            let offset = {{ $products->count() }}; // Start from the number of products already loaded.
+
+            $('#load-more').click(function() {
+                $.ajax({
+                    url: '{{route('product.loadMore')}}',
+                    method: 'GET',
+                    data: { offset: offset },
+                    success: function(response) {
+                        if(response.number > 0) {
+                            $('#filterProducts').append(response.view);
+                            offset = offset + response.number;
+                        } else {
+                            $('#load-more').hide(); // Hide button if no more products are available
+                        }
+                    },
+                    error: function() {
+                        alert('Error loading products.');
+                    }
+                });
+            });
+        });
+    </script>
+@endpush

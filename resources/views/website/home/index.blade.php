@@ -408,7 +408,10 @@
     </section>
     <section class="section-padding">
         <div class="container wow fadeIn animated">
-            <h3 class="section-title mb-20"><span>Featured</span> Brands</h3>
+            <h3 class="section-title mb-20">
+                <span>Featured</span> Brands
+                <a class="d-grid justify-content-end" style="font-size: 16px;" href="{{route('all-brand')}}">See All</a>
+            </h3>
             <div class="large-12 columns">
                 <div class="owl-carousel owl-theme">
                     @foreach($brands as $brand)
