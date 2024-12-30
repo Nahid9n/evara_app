@@ -3,10 +3,10 @@
 @if(\Request::route()->getname() == "home")
 @if($popup)
 <!-- Modal -->
-<div class="modal fade custom-modal" id="onloadModal" tabindex="-1" aria-labelledby="onloadModalLabel" aria-hidden="true">
+<div  class="modal fade custom-modal" id="onloadModal" tabindex="-1" aria-labelledby="onloadModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="btn-close" id="close-popup" data-bs-dismiss="modal" aria-label="Close"></button>
             <div class="modal-body">
                 <div class="deal" style="background-image: url('{{asset($popup->popup_image)}}')">
                     <div class="deal-top">
@@ -73,7 +73,7 @@
                                                 class="fi-rs-angle-small-down"></i></a>
                                         <ul class="language-dropdown">
                                             <li><a href="{{ route('customer.dashboard') }}"><i class="fi-rs-home"></i>Dashboard</a></li>
-                                            <li><a href="{{route('customer-logout')}}"><i class="fi-rs-lock"></i>Logout</a>
+                                            <li><a href="{{route('customer-logout')}}" onclick="return confirm('are you sure to logout ?')"><i class="fi-rs-lock"></i>Logout</a>
                                             </li>
                                         </ul>
                                     </li>
@@ -103,7 +103,7 @@
                 <div class="header-right">
                     <div class="search-style-2">
                         <form action="#">
-                            <input class="searchText" id="globalSearch" type="text" placeholder="Search for items..."/>
+                            <input class="" id="globalSearch" type="text" placeholder="Search for items..."/>
                         </form>
                     </div>
                     <div class="header-action-right">
@@ -236,7 +236,7 @@
                                 </li>
                                 @foreach($highlights as $key => $highlight)
                                 <li>
-                                    <a class="active" href="{{route('product-all')}}">{{$highlight->name}}</a>
+                                    <a class="active" href="{{route('highlight-product-all',$highlight->name)}}">{{ $highlight->name }}</a>
                                 </li>
                                 @endforeach
                                 <li><a href="#">policies<i class="fi-rs-angle-down"></i></a>
@@ -377,7 +377,7 @@
         <div class="mobile-header-content-area">
             <div class="mobile-search search-style-3 mobile-header-border form-group">
                 <form action="#">
-                    <input class="searchText" type="text" placeholder="Search for items…">
+                    <input class="" id="globalSearchMobile" type="text" placeholder="Search for items…">
                 </form>
             </div>
             <div class="mobile-menu-wrap mobile-header-border">
@@ -397,7 +397,11 @@
                 <nav>
                     <ul class="mobile-menu">
                         <li class=""><a href="{{route('home')}}">Home</a></li>
-                        <li class=""><a href="{{route('product-all')}}">Products</a></li>
+                        @foreach($highlights as $key => $highlight)
+                            <li>
+                                <a class="active" href="{{route('highlight-product-all',$highlight->name)}}">{{ $highlight->name }}</a>
+                            </li>
+                        @endforeach
                         <li class="menu-item-has-children"><span class="menu-expand"></span><a class="active" href="#">Policies</a>
                             <ul class="dropdown">
                                 @foreach($pages as $page)
@@ -407,7 +411,6 @@
                                 @endforeach
                             </ul>
                         </li>
-                        <li class=""><a href="{{route('coupons')}}">Coupon</a></li>
                     </ul>
                 </nav>
                 <!-- mobile menu end -->
@@ -419,7 +422,7 @@
                                 class="fi-rs-user"></i> {{auth()->user()->name}} </a>
                         <ul class="language-dropdown">
                             <li><a href="{{ route('customer.dashboard') }}"><i class="fi-rs-home"></i> Dashboard</a></li>
-                            <li><a href="{{route('customer-logout')}}"><i class="fi-rs-lock"></i> Logout</a>
+                            <li><a href="{{route('customer-logout')}}" onclick="return confirm('are you sure to logout ?')"><i class="fi-rs-lock"></i> Logout</a>
                             </li>
                         </ul>
                     @else

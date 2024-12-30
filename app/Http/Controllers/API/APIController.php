@@ -24,10 +24,10 @@ class APIController extends Controller
 
     public function getProductBySearchText(Request $request)
     {
-        $searchText   = $_GET['search_text'];
+        $searchText   = $request->search_text;
         $query = Product::query();
 
-        $query->when($this->searchText, function ($q, $searchText) {
+        $query->when($searchText, function ($q, $searchText) {
             $q->where('name', 'LIKE', "%{$searchText}%");
         });
 

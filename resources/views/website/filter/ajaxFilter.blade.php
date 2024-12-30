@@ -1,5 +1,5 @@
 <div class="totall-product text-center">
-    <p> We found <strong class="text-brand" id="countProduct">{{ count($products) }}</strong> items for you!</p>
+    <p> We found <strong class="text-brand" id="countProduct">{{ $products->count() }}</strong> items for you!</p>
 </div>
 <hr>
 @foreach($products as $key => $product)
@@ -108,7 +108,6 @@
         $(document).ready(function() {
             $('.wishlist').on('click', function(e) {
                 e.preventDefault();
-                console.log('adsad asd asdwa')
                 var id = $(this).data('value');
                 $.ajax({
                     url: "{{ route('wishlist.ad') }}",
@@ -132,6 +131,7 @@
                     }
                 });
             });
+
             $(document).on('submit', '.addTocart', function(e) {
                 e.preventDefault();
                 var formData = $(this).serialize();
@@ -169,6 +169,10 @@
                     }
                 });
             }
+
+
+
+
         });
     </script>
 @endpush

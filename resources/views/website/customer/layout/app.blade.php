@@ -153,11 +153,11 @@
     }
 </style>
 <section class="pt-50 pb-50">
-    <div class="container-fluid">
+    <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-9">
                 <div class="row">
-                    <div class="col-md-3">
+                    {{--<div class="col-md-3">
                         <div class="dashboard-menu">
                             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                                 <span  data-bs-toggle="collapse" data-bs-target="#navbarNav" class="navbar-toggler navbar-toggler-icon"></span>
@@ -166,7 +166,7 @@
                                 </div>
                             </nav>
                         </div>
-                    </div>
+                    </div>--}}
                     <div class="col-md-9">
                         @yield('body')
                     </div>
@@ -176,11 +176,7 @@
     </div>
 </section>
 
-<!--footer-area start-->
-@include('website.includes.footer')
-<!--footer-area end-->
 
-@include('website.includes.script')
 <!-- Modal -->
 <div class="modal fade" id="returnsProducts" tabindex="-1" aria-labelledby="returnsProductsLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -219,7 +215,11 @@
     <div class="modal-content" id="productPopUpModalBody"></div>
 
 </div>
+<!--footer-area start-->
+@include('website.includes.footer')
+<!--footer-area end-->
 
+@include('website.includes.script')
 <script>
 
     function customerOrderFilter(data){

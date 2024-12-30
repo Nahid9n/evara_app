@@ -1,30 +1,33 @@
-@extends('website.customer.layout.app')
+@extends('website.master')
 @section('title','Customer Address Dashboard')
 @section('body')
-    <div class="">
-        <div class="row my-5">
-            <div class="col-lg-6 border-5 ">
-                <h4>Billing Address: </h4>
-                <hr class="border-5 text-dark">
-                <p><b class="fw-bold">Address 1 : </b>{{$billings->address_one}}</p>
-                <p><b class="fw-bold">Address 2 : </b>{{$billings->address_two}}</p>
-                <p><b class="fw-bold">city : </b>{{$billings->city}}</p>
-                <p><b class="fw-bold">state : </b>{{$billings->state}}</p>
-                <p><b class="fw-bold">zip : </b>{{$billings->zip}}</p>
-                <p><b class="fw-bold">country : </b>{{$billings->country}}</p>
-            </div>
-            <div class="col-lg-6 border-5 ">
-                <h4>Shipping Address: </h4>
-                <hr class="border-5 text-dark">
-                <p><b class="fw-bold">Address 1 : </b>{{$shippings->address_one}}</p>
-                <p><b class="fw-bold">Address 2 : </b>{{$shippings->address_two}}</p>
-                <p><b class="fw-bold">city : </b>{{$shippings->city}}</p>
-                <p><b class="fw-bold">state : </b>{{$shippings->state}}</p>
-                <p><b class="fw-bold">zip : </b>{{$shippings->zip}}</p>
-                <p><b class="fw-bold">country : </b>{{$shippings->country}}</p>
-            </div>
-        </div>
-        <div class="row">
+    <section class="mt-2 mb-50">
+        <div class="container">
+            @include('website.customer.layout.sidebar')
+            <div class="">
+                <div class="row my-5">
+                    <div class="col-lg-6 border-5 ">
+                        <h4>Billing Address: </h4>
+                        <hr class="border-5 text-dark">
+                        <p><b class="fw-bold">Address 1 : </b>{{$billings->address_one}}</p>
+                        <p><b class="fw-bold">Address 2 : </b>{{$billings->address_two}}</p>
+                        <p><b class="fw-bold">city : </b>{{$billings->city}}</p>
+                        <p><b class="fw-bold">state : </b>{{$billings->state}}</p>
+                        <p><b class="fw-bold">zip : </b>{{$billings->zip}}</p>
+                        <p><b class="fw-bold">country : </b>{{$billings->country}}</p>
+                    </div>
+                    <div class="col-lg-6 border-5 ">
+                        <h4>Shipping Address: </h4>
+                        <hr class="border-5 text-dark">
+                        <p><b class="fw-bold">Address 1 : </b>{{$shippings->address_one}}</p>
+                        <p><b class="fw-bold">Address 2 : </b>{{$shippings->address_two}}</p>
+                        <p><b class="fw-bold">city : </b>{{$shippings->city}}</p>
+                        <p><b class="fw-bold">state : </b>{{$shippings->state}}</p>
+                        <p><b class="fw-bold">zip : </b>{{$shippings->zip}}</p>
+                        <p><b class="fw-bold">country : </b>{{$shippings->country}}</p>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-lg-6">
                         <div class="card mb-3 mb-lg-0">
                             <div class="card-header">
@@ -108,5 +111,7 @@
                         </div>
                     </div>
                 </div>
-    </div>
+            </div>
+        </div>
+    </section>
 @endsection

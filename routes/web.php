@@ -59,7 +59,9 @@ Route::get('/', [EvaraController::class,'index'])->name('home');
 Route::get('/product-category/{slug}', [EvaraController::class,'category'])->name('product-category');
 Route::get('/product-sub-category/{slug}', [EvaraController::class,'subCategory'])->name('product-sub-category');
 Route::get('/product-brand/{slug}', [EvaraController::class,'productByBrand'])->name('product-brand');
+Route::get('/brands', [EvaraController::class,'allBrands'])->name('all-brand');
 Route::get('/product-all', [EvaraController::class,'allProduct'])->name('product-all');
+Route::get('/hightlighted-product-all/{tag}', [EvaraController::class,'allHighlightedProduct'])->name('highlight-product-all');
 Route::get('/product-detail/{slug}', [EvaraController::class,'productDetails'])->name('product-detail');
 Route::get('/product-by-tag/{tag}', [EvaraController::class,'productByTag'])->name('product-by-tag');
 Route::get('/coupons', [EvaraController::class, 'coupons'])->name('coupons');
@@ -86,6 +88,7 @@ Route::post('/new-customer',[CustomerAuthController::class,'newCustomer'])->name
 Route::get('/customer-logout',[CustomerAuthController::class,'logout'])->name('customer-logout');
 
 Route::get('/filter',[EvaraController::class,'filter'])->name('product.filter');
+Route::get('/load-more-products',[EvaraController::class,'loadMoreProducts'])->name('product.loadMore');
 Route::get('/get-sub-category-by-category-filter',[EvaraController::class,'getSubCategoryByCategory'])->name('get-sub-category-by-category-filter');
 
 

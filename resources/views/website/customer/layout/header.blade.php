@@ -220,7 +220,7 @@
                                                 class="fi-rs-angle-small-down"></i></a>
                                         <ul class="language-dropdown">
                                             <li><a href="{{ route('customer.dashboard') }}"><i class="fi-rs-home"></i>Dashboard</a></li>
-                                            <li><a href="{{route('customer-logout')}}"><i class="fi-rs-lock"></i>Logout</a>
+                                            <li><a href="{{route('customer-logout')}}" onclick="return confirm('are you sure to logout ?')"><i class="fi-rs-lock"></i>Logout</a>
                                             </li>
                                         </ul>
                                     </li>
@@ -554,7 +554,7 @@
                                 class="fi-rs-user"></i> {{auth()->user()->name}} </a>
                         <ul class="language-dropdown">
                             <li><a href="{{ route('customer.dashboard') }}"><i class="fi-rs-home"></i> Dashboard</a></li>
-                            <li><a href="{{route('customer-logout')}}"><i class="fi-rs-lock"></i> Logout</a>
+                            <li><a href="{{route('customer-logout')}}" onclick="return confirm('are you sure to logout ?')"><i class="fi-rs-lock"></i> Logout</a>
                             </li>
                         </ul>
                     @else
