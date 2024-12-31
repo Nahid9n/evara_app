@@ -22,11 +22,11 @@
                         @csrf
                         <div class="table-responsive">
                             <p class="text-center">{{session('message')}}</p>
-                            <table class="table shopping-summery text-center clean">
+                            <table class=" shopping-summery text-center clean">
                                 <thead>
                                 <tr class="main-heading">
                                     <th scope="col">Image</th>
-                                    <th scope="col">Name</th>
+                                    <th class="col-4" style="width: 500px;">Name</th>
                                     <th scope="col">Price</th>
                                     <th scope="col">Quantity</th>
                                     <th scope="col">Subtotal</th>
@@ -38,8 +38,8 @@
                                     @php(array_push($ids,$product->id))
                                     <tr>
                                         <td class="image product-thumbnail"><img src="{{ asset($product->image ?? '') }}" alt="#"></td>
-                                        <td class="product-des product-name">
-                                            <h5 class="product-name"><a href="{{route('product-detail',$product->product->slug)}}" target="_blank">{{ $product->name }}</a></h5>
+                                        <td class="" style="width: 500px;">
+                                            <h5 class=""><a href="{{route('product-detail',$product->product->slug)}}" target="_blank">{{ $product->name }}</a></h5>
                                             <p class="font-xs">
                                                 <span class="fw-bold">Color: </span> {{$product->color}} <br/>
                                                 <span class="fw-bold">Size: </span> {{$product->size}} <br/>

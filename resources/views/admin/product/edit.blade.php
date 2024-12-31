@@ -261,13 +261,12 @@
 
                                 </div>
 
-
                                 <div class="row d-flex form-group">
                                     <label for="highlights" class="col-md-3 form-label">Tags</label>
                                     <div class="col-md-9 form-group">
                                         <select multiple name="tags[]"  class="form-control select2 select2-show-search form-select" data-placeholder="Select Tags" >
                                             @foreach($tags as $tag)
-                                                <option value="{{$tag->id}}" @foreach($product->taggs as $singleTag ) @selected($tag->id == $singleTag->tag_id) @endforeach> {{$tag->name}} </option>
+                                                <option value="{{$tag->id}}" @foreach($product->tagss as $singleTag ) @selected($tag->id == $singleTag->tag_id) @endforeach> {{$tag->name}} </option>
                                             @endforeach
                                         </select>
                                     </div>

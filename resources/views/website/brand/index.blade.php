@@ -81,7 +81,7 @@
                                             </a>
                                         </div>
                                         <div class="product-action-1 d-flex">
-                                            <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#latestViewModal{{ $rand = rand() }}"><i class="fi-rs-eye"></i></a>
+{{--                                            <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#latestViewModal{{ $rand = rand() }}"><i class="fi-rs-eye"></i></a>--}}
                                             <form action="{{route('cart.ad')}}" method="post" class="addTocart" id="addToCart{{$key}}">
                                                 @csrf
                                                 <input hidden type="text" name="product_id" value="{{ $product->id }}">
@@ -158,7 +158,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal fade custom-modal" id="latestViewModal{{$rand}}" tabindex="-1" aria-labelledby="latestViewModalLabel" aria-hidden="true">
+                            {{--<div class="modal fade custom-modal" id="latestViewModal{{$rand}}" tabindex="-1" aria-labelledby="latestViewModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -286,7 +286,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>--}}
                         @endforeach
                     </div>
                     <!-- Load More Button -->

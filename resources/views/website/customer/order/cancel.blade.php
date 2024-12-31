@@ -34,7 +34,7 @@
                                         </span>
 
                                     </td>
-                                    <td>{{$order->total_price}} {{$currency->symbol ?? ''}}</td>
+                                    <td>{{$order->total_price}} ৳</td>
                                     <td>
                                         <a class="btn-small  d-block" href="{{--{{ route('customer-order-details', $order->order_code) }}--}}">View</a>
 

@@ -24,7 +24,7 @@
                 <div class="col-lg-12">
                     <div class="product-detail accordion-detail">
                         <div class="row mb-50">
-                            <div class="col-md-4 col-sm-12 col-xs-12">
+                            <div class="col-md-5 col-sm-12 col-xs-12">
                                 <div class="detail-gallery">
 {{--                                    <span class="zoom-icon"><i class="fi-rs-search"></i></span>--}}
                                     <div class="product-image-slider">
@@ -44,14 +44,14 @@
                                     <!-- THUMBNAILS -->
                                     <div class="slider-nav-thumbnails pl-15 pr-15">
                                         @foreach($product->productImages as $productImage)
-                                            <div><img src="{{asset($productImage->image)}}" alt="{{$productImage->alt_text}}" width="100" height="100"/></div>
+                                            <div><img src="{{asset($productImage->image)}}" alt="{{$productImage->alt_text}}" width="100%" height=""/></div>
                                         @endforeach
-                                        <div><img src="{{asset($product->image)}}" alt="{{$product->name}}" width="100" height="100"/></div>
-                                        <div><img src="{{asset($product->back_image)}}" alt="{{$product->name}}" width="100" height="100"/></div>
+                                        <div><img src="{{asset($product->image)}}" alt="{{$product->name}}" width="100%" height=""/></div>
+                                        <div><img src="{{asset($product->back_image)}}" alt="{{$product->name}}" width="100%" height=""/></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-8 col-sm-12 col-xs-12">
+                            <div class="col-md-7 col-sm-12 col-xs-12">
                                 <input type="hidden" name="id" value="{{ $product->id }}">
                                 <div class="detail-info">
                                     <h2 class="title-detail">{{ $product->name }}</h2>
@@ -367,52 +367,124 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mt-60">
-                            <div class="col-12">
-                                <h3 class="section-title style-1 mb-30">Related products</h3>
-                            </div>
-                            <div class="col-12">
-                                <div class="row related-products">
-                                    @foreach($category_products as $category_product)
-                                        <div class="col-lg-3 col-md-4 col-12 col-sm-6">
-                                            <div class="product-cart-wrap small hover-up">
+                        <section class="section-padding">
+                            <div class="container wow fadeIn animated">
+                                <h4 class="section-title mb-20"><span>You May </span> Also Like </h4>
+                                <div class="large-12 columns">
+                                    <div class="owl-carousel owl-theme">
+                                        @foreach($category_products as $key => $latestProduct)
+                                            <div class="item product-cart-wrap small hover-up" style="margin: 1px">
                                                 <div class="product-img-action-wrap">
                                                     <div class="product-img product-img-zoom">
-                                                        <a href="" tabindex="0">
-                                                            <img class="default-img"
-                                                                 src="{{asset( asset($category_product->image) )}}"
-                                                                 alt="">
-                                                            <img class="hover-img"
-                                                                 src="{{asset( $category_product->image )}}"
-                                                                 alt="">
+                                                        <a href="{{ route('product-detail',$latestProduct->slug)}}">
+                                                            @if(!empty($latestProduct->image))
+                                                                <img class="default-img imageHeight" src="{{asset($latestProduct->image)}}" width="100" alt="">
+                                                            @else
+                                                                <img src="{{asset('/')}}no_image.jpg" class="p-0 default-img imageHeight" width="100" alt="" />
+                                                            @endif
+                                                            @if(!empty($latestProduct->back_image))
+                                                                <img class="hover-img imageHeight" src="{{asset($latestProduct->back_image)}}" width="100" alt="">
+                                                            @else
+                                                                <img src="{{asset('/')}}no_image.jpg" class="hover-img imageHeight" width="100" alt="" />
+                                                            @endif
                                                         </a>
                                                     </div>
-                                                    <div class="product-action-1">
-                                                        <a aria-label="Quick view" class="action-btn small hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-search"></i></a>
-                                                        <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="shop-wishlist.html" tabindex="0"><i class="fi-rs-heart"></i></a>
-                                                        <a aria-label="Compare" class="action-btn small hover-up" href="shop-compare.html" tabindex="0"><i class="fi-rs-shuffle"></i></a>
+                                                    <div class="product-action-1  d-flex justify-content-center">
+                                                        <form action="{{route('cart.ad')}}" method="post" class="addTocart" id="addToCart">
+                                                            @csrf
+                                                            <input hidden type="text" name="product_id" value="{{ $latestProduct->id }}">
+                                                            <div hidden class="attr-detail attr-color mb-15">
+                                                                <strong class="mr-10">Color</strong>
+                                                                <ul class="list-filter color-filter">
+                                                                    <li>
+                                                                        <select class="form-control" hidden name="color" id="">
+                                                                            @foreach($latestProduct->colors as $key => $color)
+                                                                                <option {{$key == 0 ? 'selected':''}} value="{{$color->color->name}}" style="background-color: {{ $color->color->code }}">{{ $color->color->name ?? '' }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div hidden class="attr-detail attr-size">
+                                                                <strong class="mr-10">Size</strong>
+                                                                <ul class="list-filter size-filter font-small">
+                                                                    <li>
+                                                                        <select class="form-control" hidden name="size" id="">
+                                                                            @foreach($latestProduct->sizes as $key1 => $size)
+                                                                                <option {{$key1 == 0 ? 'selected':''}} value="{{$size->size->name}}" >{{ $size->size->name ?? '' }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div hidden class="bt-1 border-color-1 mt-30 mb-30"></div>
+                                                            <div class="">
+                                                                <div class="row">
+                                                                    <input type="number" hidden name="qty" class="form-control w-100" value="1" min="1"  max="{{ $latestProduct->stock_amount }}"/>
+                                                                </div>
+                                                            </div>
+                                                            <button aria-label="Add To Cart" class="action-btn hover-up me-1"><i class="fi-rs-shopping-bag-add"></i></button>
+                                                        </form>
+                                                        <a aria-label="Add To Wishlist" class="action-btn hover-up wishlist" id="wishlist{{$key}}"  href="#{{ route('wishlist.ad',$latestProduct->id) }}" data-value="{{$latestProduct->id}}"><i class="fi-rs-heart"></i></a>
                                                     </div>
-                                                    <div class="product-badges product-badges-position product-badges-mrg">
-                                                        <span class="hot">25%</span>
+                                                    @php
+                                                        $badgess = [];
+                                                        if ($latestProduct->discount_banner != 2) {
+                                                            if ($latestProduct->discount_banner == 'save-percentage'){
+                                                                $badgess[] = 'Save('.$latestProduct->discount_value.'%)';
+                                                            }
+                                                            if ($latestProduct->discount_banner == 'save-tk'){
+                                                                $badgess[] = 'Save('.$latestProduct->discount_value.'Tk)';
+                                                            }
+                                                            if ($latestProduct->discount_banner == 'discount-percentage'){
+                                                                $badgess[] = 'Discount('.$latestProduct->discount_value.'%)';
+                                                            }
+                                                            if ($latestProduct->discount_banner == 'discount-tk'){
+                                                                $badgess[] = 'Discount('.$latestProduct->discount_value.'Tk)';
+                                                            }
+                                                        }
+                                                        if ($latestProduct->free_delivery == 1) {
+                                                            $badgess[] = 'Free Delivery';
+                                                        }
+                                                    @endphp
+                                                    <div class="product-badges product-card product-badges-position  product-badges-mrg" data-product-id="{{ $latestProduct->id }}" data-badges="{{ json_encode($badgess) }}">
+                                                        @if(!empty($badgess))
+                                                            <span class="hot bg-primary fw-bold badge" id="product-badge-{{ $latestProduct->id }}"></span>
+                                                        @endif
+                                                    </div>
+                                                    <div class="product-badges product-badges-position-right text-center product-badges-mrg">
+                                                        <span class="hot p-1 rounded-3 {{ $latestProduct->stock_amount >= 5 ? 'bg-success':'bg-danger text-white' }}"> {{ $latestProduct->stock_visibility == 1 ? $latestProduct->stock_amount:''}} {{ $latestProduct->stock_amount >= 5 ? 'In Stock ':'Stock Out' }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="product-content-wrap">
-                                                    <h2><a href="#" tabindex="0">{{ $category_product->name }}</a></h2>
-                                                    <div class="rating-result" title="90%">
-                                                        <span>
-                                                        </span>
+
+                                                    <div class="product-category">
+                                                        <a href="{{route('product-category',$latestProduct->category->slug)}}">{{$latestProduct->category->name}}</a>
                                                     </div>
-                                                    <div class="product-price">
-                                                        <span>Tk. {{ $category_product->selling_price }} </span>
-                                                        <span class="old-price">Tk. {{ $category_product->regular_price }}</span>
+                                                    <h2 class="text-start"><a href="{{route('product-detail', $latestProduct->slug)}}">{{ \Illuminate\Support\Str::limit($latestProduct->name,60) }}</a></h2>
+                                                    <div class="product-price text-start">
+                                                        @if($latestProduct->discount_value)
+                                                            <span>
+                                        ৳ {{ $latestProduct->discount_type == 0 ? ($latestProduct->regular_price - $latestProduct->discount_value):'' }}
+                                                                {{ $latestProduct->discount_type == 1 ? number_format(($latestProduct->regular_price - (($latestProduct->regular_price * $latestProduct->discount_value) / 100)),2):'' }}
+                                    </span>
+                                                        @else
+                                                            <span class="">৳ {{ $latestProduct->selling_price }}</span>
+                                                        @endif
+                                                        @if($latestProduct->selling_price != $latestProduct->regular_price)
+                                                            <span class="old-price">৳ {{ $latestProduct->regular_price }}</span>
+                                                        @endif
+                                                        @if($latestProduct->discount_value)
+                                                            <small>(  {{ $latestProduct->discount_type == 0 ? '৳ ':'' }}{{ $latestProduct->discount_value }} {{ $latestProduct->discount_type == 1 ? '%':'' }}  Off)</small>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    @endforeach
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </section>
                         <div class="banner-img banner-big wow fadeIn f-none animated mt-50">
                             <img class="border-radius-10" src="{{asset('/')}}website/assets/imgs/banner/banner-4.png" alt="">
                             <div class="banner-text">

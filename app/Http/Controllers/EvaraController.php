@@ -157,7 +157,7 @@ class EvaraController extends Controller
                 'category_products' => Product::where('category_id',$product->category_id)
                     ->orderBy('id','desc')
                     ->take(4)
-                    ->get(['id','name','slug','image','selling_price','regular_price']),
+                    ->get(),
                 'discount'  => $discount,
             ]);
         }

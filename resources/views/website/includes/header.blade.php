@@ -26,8 +26,8 @@
 @endif
 @endif
 
-<header class="header-area header-style-1 header-height-2 " style="background-color: #fcfcfc">
-    <div class="header-top header-top-ptb-1 d-none d-lg-block" style="background-color: #000000">
+<header class="header-area header-style-1 header-height-2 text-white" style="background-color: #8eb4f4; border-bottom: 1px solid black;">
+    <div class="header-top header-top-ptb-1 d-none d-lg-block" style="background-color: #111111">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-xl-2 col-lg-4">
@@ -93,7 +93,7 @@
             </div>
         </div>
     </div>
-    <div class="header-middle header-middle-ptb-1 d-none d-lg-block sticky-bar">
+    <div class="header-middle header-middle-ptb-1 d-none d-lg-block sticky-bar" style="background-color: #8eb4f4">
         <div class="container">
             <p class="text-success text-center">{{session('message')}}</p>
             <div class="header-wrap">
@@ -108,6 +108,14 @@
                     </div>
                     <div class="header-action-right">
                         <div class="header-action-2">
+                            <div class="header-action-icon-2">
+                                <a href="{{ route('product-all') }}">
+                                    <img class="svgInject" alt="Evara" src="{{asset('/')}}website/assets/imgs/theme/new-product_1474713.png">
+                                    <span class="pro-count blue" id="wishlistCartCount">
+                                    <small>{{ \App\Models\Product::where('status',1)->count() }}</small>
+                                </span>
+                                </a>
+                            </div>
                             <div class="header-action-icon-2">
                                 <a href="{{ route('wishlist.index') }}">
                                     <img class="svgInject" alt="Evara" src="{{asset('/')}}website/assets/imgs/theme/icons/icon-heart.svg">
@@ -196,10 +204,10 @@
                 </div>
                 <div class="header-nav d-none d-lg-flex">
                     <div class="main-categori-wrap d-none d-lg-block">
-                        <a class="categori-button-active" href="#">
-                            <span class="fi-rs-apps"></span> Browse Categories
+                        <a class="categori-button-active text-dark" href="#">
+                            <span class="fi-rs-apps text-dark"></span> Browse Categories
                         </a>
-                        <div class="categori-dropdown-wrap categori-dropdown-active-large">
+                        <div class="categori-dropdown-wrap categori-dropdown-active-large" style="z-index:10000;">
                             <ul>
                                 @foreach($categories as $category)
                                     <li class="{{ count($category->subCategory) > 0 ? 'has-children' : '' }}">
@@ -232,11 +240,11 @@
                         <nav>
                             <ul>
                                 <li>
-                                    <a class="active" href="{{route('home')}}">Home</a>
+                                    <a class="active text-dark" href="{{route('home')}}">Home</a>
                                 </li>
                                 @foreach($highlights as $key => $highlight)
                                 <li>
-                                    <a class="active" href="{{route('highlight-product-all',$highlight->name)}}">{{ $highlight->name }}</a>
+                                    <a class="active text-dark" href="{{route('highlight-product-all',$highlight->name)}}">{{ $highlight->name }}</a>
                                 </li>
                                 @endforeach
                                 <li><a href="#">policies<i class="fi-rs-angle-down"></i></a>
@@ -253,22 +261,17 @@
                     </div>
                 </div>
                 <div class="hotline d-none d-lg-block">
-                    <p><i class="fi-rs-headset"></i><span>Hotline</span> {{$setting->support_phone}} </p>
+                    <p class="text-danger"><i class="fi-rs-headset"></i><span>Hotline</span> {{$setting->support_phone}} </p>
 
                 </div>
-                <p class="mobile-promotion">Happy <span class="text-brand">Mother's Day</span>. Big Sale Up to 40%</p>
+                {{--<p class="mobile-promotion">Happy <span class="text-brand">Mother's Day</span>. Big Sale Up to 40%</p>--}}
                 <div class="header-action-right d-block d-lg-none">
                     <div class="header-action-2">
                         <div class="header-action-icon-2">
                             <a href="{{ route('product-all') }}">
                                 <img class="svgInject" alt="Evara" src="{{asset('/')}}website/assets/imgs/theme/new-product_1474713.png">
                                 <span class="pro-count blue" id="wishlistCartCount">
-                                    @if($wishlists != '')
-                                        <small>{{ \App\Models\Product::where('status',1)->count() }}</small>
-                                    @else
-                                        <small>0</small>
-                                    @endif
-
+                                    <small>{{ \App\Models\Product::where('status',1)->count() }}</small>
                                 </span>
                             </a>
                         </div>

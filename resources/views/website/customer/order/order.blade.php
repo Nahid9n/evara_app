@@ -6,12 +6,14 @@
             @include('website.customer.layout.sidebar')
             <div class="row table-responsive">
                 @if(count($orders) > 0)
-                    <table id="basic-datatable" class="table">
+                    <table id="basic-datatable" class="">
                         <thead>
                             <tr>
                                 <th>SL</th>
-                                <th>Order</th>
-                                <th>Date</th>
+                                <th>ID</th>
+                                <th>Date & Time</th>
+                                <th>Qty</th>
+                                <th>Payment</th>
                                 <th>Status</th>
                                 <th>Total</th>
                                 <th class="text-center">Actions</th>
@@ -21,24 +23,24 @@
                         @foreach($orders as $order)
                             <tr class="{{$order->delivery_status == 0 ? 'bg-warning text-dark':''}}{{$order->delivery_status == 1 ? 'bg-info text-white':''}}{{$order->delivery_status == 2 ? 'bg-primary':''}}{{$order->delivery_status == 3 ? 'bg-success':''}}{{$order->delivery_status == 4 ? 'bg-danger text-white':''}}">
                                 <td>{{$loop->iteration}}</td>
-                                <td>{{$order->order_code}}</td>
+                                <td><a href="{{ route('customer-order-details', $order->order_code) }}">{{$order->order_code}}</a></td>
                                 <td>{{$order->order_date}}</td>
+                                <td>{{$order->orderDetails->sum('product_qty')}}</td>
+                                <td>{{ $order->payment_status }}</td>
                                 <td>
-                                    {{$order->order_status == 0 ? 'Pending':''}}
-                                    {{$order->order_status == 1 ? 'Completed':''}}
-                                    {{$order->order_status == 2 ? 'Canceled':''}}
+                                    {{$order->order_status }}
                                 </td>
-                                <td>{{$order->total_price}} {{$currency->symbol ?? ''}}</td>
+                                <td>৳ {{ $order->order_total }} </td>
                                 <td class="d-flex justify-content-center">
-                                    <a class="btn btn-sm mx-1 d-block" href="{{ route('customer-order-details', $order->order_code) }}">View</a>
+                                    <a class="mx-1 d-block" href="{{ route('customer-order-details', $order->order_code) }}"><i class="fi-rs-eye"></i></a>
 
-                                    @if($order->order_status == 'Pending')
-                                        <form method="post" action="{{--{{ route('customer-order-cancel', $order->id) }}--}}">
+                                    {{--@if($order->order_status == 'Pending')
+                                        <form method="post" action="--}}{{--{{ route('customer-order-cancel', $order->id) }}--}}{{--">
                                             @csrf
                                             @method('PUT')
-                                            <button class="btn-sm" type="submit">cancel</button>
+                                            <button class="" type="submit"><i class="fi-rs-cross"></i></button>
                                         </form>
-                                    @endif
+                                    @endif--}}
                                 </td>
                             </tr>
                         @endforeach

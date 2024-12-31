@@ -54,7 +54,7 @@
         }
     </style>
     @if($shortPopup)
-    <div class="short-popup bg-transparent">
+    <div class="short-popup bg-transparent" style="z-index:10000;">
         @if($shortPopup->url)
         <a href="{{$shortPopup->url}}">
             <img src="{{asset($shortPopup->short_popup_image)}}" alt="Short Popup Image">
@@ -154,7 +154,7 @@
                                     </a>
                                 </div>
                                 <div class="product-action-1 d-flex justify-content-center">
-                                    <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#latestViewModal{{$rand}}"><i class="fi-rs-eye"></i></a>
+{{--                                    <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#latestViewModal{{$rand}}"><i class="fi-rs-eye"></i></a>--}}
                                     <form action="{{route('cart.ad')}}" method="post" class="addTocart" id="addToCart{{$rand}}">
                                         @csrf
                                         <input hidden type="text" name="product_id" value="{{ $product->id }}">
@@ -242,7 +242,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal fade custom-modal" id="latestViewModal{{$rand}}" tabindex="-1" aria-labelledby="latestViewModalLabel" aria-hidden="true">
+                    {{--<div class="modal fade custom-modal" id="latestViewModal{{$rand}}" tabindex="-1" aria-labelledby="latestViewModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -377,7 +377,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>--}}
                 @endforeach
             </div>
         </div>
@@ -517,27 +517,29 @@
                                     <a aria-label="Add To Wishlist" class="action-btn hover-up wishlist" id="wishlist{{$key}}"  href="#{{ route('wishlist.ad',$latestProduct->id) }}" data-value="{{$latestProduct->id}}"><i class="fi-rs-heart"></i></a>
                                 </div>
                                 @php
-                                    $badgess = [];
+                                    $badges = [];
                                     if ($latestProduct->discount_banner != 2) {
                                         if ($latestProduct->discount_banner == 'save-percentage'){
-                                            $badgess[] = 'Save('.$latestProduct->discount_value.'%)';
+                                            $badges[] = 'Save('.$latestProduct->discount_value.'%)';
                                         }
                                         if ($latestProduct->discount_banner == 'save-tk'){
-                                            $badgess[] = 'Save('.$latestProduct->discount_value.'Tk)';
+                                            $badges[] = 'Save('.$latestProduct->discount_value.'Tk)';
                                         }
                                         if ($latestProduct->discount_banner == 'discount-percentage'){
-                                            $badgess[] = 'Discount('.$latestProduct->discount_value.'%)';
+                                            $badges[] = 'Discount('.$latestProduct->discount_value.'%)';
                                         }
                                         if ($latestProduct->discount_banner == 'discount-tk'){
-                                            $badgess[] = 'Discount('.$latestProduct->discount_value.'Tk)';
+                                            $badges[] = 'Discount('.$latestProduct->discount_value.'Tk)';
                                         }
                                     }
                                     if ($latestProduct->free_delivery == 1) {
-                                        $badgess[] = 'Free Delivery';
+                                        $badges[] = 'Free Delivery';
                                     }
                                 @endphp
-                                <div class="product-badges product-card product-badges-position  product-badges-mrg" data-product-id="{{ $latestProduct->id }}" data-badges="{{ json_encode($badgess) }}">
-                                    <span class="hot bg-primary fw-bold badge" id="product-badge-{{ $latestProduct->id }}">new</span>
+                                <div class="product-badges product-card product-badges-position  product-badges-mrg" data-product-id="{{ $latestProduct->id }}" data-badges="{{ json_encode($badges) }}">
+                                    @if(!empty($badges))
+                                        <span class="hot bg-primary fw-bold badge" id="product-badge-{{ $latestProduct->id }}"></span>
+                                    @endif
                                 </div>
                                 <div class="product-badges product-badges-position-right text-center product-badges-mrg">
                                     <span class="hot p-1 rounded-3 {{ $latestProduct->stock_amount >= 5 ? 'bg-success':'bg-danger text-white' }}"> {{ $latestProduct->stock_visibility == 1 ? $latestProduct->stock_amount:''}} {{ $latestProduct->stock_amount >= 5 ? 'In Stock ':'Stock Out' }}</span>
