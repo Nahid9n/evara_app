@@ -110,7 +110,7 @@
                                                                     {{$order->order_status == 1 ? 'Completed':''}}
                                                                     {{$order->order_status == 2 ? 'Canceled':''}}
                                                                 </td>
-                                                                <td>{{$order->total_price}} {{$currency->symbol ?? ''}}</td>
+                                                                <td>{{$order->total_price}} ৳</td>
                                                                 <td>
                                                                     <a class="btn-small  d-block" href="{{ route('customer-order-details', $order->id) }}">View</a>
 
@@ -725,7 +725,7 @@
                                                                     {{$order->order_status == 1 ? 'Completed':''}}
                                                                     {{$order->order_status == 2 ? 'Canceled':''}}
                                                                 </td>
-                                                                <td>{{$order->total_price}} {{$currency->symbol ?? ''}}</td>
+                                                                <td>{{$order->total_price}} ৳</td>
                                                                 <td>
                                                                     <a class="btn-small  d-block" href="{{ route('customer-order-details', $order->id) }}">View</a>
 

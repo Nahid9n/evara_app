@@ -59,7 +59,7 @@
                     <input type="number" id="max_price" placeholder="Max Price">
                 </div>
             </div>
-            <div class="row">
+            <div class="row" style="">
                 <div class="col-lg-12">
                     <div class="row product-grid-3" id="filterProducts">
                         @foreach($products as $key => $product)
@@ -81,7 +81,7 @@
                                             </a>
                                         </div>
                                         <div class="product-action-1 d-flex">
-                                            <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#latestViewModal{{ $rand = rand() }}"><i class="fi-rs-eye"></i></a>
+{{--                                            <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#latestViewModal{{ $rand = rand() }}"><i class="fi-rs-eye"></i></a>--}}
                                             <form action="{{route('cart.ad')}}" method="post" class="addTocart" id="addToCart{{$key}}">
                                                 @csrf
                                                 <input hidden type="text" name="product_id" value="{{ $product->id }}">
@@ -119,6 +119,7 @@
                                             </form>
                                             <a aria-label="Add To Wishlist" class="action-btn hover-up wishlist" id="wishlist{{$key}}"  href="#{{ route('wishlist.ad',$product->id) }}" data-value="{{$product->id}}"><i class="fi-rs-heart"></i></a>
                                         </div>
+                                        <!-- Define the badges for each product based on product fields -->
                                         @php
                                             $badges = [];
                                             if ($product->discount_banner != 2) {
@@ -140,7 +141,9 @@
                                             }
                                         @endphp
                                         <div class="product-badges product-card product-badges-position  product-badges-mrg" data-product-id="{{ $product->id }}" data-badges="{{ json_encode($badges) }}">
-                                            <span class="hot bg-primary fw-bold badge" id="product-badge-{{ $product->id }}">new</span>
+                                            @if(!empty($badges))
+                                                <span class="hot bg-primary fw-bold badge" id="product-badge-{{ $product->id }}"></span>
+                                            @endif
                                         </div>
                                         <div class="product-badges product-badges-position-right text-center product-badges-mrg">
                                             <span class="hot p-1 rounded-3 {{ $product->stock_amount >= 11 ? 'bg-success text-dark':'bg-danger text-white' }}"> {{ $product->stock_visibility == 1 ? $product->stock_amount :''}} {{ $product->stock_amount >= 11 ? 'In Stock ':'Stock Out' }}</span>
@@ -158,7 +161,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal fade custom-modal" id="latestViewModal{{$rand}}" tabindex="-1" aria-labelledby="latestViewModalLabel" aria-hidden="true">
+                            {{--<div class="modal fade custom-modal" id="latestViewModal{{$rand}}" tabindex="-1" aria-labelledby="latestViewModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -286,7 +289,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>--}}
                         @endforeach
                     </div>
                     <!-- Load More Button -->

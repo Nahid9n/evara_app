@@ -17,7 +17,7 @@
                     </a>
                 </div>
                 <div class="product-action-1 d-flex">
-                    <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#latestViewModal{{ $rand = rand() }}"><i class="fi-rs-eye"></i></a>
+{{--                    <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#latestViewModal{{ $rand = rand() }}"><i class="fi-rs-eye"></i></a>--}}
                     <form action="{{route('cart.ad')}}" method="post" class="addTocart" id="addToCart{{$key}}">
                         @csrf
                         <input hidden type="text" name="product_id" value="{{ $product->id }}">

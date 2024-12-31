@@ -104,7 +104,7 @@
                         <span class="coupon_cart">product : {{ $coupon->product->name }}</span> {{--Visit Store : <a href="">{{ $coupon->product->brand->name }}</a>--}}
                         @endif
                         @if($coupon->discount_status == 0 )
-                        <p class="coupon_price">{{$currency->symbol ?? ''}}{{ $coupon->discount }} OFF</p>
+                        <p class="coupon_price">৳{{ $coupon->discount }} OFF</p>
                         @else
                         <p class="coupon_price">{{ $coupon->discount }}% OFF</p>
                         @endif
@@ -113,9 +113,9 @@
                     <div class="coupon_bottom_part">
                         @if(isset($coupon->min_shopping))
                             @if($coupon->discount_status == 0 )
-                            <p>Min Spend {{$currency->symbol ?? ''}}{{ $coupon->min_shopping }} to get ${{ $coupon->discount }} OFF on total orders</p>
+                            <p>Min Spend ৳{{ $coupon->min_shopping }} to get ${{ $coupon->discount }} OFF on total orders</p>
                             @else
-                            <p>Min Spend {{$currency->symbol ?? ''}}{{ $coupon->min_shopping }} to get {{ $coupon->discount }}% OFF on total orders</p>
+                            <p>Min Spend ৳{{ $coupon->min_shopping }} to get {{ $coupon->discount }}% OFF on total orders</p>
                             @endif
                         @endif
                         <div class="row">
